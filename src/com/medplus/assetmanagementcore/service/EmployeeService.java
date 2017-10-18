@@ -24,9 +24,9 @@ public interface EmployeeService {
 	
 	public String addRole(int roleId, String roleName, String createdBy, Date createdDate);
 	
-	public Map<Integer,String> getEmployeeRole(String empid);
+	public List<String> getEmployeeRole(String empid);
 	
-	public Map<Integer,String> getAllRole();
+	public List<String> getAllRole();
 	
 	public long getRoleId(String roleName);
 	

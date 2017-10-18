@@ -9,13 +9,6 @@ import com.medplus.assetmanagementcore.utils.AssetTypeEnum;
 public class Request {
 String employeeId;
 AssetTypeEnum assetType;
-
-public AssetTypeEnum getAssetType() {
-	return assetType;
-}
-public void setAssetType(AssetTypeEnum assetType) {
-	this.assetType = assetType;
-}
 Date requestDate;
 public String getEmployeeId() {
 	return employeeId;
@@ -23,7 +16,12 @@ public String getEmployeeId() {
 public void setEmployeeId(String employeeId) {
 	this.employeeId = employeeId;
 }
-
+public AssetTypeEnum getAssetType() {
+	return assetType;
+}
+public void setAssetType(AssetTypeEnum assetType) {
+	this.assetType = assetType;
+}
 public Date getRequestDate() {
 	return requestDate;
 }

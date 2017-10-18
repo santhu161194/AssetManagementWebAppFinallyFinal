@@ -25,7 +25,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Autowired
 	JdbcTemplate template;
 //needs to be updated with DB
-/*	public int insertEmployee(final Employee employee, final String createdBy,
+	public int insertEmployee(final Employee employee, final String createdBy,
 			final Date insertDate) {
 
 		int rows = template.update(Queries.ADD_EMPLOYEE,
@@ -54,46 +54,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
 				});
 
 		return rows;
-	}*/
-	
-	public int insertEmployee (final Employee employee, final String createdBy,
-			final Date insertDate) throws SQLException {
-		final PreparedStatement pst2;
-		int rows = template.update(Queries.ADD_EMPLOYEE,
-				new PreparedStatementSetter() {
-
-					public void setValues(PreparedStatement pst)
-							throws SQLException {
-		pst.setString(1, employee.getEmployeeId());
-		pst.setString(2, employee.getFirstName());
-		pst.setString(3, employee.getLastName());
-		pst.setString(4, employee.getPassword());
-		pst.setString(5, employee.getGender().value.toString());
-		pst.setString(6,
-				String.valueOf(employee.getMobileNumber()));
-		pst.setDate(7, new java.sql.Date(employee
-				.getDateOfBirth().getTime()));
-		pst.setDate(8, new java.sql.Date(employee
-				.getDateOfJoin().getTime()));
-		pst.setString(9, employee.getAddress());
-		pst.setString(10, createdBy);
-		pst.setDate(11, new java.sql.Date(new Date().getTime()));
-		pst.setDate(12, null);
-		pst.setDate(13, null);
-		pst2=pst;
-		int rows=template.update(Queries.ADD_EMPLOYEE, pst);
-		/*int rows = template.update(Queries.ADD_EMPLOYEE);
-				new PreparedStatementSetter() {
-
-					public void setValues(pst)
-							throws SQLException {
-						
-					}*/
-
-				/*});*/
-
-		return rows;
 	}
+	
+	
 //Not Working
 	public Employee getEmployee(String empId) {
 		

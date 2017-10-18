@@ -25,14 +25,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 		String password = Encryption.cryptWithMD5(employee.getPassword());
 		employee.setPassword(password);
-		try {
-			if (employeeDao.insertEmployee(employee, edpId, insertDate) != 0)
-				return "INSERTED";
-			else
-				return "NOT INSERTED";
-		} catch (SQLException e) {
+		if (employeeDao.insertEmployee(employee, edpId, insertDate) != 0)
+			return "INSERTED";
+		else
 			return "NOT INSERTED";
-		}
 
 	}
 
@@ -120,12 +116,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return false;
 	}
 
-	public Map<Integer, String> getEmployeeRole(String empid) {
+	public List< String> getEmployeeRole(String empId) {
 		// TODO Auto-generated method stub
-		return null;
+		return employeeDao.getRole(empId);
 	}
 
-	public Map<Integer, String> getAllRole() {
+	public List< String> getAllRole() {
 		// TODO Auto-generated method stub
 		return null;
 	}

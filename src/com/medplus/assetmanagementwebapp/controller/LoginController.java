@@ -28,6 +28,16 @@ public ModelAndView getLoginForm(){
 	return mav;
 }
 
+//direct go to employee home ..temp
+@RequestMapping(value="/emphome",method=RequestMethod.GET)
+public ModelAndView getEmpHome(){
+	ModelAndView mav=new ModelAndView();
+	
+
+	mav.setViewName("EmpHome");
+	return mav;
+}
+
 //Logging in
 @RequestMapping(value="/login",method=RequestMethod.POST)
 public ModelAndView login(@RequestParam("username") String username,@RequestParam("password") String password){
