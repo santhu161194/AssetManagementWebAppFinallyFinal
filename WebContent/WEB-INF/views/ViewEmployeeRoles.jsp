@@ -28,28 +28,27 @@ th {
 	<h2 id="id1" align="center">EMPLOYEE DATA</h2>
 
 	<div id="id2">
-		<h3 align="center">View Employees</h3>
+		<h3 align="center">View Employee Roles</h3>
 		</div>
 	<h4><j:out value="${updatestatus}"></j:out></h4>
 	<table border="2">
 		<tr>
 			<th>EMPCODE
-			<th>FirstNAME
-			<th>LastNAME
+			<th>ROLEID
+			<th>ASSIGNEDBY
+			<th>DATE ASSIGNED
 			
-		</tr>
+		</tr>	
 		
-		<j:forEach var="emp" items="${empl}">
 			<tr>
-				<td><j:out value="${emp.employeeId} "></j:out></td>
-				<td><j:out value="${emp.firstName} "></j:out></td>
-				<td><j:out value="${emp.lastName} "></j:out></td>
+				<td><j:out value="${employeeId} "></j:out></td>
+				<td><j:out value="${roleId} "></j:out></td>
+				<td><j:out value="${assignedBy} "></j:out></td>
+				<td><j:out value="${dateAssigned} "></j:out></td>
 				
-				<td><a href="UpdateEmployee?code=<j:out value="${emp.employeeId}"></j:out>">Update</a></td>
-				<td><a href="removeEmployeeRole?code=<j:out value="${emp.employeeId}"></j:out>">Remove Role</a></td>
-				<td><a href="getEmployeeRole?code=<j:out value="${emp.employeeId}"></j:out>">Emp Role</a></td>
+				
 				</tr>
-				</j:forEach>
+				
 	</table>
 
 	<a href="home">Return to home</a>

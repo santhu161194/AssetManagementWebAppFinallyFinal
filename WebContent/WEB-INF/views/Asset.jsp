@@ -39,9 +39,7 @@ th, td {
 <tr><td>Enter  AssetTypeEnum{Laptop/Deskto/Monitor//Mouse)</td><td><s:input path="assetType" cssClass="form" required="true"/></td><td>
 <tr><td>Enter cost</td><td><s:input path="cost" cssClass="form" required="true"/></td><td>
 <tr><td>Enter AssetStatusEnum{Available/Notavailable}</td><td><s:input path="status" cssClass="form" /></td><td>
-<tr><td>Enter createdDate</td><td><s:input path="createdDate" cssClass="form" /></td><td>
-<tr><td>Enter createdBy</td><td><s:input path="createdBy" cssClass="form" required="true"/></td><td>
-<tr><td>Enter modifiedBy</td><td><s:input path="modifiedBy" cssClass="form" required="true"/></td><td>
+
 
 </table>
 	

@@ -14,11 +14,15 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.medplus.assetmanagementcore.dao.impl.EmployeeDaoImpl;
 import com.medplus.assetmanagementcore.model.Asset;
 import com.medplus.assetmanagementcore.model.Employee;
 import com.medplus.assetmanagementcore.service.EmployeeService;
+import com.medplus.assetmanagementcore.service.impl.EmployeeServiceImpl;
+
 
 
 
@@ -31,6 +35,10 @@ public class EmployeeController {
 	Employee employee;
 	@Autowired
 	Asset asset;
+	@Autowired
+	EmployeeDaoImpl imp;
+	@Autowired
+	EmployeeServiceImpl serImpl;
 	
 	//view employees
 	@RequestMapping("/viewEmpls")
@@ -63,9 +71,133 @@ public class EmployeeController {
 	public ModelAndView employeeData( @ModelAttribute("employee") Employee emp/*,BindingResult result*/){
 		ModelAndView mav=new ModelAndView();
 		
-		String rows = employeeServiceImpl.addEmployee(emp,"me", new Date());
+		String rows = employeeServiceImpl.addEmployee(emp);
 
 		return mav;
 	}
-	
+	@RequestMapping(value="/Employee",method=RequestMethod.GET)
+	public ModelAndView EmployeeForm(@RequestParam("code") String code)
+	{
+		ModelAndView mav=new ModelAndView();
+		employee=serImpl.getEmployee(code);
+		mav.addObject(employee);
+		mav.setViewName("Employee");
+		return mav;
+	}
+	@RequestMapping(value="/Employee",method=RequestMethod.POST)
+	public ModelAndView Emp(@ModelAttribute("employee") Employee emp,BindingResult result)
+	{
+		ModelAndView mav=new ModelAndView();
+		
+		String rows=serImpl.updateEmployee(emp,"10",new Date());
+		if(rows.equals(0))
+		{
+			String msg="record not inserted";
+			mav.addObject("msg",msg);
+			return mav;
+		
+		}
+		else
+		{
+			return new ModelAndView("redirect:viewEmpls");
+	}
+	}
+	//getting form for addRole
+		@RequestMapping(value="/addRole",method=RequestMethod.GET)
+			public ModelAndView addRoleForm(){
+				
+				ModelAndView mav=new ModelAndView();
+				mav.addObject(employee);
+				mav.setViewName("AddRole");
+				return mav;
+		}
+		@RequestMapping(value="/addRole",method=RequestMethod.POST)
+		public ModelAndView addRoleForm(@RequestParam("roleId") int roleId,@RequestParam("roleName") String roleName,@RequestParam("addedBy") String addedBy)
+		{
+			ModelAndView mav=new ModelAndView();
+			
+			String rows=serImpl.addRole(roleId,roleName,addedBy,new Date());
+			if(rows.equals(0))
+			{
+				String msg="record not inserted";
+				mav.addObject("msg",msg);
+				return mav;
+			
+			}
+			else
+			{
+				return new ModelAndView("redirect:viewEmpls");
+		}
+		}
+		//getting form for addRole
+				@RequestMapping(value="/addRoleToEmp",method=RequestMethod.GET)
+					public ModelAndView addRoleToEmpForm(){
+						
+						ModelAndView mav=new ModelAndView();
+						mav.addObject(employee);
+						mav.setViewName("AddRoleToEmp");
+						return mav;
+				}
+				@RequestMapping(value="/addRoleToEmp",method=RequestMethod.POST)
+				public ModelAndView addRoleToEmpForm(@RequestParam("employeeId") String employeeId,@RequestParam("roleId") List<Long> roleId,@RequestParam("addedBy") String addedBy)
+				{
+					ModelAndView mav=new ModelAndView();
+					
+					String rows=serImpl.addRoleToEmp(employeeId, roleId, addedBy,new Date());
+					if(rows.equals(0))
+					{
+						String msg="record not inserted";
+						mav.addObject("msg",msg);
+						return mav;
+					
+					}
+					else
+					{
+						return new ModelAndView("redirect:viewEmpls");
+				}
+				}
+				//getting form for getSigleEmployee
+				@RequestMapping(value="/getSingleEmployee",method=RequestMethod.GET)
+					public ModelAndView getSingleEmployeeForm(){
+						
+						ModelAndView mav=new ModelAndView();
+						mav.addObject(employee);
+						mav.setViewName("GetSingleEmployee");
+						return mav;
+				}
+				@RequestMapping(value="/getSingleEmployee",method=RequestMethod.POST)
+				public ModelAndView getSingleEmployee(@ModelAttribute("employee") Employee emp,@RequestParam("employeeId") String employeeId){
+					ModelAndView mav=new ModelAndView();
+				emp=employeeServiceImpl.getEmployee(employeeId);
+					mav.addObject("empl",emp);
+					System.out.println("hello");
+					mav.setViewName("ViewEmployee");
+					return mav;
+				}
+				@RequestMapping(value="/getEmployeeRole",method=RequestMethod.GET)
+				public ModelAndView getEmployeeRoleForm(@RequestParam("code") String code)
+				{
+					ModelAndView mav=new ModelAndView();
+					List<String> role=serImpl.getEmployeeRole(code);
+					for(String rs:role)
+					{
+						System.out.println(rs);
+					}
+					mav.addObject("roles",role);
+					
+					mav.setViewName("GetEmpRole");
+					
+					return mav;
+				}
+			/*	@RequestMapping(value="/removeEmployeeRole",method=RequestMethod.GET)
+				public ModelAndView removeEmployeeRoleForm(@RequestParam("code") String code)
+				{
+					ModelAndView mav=new ModelAndView();
+					employee=serImpl.removeEmployeeRole(empId, roleName, removedBy, removedDate)
+					mav.addObject(employee);
+					mav.setViewName("Employee");
+					return mav;
+				}*/	
+				
+				
 }

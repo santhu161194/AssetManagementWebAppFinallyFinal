@@ -137,7 +137,6 @@ public class AssetDaoImpl implements AssetDao {
 		return template.query(Queries.getAssetByStatus,args,new RowMapper<Asset>(){  
 			public Asset mapRow(ResultSet rs, int row) throws SQLException {  
 				Asset e=new Asset(); 
-				System.out.println("1");
 				e.setAssetId(rs.getInt(1));
 				e.setSerialNumber(rs.getString(2)); 
 				e.setAssetName(rs.getString(3));
@@ -209,7 +208,7 @@ public class AssetDaoImpl implements AssetDao {
 			public void setValues(PreparedStatement pst) throws SQLException {
 				pst.setString(1,empId);
 				pst.setString(2,assetType.toString());
-				pst.setDate(3,(java.sql.Date) requestedDate);
+				pst.setDate(3,new java.sql.Date(requestedDate.getTime()));
 
 			}
 		});

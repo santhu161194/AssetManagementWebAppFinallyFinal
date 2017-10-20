@@ -29,6 +29,39 @@ public class Employee {
 	private double salary;
 	
 
+	private String createdBy;
+	
+	private Date createdDate;
+	
+	private String ModifiedBy;
+	
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+	public String getModifiedBy() {
+		return ModifiedBy;
+	}
+	public void setModifiedBy(String modifiedBy) {
+		ModifiedBy = modifiedBy;
+	}
+	public Date getModifiedDate() {
+		return ModifiedDate;
+	}
+	public void setModifiedDate(Date modifiedDate) {
+		ModifiedDate = modifiedDate;
+	}
+	private Date ModifiedDate;
+	
+
 	public double getSalary() {
 		return salary;
 	}

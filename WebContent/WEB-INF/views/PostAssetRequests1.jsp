@@ -47,17 +47,8 @@ th {
 		
 		<j:forEach var="asss" items="${assets}">
 			<tr>
-				<td><j:out value="${asss.assetId} "></j:out></td>
-				<td><j:out value="${asss.serialNumber} "></j:out></td>
-				<td><j:out value="${asss.assetName} "></j:out></td>
-				<td><j:out value="${asss.assetType} "></j:out></td>
-				<td><j:out value="${asss.cost} "></j:out></td>
-				<td><j:out value="${asss.status} "></j:out></td>
-				<td><j:out value="${asss.createdDate} "></j:out></td>
-				<td><j:out value="${asss.createdBy} "></j:out></td>
-				<td><j:out value="${asss.modifiedBy} "></j:out></td>
-				<td><a href=postAssetRequests?type=<j:out value="${asss.assetType}"></j:out>>Asset Request</a></td>
-				<td><a href="UpdateAsset?code=<j:out value="${asss.assetId}"></j:out>">Update</a></td>
+				
+				<td><a href="postAssetRequests?type=<j:out value="${asss.assetType}"></j:out>">Requests</a></td>
 				</tr>
 				</j:forEach>
 				</table>
@@ -66,5 +57,3 @@ th {
 				</s:form>
 				</body>
 				</html>
-				
-	

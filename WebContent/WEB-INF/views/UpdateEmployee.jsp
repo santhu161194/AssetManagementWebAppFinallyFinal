@@ -19,16 +19,23 @@ clear:both;
 </style>
 </head>
 <body>
-<h2 align="center">EMPLOYEE INFORMATION</h2>
-<h3 align="center">Employee Updation Form</h3>
 <s:form commandName="employee" action="UpdateEmployee" method="post">
+<h2 id="id1" align="center">EMPLOYEE DATA</h2>
+
+	<div id="id2">
+		<h3 align="center">Update Employee Form</h3>
+		</div>
+
 <table align="center">
-<tr><td>Enter code</td><td><s:input path="code" cssClass="form" readonly="true"/></td><td><s:errors path="code" cssClass="red" ></s:errors></td></tr>
-<tr><td>Enter Firstname</td><td><s:input path="fname" cssClass="form"/></td><td><s:errors path="fname" cssClass="red"></s:errors></td></tr>
-<tr><td>Enter LastName</td><td><s:input path="lname" cssClass="form"/></td><td><s:errors path="lname" cssClass="red"></s:errors></td></tr>
-<tr><td>Enter Job</td><td><s:input path="job" cssClass="form"/></td><td><s:errors path="job" cssClass="red"></s:errors></td></tr>
-<tr><td>Enter Salary</td><td><s:input path="salary" cssClass="form"/></td><td><s:errors path="salary" cssClass="red"></s:errors></td></tr>
-<tr><td>Enter Deptno</td><td><s:input path="deptno" cssClass="form" readonly="true"/></td><td><s:errors path="deptno" cssClass="red"></s:errors></td></tr>
+<tr><td>EmployeeId</td><td><s:input path="employeeId" cssClass="form" required="true"/></td><td>
+<tr><td>Firstname</td><td><s:input path="firstName" cssClass="form" required="true"/></td><td>
+<tr><td>LastName</td><td><s:input path="lastName" cssClass="form" required="true"/></td><td>
+<tr><td>gender</td><td><s:input path="gender" cssClass="form" required="true"/></td><td>
+<tr><td>mobileNumber</td><td><s:input path="mobileNumber" cssClass="form" required="true"/></td><td>
+<tr><td>dateOfJoin</td><td><s:input path="dateOfJoin" cssClass="form" required="true"/></td><td>
+<tr><td>dateOfBirth</td><td><s:input path="dateOfBirth" cssClass="form" required="true"/></td><td>
+<tr><td>address</td><td><s:input path="address" cssClass="form" required="true"/></td><td>
+
 <tr><td></td><td><input type="submit"></td><td></td></tr>
 </table>
 <a href="home">Return to home</a>

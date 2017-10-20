@@ -23,7 +23,7 @@ public interface AssetDao {
 	
 	public  int updateAssetStatus(int assetId,AssetStatusEnum status,String ModifiedBy,Date dateModified);
 	
-	public List<Asset> getAssetByStatus(String status);//1
+	public List<Asset> getAssetByStatus(String status);//done
     
 	public List<Asset> getEmployeeAssets(String empId);//2
 	

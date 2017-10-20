@@ -36,8 +36,17 @@ bottom:300px;
 			<div align="left"> <a href="viewAssets">View Departments</a></div><br>
 			<div align="left"><a href="viewEmpls" >View Employee</a></div><br>
 			
+<<<<<<< HEAD
 			<div align="left"><a href="addAsset">Add Asset</a></div><br>
+=======
+			<div align="left"><a href=addAsset?adminId=${userid} >Add Asset</a></div><br>
+			<div align="left"><a href="viewAssets" >View Assets</a></div><br>
+			<div align="left"><a href=ViewAssetRequests?userId=${userid} >View Asset Requests</a></div><br>
+			<div align="left"><a href="ViewAssetRequests1?status=A" >View Available Assets</a></div><br>
+			<div align="left"><a href="addRole" >Add Role To Employee</a></div><br>
+>>>>>>> refs/remotes/origin/HEAD
 			<div align="left"><a href="empl">Add Employee</a></div><br>
+<<<<<<< HEAD
 			<div align="left"><a href="viewAssets" >View Assets</a></div><br>
 			<div align="left"><a href="viewAssetsByStatus?status=A" >View Available Assets</a></div><br>
 			<div align="left"><a href="viewAssetsByStatus?status=N" >View UnAvailable Assets</a></div><br>
@@ -54,6 +63,9 @@ bottom:300px;
 			<div align="left"><a href="ViewAssetRequests" >View Asset Requests</a></div><br>
 			
 			
+=======
+			<div align="left"><a href=getSingleEmployee >Get Single Employee</a></div><br>
+>>>>>>> refs/remotes/origin/HEAD
 			<div align="left"><a href="invalidate">Logout</a></div><br>
 			
 		</div>

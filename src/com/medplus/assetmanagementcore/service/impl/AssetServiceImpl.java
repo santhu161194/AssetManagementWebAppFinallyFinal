@@ -104,6 +104,8 @@ public class AssetServiceImpl implements AssetService{
 
 	public String postAssetRequest(AssetTypeEnum assetType, String requestedBy,Date requestedDate)throws AuthenticationException {
 		//check for valid RequestedBy
+		
+		System.out.println(assetType);
 		if(!employeeService.isUserExisting(requestedBy)){
 			AuthenticationException iae= new AuthenticationException("Authentication Exception ..");
 			throw iae;

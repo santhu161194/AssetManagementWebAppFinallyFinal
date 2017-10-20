@@ -24,6 +24,8 @@ import com.medplus.assetmanagementcore.model.Asset;
 import com.medplus.assetmanagementcore.model.Employee;
 import com.medplus.assetmanagementcore.model.Request;
 import com.medplus.assetmanagementcore.service.AssetService;
+import com.medplus.assetmanagementcore.utils.AssetStatus;
+import com.medplus.assetmanagementcore.utils.AssetTypeEnum;
 import com.medplus.assetmanagementcore.utils.AssetValidation;
 @Controller
 public class AssetController {
@@ -42,7 +44,8 @@ public class AssetController {
 		Employee employee;
 		@Autowired
 		List<Request> getAllAssetRequests;
-		
+		@Autowired
+		List<Asset> getAssetsByStatus;
 		//view employees
 		/*@RequestMapping("/viewAssets")
 		public ModelAndView viewEmployees(@ModelAttribute("asset") Asset ass,BindingResult result){
@@ -79,13 +82,14 @@ public class AssetController {
 
 		*/
 		 @RequestMapping(value="/addAsset",method=RequestMethod.POST)
-			public ModelAndView addAsset(@ModelAttribute("asset") Asset asse,BindingResult result)
+			public ModelAndView addAsset(@ModelAttribute("asset") Asset asse, BindingResult result)
 			{
 				ModelAndView mav=new ModelAndView();
 				
 				String rows;
 				try {
-					rows = assetServiceImpl.addAsset(asse,"13", new Date());
+					
+					rows = assetServiceImpl.addAsset(asse,"10", new Date());
 					if(rows.equals(0))
 					{
 						
@@ -227,23 +231,30 @@ public class AssetController {
 			}
 			return mav;
 			}
+
+		
 		 
 		 
-		/* @RequestMapping(value="/postAssetRequest",method=RequestMethod.GET)
-			public ModelAndView postAssetRequestForm(@ModelAttribute("asset") Asset asset)
+		 @RequestMapping(value="postAssetRequests",method=RequestMethod.GET)
+		 public ModelAndView postAssetRequestForm(@RequestParam("type") String type) 
 			{
 				ModelAndView mav=new ModelAndView();
 				
+			
 			try {
-				postAssetRequest=assetServiceImpl.postAssetRequest(asset.getAssetType(),"u",new Date());
-				mav.addObject("assetRequests",getAllAssetRequests);
-				mav.setViewName("ViewAssetRequests");
-		        return mav;
-			} catch (AssetException e) {
+				assetServiceImpl.postAssetRequest(AssetTypeEnum.valueOf(type),"10",new Date());
+				
+				mav.setViewName("PostAssetRequests1");
+				return mav;
+			} catch (AuthenticationException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 			return mav;
-			}*/
+			
+			}
+		
 	}
+
 
