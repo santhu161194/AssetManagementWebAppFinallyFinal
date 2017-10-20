@@ -1,26 +1,23 @@
 package com.medplus.assetmanagementcore.dao.impl;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
-import java.sql.PreparedStatement;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.ResultSetExtractor;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
-
-import java.sql.Connection;
 
 import com.medplus.assetmanagementcore.dao.AssetDao;
 import com.medplus.assetmanagementcore.model.Asset;
 import com.medplus.assetmanagementcore.model.AssetMapping;
-import com.medplus.assetmanagementcore.model.Employee;
 import com.medplus.assetmanagementcore.model.NewTypeRequest;
 import com.medplus.assetmanagementcore.model.Request;
 import com.medplus.assetmanagementcore.utils.AssetAllocation;
@@ -90,12 +87,12 @@ public class AssetDaoImpl implements AssetDao {
 	}
 //working done with log
 	public int updateAssetStatus(final int assetId, final AssetStatusEnum status,final String modifiedBy, final Date dateModifed) {
-		int rows1=updateAssetToLog(assetId);	
+		updateAssetToLog(assetId);	
 		int rows=template.update(Queries.updateAssetStatus,new PreparedStatementSetter() {
 			public void setValues(PreparedStatement pst) throws SQLException {
 				pst.setString(1,status.value);
 				pst.setString(2,modifiedBy);
-				pst.setDate(3,(java.sql.Date)dateModifed);
+				pst.setDate(3,new java.sql.Date(dateModifed.getTime()));
 				pst.setInt(4,assetId);
 			}
 		});	
@@ -136,7 +133,7 @@ public class AssetDaoImpl implements AssetDao {
 	//
 	public List<Asset> getAssetByStatus(String status) {      //done
 		Object args[]={status};
-
+		System.out.println(status);
 		return template.query(Queries.getAssetByStatus,args,new RowMapper<Asset>(){  
 			public Asset mapRow(ResultSet rs, int row) throws SQLException {  
 				Asset e=new Asset(); 
@@ -198,7 +195,7 @@ public class AssetDaoImpl implements AssetDao {
 
 
 
-	public List<Request> getAssetRequests(String requestedBy) {//repeated
+	public List<Request> getAssetRequests(String requestedBy) {//repeated//done
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -244,19 +241,19 @@ public class AssetDaoImpl implements AssetDao {
 			pst.setString(2,assignedBy);
 			pst.setInt(3,assetId);
 			pst.setString(4,AssetAllocation.Allocated.value);
-			pst.setDate(5,(java.sql.Date)handOverDate);
+			pst.setDate(5,new java.sql.Date(handOverDate.getTime()));
 		}
 	});
 	return rows;
 	}
 //done
 	public int deAllocateAsset(final int assetId, final String deAllocatedBy,final Date deAllocationdate) {
-		int row1=updateMappingToLog( assetId);
+		updateMappingToLog( assetId);
 		int rows=template.update(Queries.deallocateAsset,new PreparedStatementSetter() {
 			public void setValues(PreparedStatement pst) throws SQLException {
 			
 			pst.setString(1,AssetAllocation.DeAllocated.value);
-			pst.setDate(2,(java.sql.Date)deAllocationdate);
+			pst.setDate(2,(new java.sql.Date(deAllocationdate.getTime())));
 			pst.setString(3,deAllocatedBy);            //assignedBy& deallocatedBy both in same column
 			pst.setInt(4,assetId);
 		}
@@ -271,13 +268,13 @@ private int updateMappingToLog(final int assetId) {
 		int rows=template.update(Queries.UPDATE_ASSET_MAPPING_TO_LOG,new PreparedStatementSetter() {
 				
 		public void setValues(PreparedStatement pst) throws SQLException {
-			
+			System.out.println("I got the status as"+map.getStatus());
 			pst.setString(1,map.getEmployeeId());
 			pst.setString(2, map.getAssignedBy());
 			pst.setInt(3, map.getAssetId());
 			pst.setDate(4, new java.sql.Date (map.getAssignedDate().getTime()));
 			pst.setDate(5, new java.sql.Date (map.getReturnDate().getTime()));
-			pst.setString(6, map.getStatus().value);
+			pst.setString(6, map.getStatus().value.toString());
 			
 		}
 	});
@@ -300,8 +297,9 @@ private int updateMappingToLog(final int assetId) {
 				e.setAssignedDate(new java.util.Date(rs.getDate(4).getTime())); 
 				
 				e.setReturnDate((new Date() ));
+				System.out.println("I got the status as"+rs.getString(6));
+				e.setStatus(AssetAllocation.getName(rs.getString(6)));
 				
-				e.setStatus(AssetStatusEnum.getName(rs.getString(6)));
 				return e; 
 				}
 				else

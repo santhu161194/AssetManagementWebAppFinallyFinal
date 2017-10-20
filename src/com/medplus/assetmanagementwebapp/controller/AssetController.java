@@ -15,12 +15,13 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.medplus.assetmanagementcore.exceptions.AssetException;
+import com.medplus.assetmanagementcore.exceptions.AuthenticationException;
 import com.medplus.assetmanagementcore.model.Asset;
 import com.medplus.assetmanagementcore.model.Employee;
-import com.medplus.assetmanagementcore.model.NewTypeRequest;
 import com.medplus.assetmanagementcore.model.Request;
 import com.medplus.assetmanagementcore.service.AssetService;
 import com.medplus.assetmanagementcore.utils.AssetValidation;
@@ -55,7 +56,7 @@ public class AssetController {
 		//getting form
 		@RequestMapping(value="/addAsset",method=RequestMethod.GET)
 			public ModelAndView getAssetForm(){
-				System.out.println("i got called");
+		
 				ModelAndView mav=new ModelAndView();
 				mav.addObject(asset);
 				mav.setViewName("Asset");
@@ -117,6 +118,99 @@ public class AssetController {
 			}
 			return mav;
 			}
+		 
+		 
+		 @RequestMapping(value="/viewAssetsByStatus",method=RequestMethod.GET)
+			public ModelAndView viewAssetForm(@RequestParam("status") String status)
+			{
+				ModelAndView mav=new ModelAndView();
+				
+			try {
+				assetlist=assetServiceImpl.getAssetsByStatus(status);
+				mav.addObject("assets", assetlist);
+				mav.setViewName("ViewAssets");
+		        return mav;
+			} catch (AssetException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return mav;
+			}
+		 
+		 @RequestMapping(value="/allocateAsset",method=RequestMethod.GET)
+			public ModelAndView getAllocationForm(){
+				
+				ModelAndView mav=new ModelAndView();
+				
+				mav.setViewName("Allocation");
+				return mav;
+		}
+		 
+		 
+		 @RequestMapping(value="/allocateAsset",method=RequestMethod.POST)
+			public ModelAndView allocateAsset(@RequestParam("employeeID") String employeeId,
+					@RequestParam("assetID") String assetID,
+					@RequestParam("assignedBy") String assignedBy) throws NumberFormatException, AuthenticationException
+			{
+				ModelAndView mav=new ModelAndView();
+				System.out.println("I reached");
+				boolean rows;
+				try {
+					rows = assetServiceImpl.allocateAsset(employeeId, Integer.parseInt(assetID), assignedBy, new Date());
+					if(rows==true)
+					{
+						
+						return mav;
+					
+					}
+					else
+					{
+					return new ModelAndView("redirect:home");
+				}
+				} catch (AssetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return mav;
+			}
+		 
+		 @RequestMapping(value="/deallocateAsset",method=RequestMethod.GET)
+			public ModelAndView getDeAllocationForm(){
+				
+				ModelAndView mav=new ModelAndView();
+				
+				mav.setViewName("DeAllocation");
+				return mav;
+		}
+		 
+		 
+		 @RequestMapping(value="/deallocateAsset",method=RequestMethod.POST)
+			public ModelAndView DeallocateAsset(
+					@RequestParam("assetID") String assetID,
+					@RequestParam("deassignedBy") String deassignedBy) throws NumberFormatException, AuthenticationException
+			{
+				ModelAndView mav=new ModelAndView();
+				System.out.println("I reached");
+				boolean rows;
+				try {
+					rows = assetServiceImpl.deAllocateAsset(Integer.parseInt(assetID), deassignedBy, new Date());
+					if(rows==true)
+					{
+						
+						return mav;
+					
+					}
+					else
+					{
+					return new ModelAndView("redirect:home");
+				}
+				} catch (AssetException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return mav;
+			}
+		 
 		 @RequestMapping(value="/ViewAssetRequests",method=RequestMethod.GET)
 			public ModelAndView viewAssetRequestForm()
 			{
@@ -133,6 +227,8 @@ public class AssetController {
 			}
 			return mav;
 			}
+		 
+		 
 		/* @RequestMapping(value="/postAssetRequest",method=RequestMethod.GET)
 			public ModelAndView postAssetRequestForm(@ModelAttribute("asset") Asset asset)
 			{

@@ -25,9 +25,10 @@ public class Employee {
 	private Date dateOfBirth;
 	
 	private String address;
+	
 	private double salary;
 	
-	
+
 	public double getSalary() {
 		return salary;
 	}

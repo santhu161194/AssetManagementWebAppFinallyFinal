@@ -4,7 +4,6 @@ import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
-import com.medplus.assetmanagementcore.exceptions.AuthenticationException;
 import com.medplus.assetmanagementcore.model.Asset;
 import com.medplus.assetmanagementcore.model.NewTypeRequest;
 import com.medplus.assetmanagementcore.model.Request;
@@ -32,7 +31,7 @@ public interface AssetDao {
 	
 	public List<Request> getAllAssetRequests();
 	
-	public List<Request> getAssetRequests(String requestedBy);
+	public List<Request> getAssetRequests(String requestedBy);//
 	
 	public int postAssetRequest(AssetTypeEnum assetType,String empId,Date requestedDate) throws SQLException;
 	
@@ -45,3 +44,6 @@ public interface AssetDao {
 	
 	public int deAllocateAsset(int assetId,String deallocatedBy,Date deallocateDate);
 }
+
+/*public Asset getAsset(int assetId) ; 
+public List<Asset> getEmployeeAssets(String empId);*/

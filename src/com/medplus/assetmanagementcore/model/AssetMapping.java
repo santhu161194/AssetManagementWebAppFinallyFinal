@@ -2,6 +2,7 @@ package com.medplus.assetmanagementcore.model;
 
 import java.util.Date;
 
+import com.medplus.assetmanagementcore.utils.AssetAllocation;
 import com.medplus.assetmanagementcore.utils.AssetStatusEnum;
 
 public class AssetMapping {
@@ -17,14 +18,16 @@ public class AssetMapping {
 	
 	private Date ReturnDate;
 
-	private AssetStatusEnum Status;
+	private AssetAllocation Status;
 	
 	
-	public AssetStatusEnum getStatus() {
+
+
+	public AssetAllocation getStatus() {
 		return Status;
 	}
 
-	public void setStatus(AssetStatusEnum status) {
+	public void setStatus(AssetAllocation status) {
 		Status = status;
 	}
 

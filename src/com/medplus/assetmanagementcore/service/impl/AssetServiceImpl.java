@@ -84,7 +84,10 @@ public class AssetServiceImpl implements AssetService{
 		}
 
 	public List<Asset> getAssetsByStatus(String status)throws AssetException {                      //done
+		
+	
 		if(status.isEmpty()){    //change and validate using validate class
+			
 			AssetException iae= new AssetException("Asset Status Exception");
 			throw iae;
 		}
@@ -167,7 +170,7 @@ public class AssetServiceImpl implements AssetService{
 		//System.out.println(dao.getAsset(assetId).getStatus().value);
 		int result=dao.allocateAsset(assignedTo, assetId, asignedBy, handOverDate);
 		 if(result>0){    //tx mgmt required-rollback
-			 int r=dao.updateAssetStatus(assetId, AssetStatusEnum.NotAvailable, asignedBy, handOverDate);//for make asset unavailable
+			 dao.updateAssetStatus(assetId, AssetStatusEnum.NotAvailable, asignedBy, handOverDate);//for make asset unavailable
 			 return true;
 			 }
 		 else
@@ -192,7 +195,7 @@ public class AssetServiceImpl implements AssetService{
 		}
 		 int result=dao.deAllocateAsset( assetId, deallocatedBy, deallocationDate);
 		 if(result>0){ //rollback required
-		 int r=dao.updateAssetStatus(assetId, AssetStatusEnum.NotAvailable, deallocatedBy, deallocationDate);//for make asset available
+		 dao.updateAssetStatus(assetId, AssetStatusEnum.NotAvailable, deallocatedBy, deallocationDate);//for make asset available
  
 		 return true;
 		 }
