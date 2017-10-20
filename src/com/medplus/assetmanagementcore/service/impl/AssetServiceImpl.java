@@ -5,19 +5,13 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import com.medplus.assetmanagementcore.dao.AssetDao;
-import com.medplus.assetmanagementcore.dao.impl.AssetDaoImpl;
-import com.medplus.assetmanagementcore.dao.impl.EmployeeDaoImpl;
 import com.medplus.assetmanagementcore.exceptions.AssetException;
 import com.medplus.assetmanagementcore.exceptions.AuthenticationException;
 import com.medplus.assetmanagementcore.model.Asset;
-import com.medplus.assetmanagementcore.model.Employee;
 import com.medplus.assetmanagementcore.model.NewTypeRequest;
 import com.medplus.assetmanagementcore.model.Request;
 import com.medplus.assetmanagementcore.service.AssetService;
@@ -46,7 +40,7 @@ public class AssetServiceImpl implements AssetService{
 		}
 		return asset; 	
 	}
-
+//ui done
 	public List<Asset> getAllAssets()  throws AssetException{
 		List<Asset> list=dao.getAllAssets();
 		if(list.size()==0)
@@ -56,7 +50,7 @@ public class AssetServiceImpl implements AssetService{
 		}
 		return list;
 	}
-
+//ui done
 	public String addAsset(Asset asset, String createdBy, Date createdDate) throws AssetException {
 		//check role of createdBy
 		if(asset==null){

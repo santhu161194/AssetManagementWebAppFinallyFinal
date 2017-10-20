@@ -78,7 +78,7 @@ public class AssetDaoImpl implements AssetDao {
 				pst.setDouble(4,asset.getCost());
 				pst.setString(5,asset.getStatus().value);
 				pst.setString(6,asset.getCreatedBy());
-				pst.setDate(7,(java.sql.Date)createdDate);
+				pst.setDate(7,new java.sql.Date(createdDate.getTime()));
 			}
 		});
 		return rows;
