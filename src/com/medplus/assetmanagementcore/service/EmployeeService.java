@@ -32,7 +32,7 @@ public interface EmployeeService {
 	
 	public String removeEmployeeRole(String empid,String removedBy,Date removedDate);
 	
-	public String changePassword(String empId,String oldPassword,String newPassword);
+	public String changePassword(String empId,String oldPassword,String newPassword,String changedBy,Date changedDate);
 	
 	public String resetPassword(String empId,String changedBy,String newPassword);
 	

@@ -41,10 +41,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	public String changePassword(String empId, String password,
-			String newPassword) {
+			String newPassword,String changedBy,Date changedDate) {
 
-		if (employeeDao.updatePassword(empId, "someone",
-				new java.sql.Date(new Date().getTime()), "123456", "123") != 0)
+		if (employeeDao.updatePassword(empId, changedBy,
+				changedDate, password, newPassword) != 0)
 			return "SUCCESS";
 		else
 			return "FAILURE";
@@ -53,8 +53,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	public String resetPassword(String empId, String changedBy,
 			String newPassword) {
+		
+
 		if (employeeDao.resetPassword(empId, changedBy,
-				new java.sql.Date(new Date().getTime()), "121") != 0)
+				new java.sql.Date(new Date().getTime()), newPassword) != 0)
 			return "SUCCESS";
 		else
 			return "FAILURE";

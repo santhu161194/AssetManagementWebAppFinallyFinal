@@ -1,5 +1,7 @@
 package com.medplus.assetmanagementwebapp.controller;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -78,6 +80,51 @@ public ModelAndView invalidate(){
 	ModelAndView mav=new ModelAndView();
 	
 	mav.addObject("status",null);
+	mav.setViewName("Login");
+	return mav;
+}
+
+@RequestMapping(value="/changePassword",method=RequestMethod.GET)
+public ModelAndView changePassword(){
+	ModelAndView mav=new ModelAndView();
+	mav.setViewName("ChangePassword");
+	return mav;
+}
+
+@RequestMapping(value="/changePassword",method=RequestMethod.POST)
+public ModelAndView ChangePassword(
+		@RequestParam("employeeID") String username,
+		@RequestParam("oldpassword") String oldpassword,
+		@RequestParam("newpassword") String newpassword,
+		@RequestParam("changedBy") String changedBy
+		){
+	ModelAndView mav=new ModelAndView();
+	
+	
+	String msg=employeeServiceImpl.changePassword(username, oldpassword, newpassword, changedBy, new Date());
+	mav.addObject("status", msg);
+	mav.setViewName("Login");
+	return mav;
+}
+
+@RequestMapping(value="/resetPassword",method=RequestMethod.GET)
+public ModelAndView resetPassword(){
+	ModelAndView mav=new ModelAndView();
+	mav.setViewName("ResetPassword");
+	return mav;
+}
+
+@RequestMapping(value="/resetPassword",method=RequestMethod.POST)
+public ModelAndView ResetPassword(
+		@RequestParam("employeeID") String username,
+		
+		@RequestParam("newpassword") String newpassword,
+		@RequestParam("resetby") String resetby){
+	ModelAndView mav=new ModelAndView();
+	
+	
+	String msg=employeeServiceImpl.resetPassword(username, resetby, newpassword);
+	mav.addObject("status", msg);
 	mav.setViewName("Login");
 	return mav;
 }

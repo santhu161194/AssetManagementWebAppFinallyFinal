@@ -46,6 +46,8 @@ bottom:300px;
 			<div align="left"><a href="allocateAsset?allocatedBy=${userid}">allocateAsset</a></div><br>
 			<div align="left"><a href="deallocateAsset?deallocatedBy=${userid}">DellocateAsset</a></div><br>
 			
+			<div align="left"><a href="resetPassword?resetBy=${userid}">Reset Password</a></div><br>
+			
 			
 			<div align="left"><a href="empl">Add Employee</a></div><br>
 			

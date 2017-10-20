@@ -6,8 +6,66 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<style>
+<title>Welcome to MEDPLUS Asset Management</title>
+
+<style><%@include file="css/login.css"%></style>
+
+
+</head>
+
+
+<body>
+<div class="container">
+<div class="main">
+<h2>MEDPLUS Asset Management</h2>
+
+
+
+
+
+<form action="login" id="form_id" method="post" name="myform">
+<label>User Name :</label>
+<input type="text" name="username" id="username" required="true"/>
+<label>Password :</label>
+<input type="password" name="password" id="password" required="true"/>
+<input type="submit" value="Login" id="submit" />
+</form>
+</div>
+</div>
+</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%-- <style>
 
 html{
 margin:0px;
@@ -41,7 +99,7 @@ float:left;
 <body>
 	<img src="/assetmanagementwebapp/WebContent/WEB-INF/views/logo.jpg" width="100px" height="30px">
 	<h2 id="id1" align="center">EMPLOYEE DATA</h2>
-
+<j:out value="${pageContext.request.contextPath}"></j:out>
 	<div id="id2">
 		<h3 align="center">Login Page</h3>
 		</div>
@@ -53,12 +111,13 @@ float:left;
 		<table>
 		<tr><td>Enter code</td><td><input name="username" required="true"/></td></tr>
 		<tr><td>Enter password</td><td><input name="password" type="password" required="true"/></td></tr>
-		<tr><td></td><td><input type="submit" value="Login"></td></tr>
+		<tr><td><input type="submit" value="Login"></td><td><a href="changePassword" >Change Password</a></td></tr>
+		
 		</table>
 			
 </form>
 	
 		</div>
 	</div>
-</body>
+</body> --%>
 </html>
