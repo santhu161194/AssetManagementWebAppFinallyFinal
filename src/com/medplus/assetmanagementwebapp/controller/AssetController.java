@@ -6,6 +6,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.context.annotation.Scope;
@@ -25,6 +29,8 @@ import com.medplus.assetmanagementcore.model.Asset;
 import com.medplus.assetmanagementcore.model.Employee;
 import com.medplus.assetmanagementcore.model.Request;
 import com.medplus.assetmanagementcore.service.AssetService;
+import com.medplus.assetmanagementcore.service.impl.EmployeeServiceImpl;
+import com.medplus.assetmanagementcore.utils.AssetStatus;
 import com.medplus.assetmanagementcore.utils.AssetTypeEnum;
 import com.medplus.assetmanagementcore.utils.AssetValidation;
 @Controller
@@ -40,7 +46,10 @@ public class AssetController {
 		AssetValidation validation;
 		@Autowired
 		List<Asset> assetlist;
-		
+		@Autowired
+		List<Request> requestList;
+		@Autowired
+		EmployeeServiceImpl employeeServiceImpl;
 		@Autowired
 		Employee employee;
 		@Autowired
@@ -237,13 +246,14 @@ public class AssetController {
 		 
 		 
 		 @RequestMapping(value="postAssetRequests",method=RequestMethod.GET)
-		 public ModelAndView postAssetRequestForm(@RequestParam("type") String type) 
+		 public ModelAndView postAssetRequestForm(@RequestParam("type") String type,HttpServletRequest request, HttpServletResponse response)
 			{
 				ModelAndView mav=new ModelAndView();
 				
 			
 			try {
-				assetServiceImpl.postAssetRequest(AssetTypeEnum.valueOf(type),"10",new Date());
+				HttpSession session=request.getSession(false);
+				assetServiceImpl.postAssetRequest(AssetTypeEnum.valueOf(type),session.getAttribute("username").toString(),new Date());
 				
 				mav.setViewName("PostAssetRequests1");
 				return mav;
@@ -254,6 +264,35 @@ public class AssetController {
 			
 			return mav;
 			
+			}
+		 
+		 
+		 @RequestMapping(value="/emphome",method=RequestMethod.GET)
+			public ModelAndView emphome(@RequestParam("username") String username,HttpServletRequest request, HttpServletResponse response)
+			{
+				ModelAndView mav=new ModelAndView();
+				
+			try {
+				HttpSession session=request.getSession(false);
+				assetlist=assetServiceImpl.getAssetsOfEmployee(username);
+				
+				mav.addObject("assets", assetlist);
+				
+				requestList	=assetServiceImpl.getAssetRequests(username);
+				System.out.println("ccccc"+requestList.size());
+				mav.addObject("requestList", requestList);
+				employee=employeeServiceImpl.getEmployee(username);
+				mav.addObject("emp", employee);
+				mav.setViewName("EmpHome");
+		        return mav;
+			} catch (AssetException e) {
+				return mav;
+				
+			}
+			catch(NullPointerException e1)
+			{
+				return mav;
+			}
 			}
 		
 	}

@@ -1,5 +1,6 @@
 package com.medplus.assetmanagementwebapp.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -37,19 +38,11 @@ public ModelAndView getLoginForm(){
 	return mav;
 }
 
-//direct go to employee home ..temp
-@RequestMapping(value="/emphome",method=RequestMethod.GET)
-public ModelAndView getEmpHome(){
-	ModelAndView mav=new ModelAndView();
-	
 
-	mav.setViewName("EmpHome");
-	return mav;
-}
 
 //Logging in
 @RequestMapping(value="/login",method=RequestMethod.POST)
-public ModelAndView login(HttpServletRequest request, HttpServletResponse response,@RequestParam("username") String username,@RequestParam("password") String password){
+public String login(HttpServletRequest request, HttpServletResponse response,@RequestParam("username") String username,@RequestParam("password") String password) throws IOException{
 	ModelAndView mav=new ModelAndView();
 	String msg=null;
 	String login= employeeServiceImpl.authenticateEmployee(username, password);
@@ -71,18 +64,20 @@ public ModelAndView login(HttpServletRequest request, HttpServletResponse respon
 		session.setAttribute("role",roles );
 		if(roles.contains("admin"))
 		{
-		mav.setViewName("adminhome");
+			return "redirect:emphome?username="+username;
+		//mav.setViewName("EmpHome");
 		}
 		else if(roles.contains("edp"))
 		{
-		mav.setViewName("edphome");
+			return "redirect:emphome?username="+username;
 		}
-		else if(roles.contains("emp"))
+		else
 		{
-			mav.setViewName("emphome");
+			return "redirect:emphome?username="+username;
 		}
 	}
-	return mav;
+	
+	return null;
 }
 
 
