@@ -24,7 +24,12 @@ th {
 </style>
 </head>
 <body>
-	
+		<%
+HttpSession session1=request.getSession(false);
+if(session1==null||session1.getAttribute("username")==null)
+{	%>
+<a href="login">Click here to login</a>
+<%} else{ %>
 	<h2 id="id1" align="center">EMPLOYEE DATA</h2>
 
 	<div id="id2">
@@ -53,5 +58,6 @@ th {
 	</table>
 
 	<a href="home">Return to home</a>
+	<%} %>
 </body>
 </html>

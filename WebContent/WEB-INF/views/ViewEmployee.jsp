@@ -24,7 +24,8 @@ th {
 </style>
 </head>
 <body>
-	
+<j:choose>
+<j:when test="${not empty sessionScope.username}">
 	<h2 id="id1" align="center">EMPLOYEE DATA</h2>
 
 	<div id="id2">
@@ -50,5 +51,10 @@ th {
 	</table>
 
 	<a href="home">Return to home</a>
+	</j:when>
+	<j:otherwise>
+<a href="#">Click here to login</a>
+</j:otherwise>
+</j:choose>
 </body>
 </html>

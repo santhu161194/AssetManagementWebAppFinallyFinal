@@ -1,17 +1,23 @@
 package com.medplus.assetmanagementwebapp.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.medplus.assetmanagementcore.model.Employee;
 import com.medplus.assetmanagementcore.service.EmployeeService;
-@Scope("prototype")
+
 
 
 @Controller
@@ -19,7 +25,8 @@ import com.medplus.assetmanagementcore.service.EmployeeService;
 public class LoginController {
 @Autowired	
 EmployeeService employeeServiceImpl;
-
+@Autowired
+Employee employee;
 //getting loginform
 @RequestMapping(value="/login",method=RequestMethod.GET)
 public ModelAndView getLoginForm(){
@@ -42,25 +49,38 @@ public ModelAndView getEmpHome(){
 
 //Logging in
 @RequestMapping(value="/login",method=RequestMethod.POST)
-public ModelAndView login(@RequestParam("username") String username,@RequestParam("password") String password){
+public ModelAndView login(HttpServletRequest request, HttpServletResponse response,@RequestParam("username") String username,@RequestParam("password") String password){
 	ModelAndView mav=new ModelAndView();
-	
 	String msg=null;
-	
 	String login= employeeServiceImpl.authenticateEmployee(username, password);
 	System.out.println(login+""+password);
-	if(login.equals("LOGIN FAILED"))
+	if(!login.equals("LOGIN SUCCESSFUL"))
 	{
 
 		mav.setViewName("Login");
-		mav.addObject("status","Invalid Credentials");
+		mav.addObject("status",login);
 	}
 	else
 	{
-		mav.addObject("msg", msg);
-		mav.addObject("userid",username);
-		/*mav.addObject("status","yes");*/
-		mav.setViewName("home");
+		HttpSession session=request.getSession();
+		session.setAttribute("username", username);
+		
+		
+		List<String> roles=employeeServiceImpl.getRole(username);
+		
+		session.setAttribute("role",roles );
+		if(roles.contains("admin"))
+		{
+		mav.setViewName("adminhome");
+		}
+		else if(roles.contains("edp"))
+		{
+		mav.setViewName("edphome");
+		}
+		else if(roles.contains("emp"))
+		{
+			mav.setViewName("emphome");
+		}
 	}
 	return mav;
 }
@@ -76,9 +96,10 @@ public ModelAndView home(){
 
 //invalidate
 @RequestMapping(value="/invalidate",method=RequestMethod.GET)
-public ModelAndView invalidate(){
+public ModelAndView invalidate(HttpServletRequest request, HttpServletResponse response){
 	ModelAndView mav=new ModelAndView();
-	
+	HttpSession session=request.getSession(false);
+	session.invalidate();
 	mav.addObject("status",null);
 	mav.setViewName("Login");
 	return mav;

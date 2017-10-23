@@ -2,13 +2,6 @@ package com.medplus.assetmanagementcore.validations;
 
 
 
-import java.util.jar.Attributes.Name;
-
-import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
-import org.springframework.validation.Validator;
-
-import com.medplus.assetmanagementcore.model.Employee;
 
 
 

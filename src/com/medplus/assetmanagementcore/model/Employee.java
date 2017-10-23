@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.medplus.assetmanagementcore.utils.Gender;
 @Component
+
 public class Employee {
 	
 	private String employeeId;

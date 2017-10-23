@@ -1,6 +1,6 @@
 @import url(http://fonts.googleapis.com/css?family=Raleway);
 h2{
-
+color:white;
 padding: 30px 35px;
 margin: -10px -50px;
 text-align:center;
@@ -29,7 +29,7 @@ border: 2px solid gray;
 border-radius: 10px;
 font-family: raleway;
 float:left;
-background:#FE6F5E;
+background:#4d4d4d;
 margin-top:50px;
 }
 input[type=text],input[type=password]{
@@ -44,7 +44,7 @@ font-size: 16px;
 border-radius: 5px;
 }
 label{
-color: #464646;
+color: white;
 text-shadow: 0 1px 0 #fff;
 font-size: 14px;
 font-weight: bold;
@@ -68,9 +68,9 @@ color: black;
 }
 input[type=submit]{
 font-size: 16px;
-background: linear-gradient(#ffbc00 5%, #ffdd7f 100%);
-border: 1px solid #e5a900;
-color: #4E4D4B;
+background: linear-gradient(black 5%, black 70%);
+border: 1px solid white;
+color: white;
 font-weight: bold;
 cursor: pointer;
 width: 100%;

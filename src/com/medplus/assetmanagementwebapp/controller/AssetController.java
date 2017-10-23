@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -24,10 +25,10 @@ import com.medplus.assetmanagementcore.model.Asset;
 import com.medplus.assetmanagementcore.model.Employee;
 import com.medplus.assetmanagementcore.model.Request;
 import com.medplus.assetmanagementcore.service.AssetService;
-import com.medplus.assetmanagementcore.utils.AssetStatus;
 import com.medplus.assetmanagementcore.utils.AssetTypeEnum;
 import com.medplus.assetmanagementcore.utils.AssetValidation;
 @Controller
+
 public class AssetController {
 
 	

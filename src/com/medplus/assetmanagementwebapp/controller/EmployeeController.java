@@ -7,6 +7,7 @@ import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -28,6 +29,7 @@ import com.medplus.assetmanagementcore.service.impl.EmployeeServiceImpl;
 
 
 @Controller
+
 public class EmployeeController {
 	@Autowired	
 	EmployeeService employeeServiceImpl;

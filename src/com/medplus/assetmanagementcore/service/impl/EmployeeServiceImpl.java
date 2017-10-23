@@ -5,16 +5,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.support.DaoSupport;
 import org.springframework.stereotype.Service;
 
 import com.medplus.assetmanagementcore.dao.impl.EmployeeDaoImpl;
-import com.medplus.assetmanagementcore.model.Asset;
 import com.medplus.assetmanagementcore.model.Employee;
 import com.medplus.assetmanagementcore.service.EmployeeService;
 import com.medplus.assetmanagementcore.utils.EmployeeException;
 import com.medplus.assetmanagementcore.utils.Encryption;
-import com.medplus.assetmanagementcore.utils.Queries;
 @Service
 public class EmployeeServiceImpl implements EmployeeService{
 	@Autowired
@@ -196,16 +193,28 @@ EmployeeDaoImpl employeeDaoImpl;
 	}
 
 public String authenticateEmployee(String empId, String password) {
-		
+		if(!isUserExisting(empId))
+		{
+		return "INVALID USER";
+		}
+		else
+		{
 		password=Encryption.cryptWithMD5(password);
 		System.out.println(password);
-		System.out.println(employeeDaoImpl.getEmployeePassword(empId));
+		try{
 		if(password.equals(employeeDaoImpl.getEmployeePassword(empId)))
+		{
 		return "LOGIN SUCCESSFUL";
+		}
 		else
-		return "LOGIN FAILED";
+		return "Username and password do not match";
 	}
-
+catch(NullPointerException e)
+		{
+	return "Username and password do not match";
+		}
+		}
+}
 
 
 
