@@ -53,6 +53,7 @@ if(session1==null||session1.getAttribute("username")==null)
 				<td><a href="UpdateEmployee?code=<j:out value="${emp.employeeId}"></j:out>">Update</a></td>
 				<td><a href="removeEmployeeRole?code=<j:out value="${emp.employeeId}"></j:out>">Remove Role</a></td>
 				<td><a href="getEmployeeRole?code=<j:out value="${emp.employeeId}"></j:out>">Emp Role</a></td>
+				<td><a href="view?code=<j:out value="${emp.employeeId}"></j:out>">Emp Role</a></td>
 				</tr>
 				</j:forEach>
 	</table>

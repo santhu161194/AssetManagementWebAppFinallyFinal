@@ -95,7 +95,6 @@ float: left;
 width: 60%;
 height: 100%;
 margin-top: 10px;
-margin-left:20px;
 }
 #options{
 margin-top: 50px;
@@ -126,6 +125,18 @@ line-height:40px;
 #sidebar .sidebar-header {
     padding: 20px;
     background: #6d7fcc;
+}
+#div1 { 
+   width:450px; 
+				height: 400px;
+				background:gray;
+				float:right;
+				 
+				 margin-top: 5%;
+                 margin-right: 20%
+                
+				 
+ 
 }
 
 #sidebar ul.components {
@@ -160,13 +171,13 @@ line-height:40px;
     </div>
 
     <ul class="nav navbar-nav">
-   <% List role = (List)session.getAttribute("role");
+ <%--   <% List role = (List)session.getAttribute("role");
    if(role.contains("admin")){
 %>
       <li ><a href="adminhome?username=${username}">Admin</a></li>
-      <%} if(role.contains("edp")){%>
+      <%} if(role.contains("EDP")){%>
       <li><a  href="EDPHome?username=${username}">EDP</a></li>
-      <%} %>
+      <%} %> --%>
       <li class="active"><a  href="employee?username=${username}">Employee</a></li>
 
       
@@ -188,20 +199,40 @@ line-height:40px;
           
  <ul class="list-unstyled components">
   
-    
-  <li><a id="emphome?username=${username}" class="showhide">DashBoard</a></li><br>	
-   
-    <li><a id="postAssetRequests" href="#" class="showhide">Request Asset</a></li><br>
+  <li><a id="viewAssets" class="showhide">View Available Assets</a></li><br>	
+   <li><a id="viewEmpls" href="#" class="showhide">View Available Assets</a></li><br>
     <li><a id="assetrequest" href="#" class="showhide">Request New type of Asset</a></li><br>
        <li><a id="changePassword" href="#" class="showhide">Change Password</a></li><br>
+  
+      
   </ul>
   </nav>
   </div>
 	<!-- the content is shown here -->
 	
 	
-	<div id="content"></div>
-  
+	<div id="content">
+  <div id="div1">
+	<form  action="postAssetRequests" method="post">
+     <h2 id="id1" align="center"> Confirm Asset-Request</h2>
+
+	<div id="id2">
+		<h3 align="center">${msg}</h3>
+		</div>
+
+<table align="center">
+
+<tr><td>employeeId</td><td><input type="text" name="EmployeeId" value=${username} readonly></td></tr>
+<tr><td>Asset Type</td><td><input type="text" name="assetType"  value=<%= request.getParameter("type") %> readonly></td></tr>
+
+
+<tr><td></td><td><input type="submit" value="Confirm Request"></td><td></td></tr>
+</table>
+<!-- <a href="postAssetRequests" >Return to home</a> -->
+     </form>
+	
+</div>
+  </div>
 
 
   </j:when>
