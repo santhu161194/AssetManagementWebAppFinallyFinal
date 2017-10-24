@@ -22,13 +22,23 @@ th {
     color: white;
 }
 </style>
+
+<script>
+  $(function() { // when DOM is ready
+	    $(".showhide").click(function(){ 
+	    	var toLoad=$(this).attr('id');// when #showhidecomment is clicked
+	    	
+	        $("#content").load(toLoad); // load the sample.jsp page in the #chkcomments element
+	    }); 
+	});
+  </script>
 </head>
 <body>
-	<s:form commandName="asset" action="viewAssets" method="post">
-	<h2 id="id1" align="center">ASSET DATA</h2>
+	
 
-	<div id="id2">
-		<h3 align="center">View Assets</h3>
+
+	<div id="content">
+		<h3 align="center">${viewdetails}</h3>
 		</div>
 	<h4><j:out value="${updatestatus}"></j:out></h4>
 	<table border="2">
@@ -56,14 +66,19 @@ th {
 				<td><j:out value="${asss.createdDate} "></j:out></td>
 				<td><j:out value="${asss.createdBy} "></j:out></td>
 				<td><j:out value="${asss.modifiedBy} "></j:out></td>
-				<td><a href=postAssetRequests?type=<j:out value="${asss.assetType}"></j:out>>Asset Request</a></td>
+				<j:if test="${viewdetails eq 'Available Assets'}">
+				<td><a class="showhide" id="allocateAsset?assetID=<j:out value="${asss.assetId}"></j:out>">Allocate Asset</a></td>
+				</j:if>
+				<j:if test="${viewdetails eq 'Allocated Assets'}">
+				<td><a class="showhide" id="deallocateAsset?assetID=<j:out value="${asss.assetId}"></j:out>?deassignedBy=<j:out value="${username}"></j:out>">DeAllocate Asset</a></td>
+				</j:if>
 				<td><a href="UpdateAsset?code=<j:out value="${asss.assetId}"></j:out>">Update</a></td>
 				</tr>
 				</j:forEach>
 				</table>
 				
-				<a href="home">Return to home</a>
-				</s:form>
+			
+			
 				</body>
 				</html>
 				

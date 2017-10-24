@@ -15,11 +15,11 @@
 				<td>
 			<tr>
 				<td>AssetId</td>
-				<td><input name=assetID /></td>
+				<td><input name=assetID value="${assetID}"></td>
 				<td>
 			<tr>
 				<td>AssignedBy</td>
-				<td><input name=assignedBy value=<%=request.getParameter("allocatedBy")%>></td>
+				<td><input name=assignedBy value=<%=session.getAttribute("username")%>></td>
 			</tr>
 			</table>
 			<input type="submit">

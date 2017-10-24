@@ -191,15 +191,15 @@ public class EmployeeController {
 					
 					return mav;
 				}
-			/*	@RequestMapping(value="/removeEmployeeRole",method=RequestMethod.GET)
+				@RequestMapping(value="/removeEmployeeRole",method=RequestMethod.GET)
 				public ModelAndView removeEmployeeRoleForm(@RequestParam("code") String code)
 				{
 					ModelAndView mav=new ModelAndView();
-					employee=serImpl.removeEmployeeRole(empId, roleName, removedBy, removedDate)
+					serImpl.removeEmployeeRole("santhu", "EDP", "santhu", new Date());
 					mav.addObject(employee);
 					mav.setViewName("Employee");
 					return mav;
-				}*/	
+				}	
 				
 				
 }

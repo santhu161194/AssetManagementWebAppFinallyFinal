@@ -12,26 +12,26 @@
 			<tr>
 				<td>EmployeeId</td>
 				<td><input name=employeeID /></td>
-				<td>
+				
 			<tr>
 				<td>Old Password</td>
 				<td><input name=oldpassword /></td>
-				<td>
+
 			<tr>
 			<tr>
 				<td>Re enter Old Password</td>
 				<td><input /></td>
-				<td>
+		
 			<tr>
 			<tr>
 				<td>New Password</td>
 				<td><input name=newpassword ></td>
-				<td>
+		
 			<tr>
 			<tr>
 				<td>Changed By</td>
 				<td><input name=changedBy ></td>
-				<td>
+		
 			<tr>	
 			</table>
 			<input type="submit">

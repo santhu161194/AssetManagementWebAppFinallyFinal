@@ -1,3 +1,4 @@
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="j"%>
@@ -17,15 +18,34 @@
   }
   
   </script>
+  <script>
+  $(function() { // when DOM is ready
+	    $(".showhide").click(function(){ 
+	    	var toLoad=$(this).attr('id');// when #showhidecomment is clicked
+	    	
+	        $("#content").load(toLoad); // load the sample.jsp page in the #chkcomments element
+	    }); 
+	});
+  </script>
 <title>Welcome Home</title>
 <style type="text/css">
+body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+    background-color: whitesmoke;
+}
 #upleft { 
-   width:650px; 
-				height: 500px;
-				background:white;
-				float:left;
-				 margin: 10px;
- 
+width: 300px;
+height: 100%;
+background: grey;
+float: left;
+margin: 10px;
+padding-left: 10px;
+position: absolute;
+left: -10px;
+top: 42px;
 }
 #profile { 
    width:550px; 
@@ -70,10 +90,62 @@ margin: 10px;
     text-align: center;
     vertical-align: center;
 }
-tr:nth-child(even) {background-color: #f2f2f2}
-th {
-    background-color: black;
-    color: white;
+
+#options{
+margin-top: 50px;
+}
+.showhide{
+line-height:40px;
+
+
+}
+#content{
+float: left;
+width: 60%;
+height: 100%;
+margin-top: 10px;
+margin-left:20px;
+}
+.wrapper {
+        display: flex;
+}
+
+#sidebar {
+        min-width: 250px;
+        max-width: 250px;
+        height: 100vh;
+        margin-top: -20px;
+}
+#sidebar {
+    /* don't forget to add all the previously mentioned styles here too */
+    background: #7386D5;
+    color: #fff;
+    transition: all 0.3s;
+}
+
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: #6d7fcc;
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+    border-bottom: 1px solid #47748b;
+}
+
+#sidebar ul p {
+    color: #fff;
+    padding: 10px;
+}
+
+#sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+}
+#sidebar ul li a:hover {
+    color: #7386D5;
+    background: #fff;
 }
 </style>
 </head>
@@ -87,16 +159,21 @@ th {
       <a class="navbar-brand" href="#">Asset Management</a>
     </div>
     <ul class="nav navbar-nav">
-      <li class="active"><a href="#">Home</a></li>
-      <li><a href="#">Page 1</a></li>
-      <li><a href="#">Page 2</a></li>
+   <% List role = (List)session.getAttribute("role");
+   if(role.contains("admin")){
+%>
+      <li class="active"><a href="emphome?username=${username}">Admin</a></li>
+      <%} if(role.contains("edp")){%>
+      <li><a  href="EDPHome?username=${username}">EDP</a></li>
+      <%} %>
+      <li ><a  href="employee?username=${username}">Employee</a></li>
+
+      
     </ul>
     <ul class="nav navbar-nav navbar-right">
-      
+
       <li><a href="invalidate"><span class="glyphicon glyphicon-user"></span> Logout</a></li>
       
-    </ul>
-     <!--  <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li> -->
     </ul>
   </div>
   

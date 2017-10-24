@@ -90,10 +90,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
 								.getDateOfJoin().getTime()));
 						pst.setString(9, employee.getAddress());
 						pst.setString(10,employee.getCreatedBy());
-						pst.setDate(11,new java.sql.Date(employee.getCreatedDate().getTime()));
+						pst.setDate(11,new java.sql.Date(new Date().getTime()));
 						pst.setString(12, employee.getModifiedBy());
 						
-						pst.setDate(13,new java.sql.Date(employee.getModifiedDate().getTime()));
+						pst.setDate(13,new java.sql.Date(new Date().getTime()));
 						
 					}
 

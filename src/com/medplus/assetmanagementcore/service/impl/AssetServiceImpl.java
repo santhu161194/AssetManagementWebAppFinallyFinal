@@ -197,8 +197,8 @@ public class AssetServiceImpl implements AssetService{
 		}
 		 int result=dao.deAllocateAsset( assetId, deallocatedBy, deallocationDate);
 		 if(result>0){ //rollback required
-		 dao.updateAssetStatus(assetId, AssetStatusEnum.NotAvailable, deallocatedBy, deallocationDate);//for make asset available
- 
+		 dao.updateAssetStatus(assetId, AssetStatusEnum.Available, deallocatedBy, deallocationDate);//for make asset available
+		 
 		 return true;
 		 }
 		 else

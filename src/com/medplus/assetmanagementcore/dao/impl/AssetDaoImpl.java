@@ -20,6 +20,7 @@ import com.medplus.assetmanagementcore.model.Asset;
 import com.medplus.assetmanagementcore.model.AssetMapping;
 import com.medplus.assetmanagementcore.model.NewTypeRequest;
 import com.medplus.assetmanagementcore.model.Request;
+import com.medplus.assetmanagementcore.service.impl.AssetServiceImpl;
 import com.medplus.assetmanagementcore.utils.AssetAllocation;
 import com.medplus.assetmanagementcore.utils.AssetStatusEnum;
 import com.medplus.assetmanagementcore.utils.AssetTypeEnum;
@@ -32,6 +33,8 @@ public class AssetDaoImpl implements AssetDao {
 	Asset asset;
 	@Autowired
 	Request request;
+	@Autowired
+	AssetServiceImpl ser;
 	Connection conn;
 	PreparedStatement pst;
 	String code="";
@@ -86,11 +89,13 @@ public class AssetDaoImpl implements AssetDao {
 		return 0;
 	}
 //working done with log
-	public int updateAssetStatus(final int assetId, final AssetStatusEnum status,final String modifiedBy, final Date dateModifed) {
-		updateAssetToLog(assetId);	
+	public int updateAssetStatus(final int assetId,  final AssetStatusEnum status,final String modifiedBy, final Date dateModifed) {
+		updateAssetToLog(assetId);
+		System.out.println("kya "+status);
 		int rows=template.update(Queries.updateAssetStatus,new PreparedStatementSetter() {
 			public void setValues(PreparedStatement pst) throws SQLException {
 				pst.setString(1,status.value);
+				System.out.println(status.name());
 				pst.setString(2,modifiedBy);
 				pst.setDate(3,new java.sql.Date(dateModifed.getTime()));
 				pst.setInt(4,assetId);
@@ -247,7 +252,8 @@ public class AssetDaoImpl implements AssetDao {
 	}
 //done
 	public int deAllocateAsset(final int assetId, final String deAllocatedBy,final Date deAllocationdate) {
-		updateMappingToLog( assetId);
+		int rows1=updateMappingToLog( assetId);
+		
 		int rows=template.update(Queries.deallocateAsset,new PreparedStatementSetter() {
 			public void setValues(PreparedStatement pst) throws SQLException {
 			
@@ -257,9 +263,11 @@ public class AssetDaoImpl implements AssetDao {
 			pst.setInt(4,assetId);
 		}
 	});
+		
 	return rows;
 	}
-	//insert into mapping log 
+	
+//insert into mapping log 
 private int updateMappingToLog(final int assetId) {
 		
 		final AssetMapping map=getAssetMapping(assetId);

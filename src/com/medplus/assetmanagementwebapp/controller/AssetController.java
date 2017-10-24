@@ -142,7 +142,12 @@ public class AssetController {
 			try {
 				assetlist=assetServiceImpl.getAssetsByStatus(status);
 				mav.addObject("assets", assetlist);
+				if(status.equals("A")){
+				mav.addObject("viewdetails", "Available Assets");}
+				else if(status.equals("N"))
+				mav.addObject("viewdetails", "Allocated Assets");	
 				mav.setViewName("ViewAssets");
+				
 		        return mav;
 			} catch (AssetException e) {
 				// TODO Auto-generated catch block
@@ -152,10 +157,10 @@ public class AssetController {
 			}
 		 
 		 @RequestMapping(value="/allocateAsset",method=RequestMethod.GET)
-			public ModelAndView getAllocationForm(){
+			public ModelAndView getAllocationForm(@RequestParam("assetID") String assetID){
 				
 				ModelAndView mav=new ModelAndView();
-				
+				mav.addObject("assetID", assetID);
 				mav.setViewName("Allocation");
 				return mav;
 		}
@@ -167,19 +172,21 @@ public class AssetController {
 					@RequestParam("assignedBy") String assignedBy) throws NumberFormatException, AuthenticationException
 			{
 				ModelAndView mav=new ModelAndView();
-				System.out.println("I reached");
+				
 				boolean rows;
 				try {
 					rows = assetServiceImpl.allocateAsset(employeeId, Integer.parseInt(assetID), assignedBy, new Date());
 					if(rows==true)
 					{
-						
+						mav.addObject("message", "allocated asset successfully");
+						mav.setViewName("EDPHome");
 						return mav;
 					
 					}
 					else
 					{
-					return new ModelAndView("redirect:home");
+						mav.addObject("message", "allocation failed");
+					return new ModelAndView("redirect:EDPHome");
 				}
 				} catch (AssetException e) {
 					// TODO Auto-generated catch block
@@ -267,7 +274,7 @@ public class AssetController {
 			}
 		 
 		 
-		 @RequestMapping(value="/emphome",method=RequestMethod.GET)
+		 @RequestMapping(value="/adminhome",method=RequestMethod.GET)
 			public ModelAndView emphome(@RequestParam("username") String username,HttpServletRequest request, HttpServletResponse response)
 			{
 				ModelAndView mav=new ModelAndView();
@@ -283,7 +290,63 @@ public class AssetController {
 				mav.addObject("requestList", requestList);
 				employee=employeeServiceImpl.getEmployee(username);
 				mav.addObject("emp", employee);
-				mav.setViewName("EmpHome");
+				mav.setViewName("AdminHome");
+		        return mav;
+			} catch (AssetException e) {
+				return mav;
+				
+			}
+			catch(NullPointerException e1)
+			{
+				return mav;
+			}
+			}
+		 
+		 @RequestMapping(value="/employee",method=RequestMethod.GET)
+			public ModelAndView EmployeeHome(@RequestParam("username") String username,HttpServletRequest request, HttpServletResponse response)
+			{
+				ModelAndView mav=new ModelAndView();
+				
+			try {
+				HttpSession session=request.getSession(false);
+				assetlist=assetServiceImpl.getAssetsOfEmployee(username);
+				
+				mav.addObject("assets", assetlist);
+				
+				requestList	=assetServiceImpl.getAssetRequests(username);
+				System.out.println("ccccc"+requestList.size());
+				mav.addObject("requestList", requestList);
+				employee=employeeServiceImpl.getEmployee(username);
+				mav.addObject("emp", employee);
+				mav.setViewName("EmployeeHome");
+		        return mav;
+			} catch (AssetException e) {
+				return mav;
+				
+			}
+			catch(NullPointerException e1)
+			{
+				return mav;
+			}
+			}
+		 
+		 @RequestMapping(value="/EDPHome",method=RequestMethod.GET)
+			public ModelAndView EDPHome(@RequestParam("username") String username,HttpServletRequest request, HttpServletResponse response)
+			{
+				ModelAndView mav=new ModelAndView();
+				
+			try {
+				HttpSession session=request.getSession(false);
+				assetlist=assetServiceImpl.getAssetsOfEmployee(username);
+				
+				mav.addObject("assets", assetlist);
+				
+				requestList	=assetServiceImpl.getAssetRequests(username);
+				System.out.println("ccccc"+requestList.size());
+				mav.addObject("requestList", requestList);
+				employee=employeeServiceImpl.getEmployee(username);
+				mav.addObject("emp", employee);
+				mav.setViewName("EDPHome");
 		        return mav;
 			} catch (AssetException e) {
 				return mav;

@@ -64,16 +64,16 @@ public String login(HttpServletRequest request, HttpServletResponse response,@Re
 		session.setAttribute("role",roles );
 		if(roles.contains("admin"))
 		{
-			return "redirect:emphome?username="+username;
+			return "redirect:adminhome?username="+username;
 		//mav.setViewName("EmpHome");
 		}
 		else if(roles.contains("edp"))
 		{
-			return "redirect:emphome?username="+username;
+			return "redirect:EDPHome?username="+username;
 		}
 		else
 		{
-			return "redirect:emphome?username="+username;
+			return "redirect:employee?username="+username;
 		}
 	}
 	
