@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.medplus.assetmanagementcore.dao.impl.EmployeeDaoImpl;
+import com.medplus.assetmanagementcore.exceptions.EmployeeException;
 import com.medplus.assetmanagementcore.model.Employee;
 import com.medplus.assetmanagementcore.service.EmployeeService;
-import com.medplus.assetmanagementcore.utils.EmployeeException;
 import com.medplus.assetmanagementcore.utils.Encryption;
 @Service
 public class EmployeeServiceImpl implements EmployeeService{

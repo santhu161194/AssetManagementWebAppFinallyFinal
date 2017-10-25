@@ -3,12 +3,7 @@ package com.medplus.assetmanagementcore.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-/*import java.util.HashMap;
-import java.util.Map;
 
-public enum Gender {
-male,female
-}*/
 public enum Gender{
 
 	MALE("M"), 

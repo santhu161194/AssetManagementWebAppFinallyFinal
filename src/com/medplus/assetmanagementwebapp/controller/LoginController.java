@@ -112,7 +112,7 @@ public ModelAndView ChangePassword(
 		@RequestParam("employeeID") String username,
 		@RequestParam("oldpassword") String oldpassword,
 		@RequestParam("newpassword") String newpassword,
-		@RequestParam("changedBy") String changedBy
+		@RequestParam("employeeID") String changedBy
 		){
 	ModelAndView mav=new ModelAndView();
 	

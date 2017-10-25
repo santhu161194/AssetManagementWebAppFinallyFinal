@@ -1,12 +1,36 @@
+
 package com.medplus.assetmanagementcore.utils;
 
+import java.util.HashMap;
+import java.util.Map;
+
+
 public enum AssetStatus {
-	Available("A"), NotAvailable("N");
-	
+
+	Available("A"), 
+	NotAvailable("N"); 
+
+
 	public String value;
-	AssetStatus(String value){
-		this.value = value;
+
+	
+	private static final Map<String, AssetStatus > lookup = new HashMap<String, AssetStatus >();
+
+	static {
+		for (AssetStatus  assetStatus : AssetStatus .values()) {
+			lookup.put(assetStatus.getValue(), assetStatus);
+		}
+	}
+
+	AssetStatus (String v) {
+		value = v;
+	}
+
+	public String getValue() {
+		return value;
+	}
+
+	public static AssetStatus  getName(String assetStatus) {
+		return lookup.get(assetStatus);
 	}
 }
-
-

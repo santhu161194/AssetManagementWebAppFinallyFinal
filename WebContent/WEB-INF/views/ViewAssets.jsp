@@ -70,9 +70,11 @@ th {
 				<td><a class="showhide" id="allocateAsset?assetID=<j:out value="${asss.assetId}"></j:out>">Allocate Asset</a></td>
 				</j:if>
 				<j:if test="${viewdetails eq 'Allocated Assets'}">
-				<td><a class="showhide" id="deallocateAsset?assetID=<j:out value="${asss.assetId}"></j:out>?deassignedBy=<j:out value="${username}"></j:out>">DeAllocate Asset</a></td>
+				<td><a class="showhide" id="deallocateAsset?assetID=<j:out value="${asss.assetId}"></j:out>">DeAllocate Asset</a></td>
 				</j:if>
-				<td><a href="UpdateAsset?code=<j:out value="${asss.assetId}"></j:out>">Update</a></td>
+				<j:if test="${viewdetails eq 'All Assets'}">
+				
+				</j:if>
 				</tr>
 				</j:forEach>
 				</table>

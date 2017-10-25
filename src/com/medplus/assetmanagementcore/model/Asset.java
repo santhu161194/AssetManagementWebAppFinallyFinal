@@ -4,11 +4,8 @@ import java.util.Date;
 
 import org.springframework.stereotype.Component;
 
-import com.medplus.assetmanagementcore.utils.AssetStatusEnum;
-import com.medplus.assetmanagementcore.utils.AssetTypeEnum;
-
-
-
+import com.medplus.assetmanagementcore.utils.AssetStatus;
+import com.medplus.assetmanagementcore.utils.AssetType;
 
 @Component
 public class Asset {
@@ -18,15 +15,18 @@ public class Asset {
 
 	private String assetName;
 
-	//private enum assetType{Laptop,Desktop,Monitor,Mouse};
-	private AssetTypeEnum assetType;
+	private AssetType assetType;
+	
 	private double cost;
-	private AssetStatusEnum status;
-	//private enum status{Available,Notavailable}
+	
+	private AssetStatus status;
+	
 	private Date createdDate;
+	
 	private String createdBy;
+	
 	private String modifiedBy;
-	//private Date dateModified;
+
 	public String getModifiedBy() {
 		return modifiedBy;
 	}
@@ -44,6 +44,7 @@ public class Asset {
 	}
 
 	private Date dateModified;
+
 	public int getAssetId() {
 		return assetId;
 	}
@@ -64,19 +65,19 @@ public class Asset {
 		this.createdBy = createdBy;
 	}
 
-	public AssetTypeEnum getAssetType() {
+	public AssetType getAssetType() {
 		return assetType;
 	}
 
-	public void setAssetType(AssetTypeEnum assetType) {
+	public void setAssetType(AssetType assetType) {
 		this.assetType = assetType;
 	}
 
-	public AssetStatusEnum getStatus() {
+	public AssetStatus getStatus() {
 		return status;
 	}
 
-	public void setStatus(AssetStatusEnum status) {
+	public void setStatus(AssetStatus status) {
 		this.status = status;
 	}
 
@@ -103,18 +104,18 @@ public class Asset {
 	public double getCost() {
 		return cost;
 	}
-    
+
 	@Override
 	public String toString() {
-		return "Asset [assetId=" + assetId + ", serialNumber=" + serialNumber + ", assetName=" + assetName
-				+ ", assetType=" + assetType + ", cost=" + cost + ", status=" + status + ", createdDate=" + createdDate
-				+ ", createdBy=" + createdBy + ", modifiedBy=" + modifiedBy + ", dateModified=" + dateModified + "]";
+		return "Asset [assetId=" + assetId + ", serialNumber=" + serialNumber
+				+ ", assetName=" + assetName + ", assetType=" + assetType
+				+ ", cost=" + cost + ", status=" + status + ", createdDate="
+				+ createdDate + ", createdBy=" + createdBy + ", modifiedBy="
+				+ modifiedBy + ", dateModified=" + dateModified + "]";
 	}
 
 	public void setCost(double cost) {
 		this.cost = cost;
 	};
-
-	
 
 }

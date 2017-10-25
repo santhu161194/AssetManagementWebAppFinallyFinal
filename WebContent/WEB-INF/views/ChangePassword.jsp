@@ -13,43 +13,26 @@
 				<td>EmployeeId</td>
 
 				<td><input name=employeeID  value=${username} readonly/></td>
-				<td>
-
-				<td><input name=employeeID /></td>
-
+				
 			<tr>
 				<td>Old Password</td>
 
 				<td><input name=oldpassword required/></td>
-				<td>
-
-				<td><input name=oldpassword /></td>
+				
 
 			<tr>
 			<tr>
 				<td>Re enter Old Password</td>
 
 				<td><input name=oldpassword1 required/></td>
-				<td>
-
-				<td><input /></td>
+			
 
 			<tr>
 			<tr>
 				<td>New Password</td>
-
 				<td><input name=newpassword required/></td>
-				<td>
-
-				<td><input name=newpassword ></td>
-
 			<tr>
-			<!-- <tr>
-				<td>Changed By</td>
-				<td><input name=changedBy ></td>
-
-				<td>
-			<tr> -->	
+		
 
 		
 			<tr>	

@@ -9,22 +9,22 @@
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  
+ 
   <script type="text/javascript">
   function assetRequest(select){
-	  var request=document.getElementById(select);
-	  var sel=(request.options[request.selectedIndex].value);
-	  window.location = '/Task2/postAssetRequests?type=' + sel;
+      var request=document.getElementById(select);
+      var sel=(request.options[request.selectedIndex].value);
+      window.location = '/Task2/postAssetRequests?type=' + sel;
   }
   </script>
   <script>
   $(function() { // when DOM is ready
-	    $(".showhide").click(function(){ 
-	    	var toLoad=$(this).attr('id');// when #showhidecomment is clicked
-	    	
-	        $("#content").load(toLoad); // load the sample.jsp page in the #chkcomments element
-	    }); 
-	});
+        $(".showhide").click(function(){
+            var toLoad=$(this).attr('id');// when #showhidecomment is clicked
+            
+            $("#content").load(toLoad); // load the sample.jsp page in the #chkcomments element
+        });
+    });
   </script>
   <title>Welcome Home</title>
 <style type="text/css">
@@ -46,35 +46,35 @@ position: absolute;
 left: -10px;
 top: 42px;
 }
-#profile { 
-   width:550px; 
-				height: 200px;
-				background:gray;
-				float:left;
-				 margin: 10px;
+#profile {
+   width:550px;
+                height: 200px;
+                background:gray;
+                float:left;
+                 margin: 10px;
  
 }
 
-#upright { 
+#upright {
    width:600px;
-				height:215px;
-				background:gray;
-				float:left;
+                height:215px;
+                background:gray;
+                float:left;
 
 }
-#below { 
+#below {
  height:215px;
-				width:600px;
-				background:gray;
-				float:left;
+                width:600px;
+                background:gray;
+                float:left;
 
 
 }
-#d4 { 
+#d4 {
  height:50px;
-				width:600px;
-				background:white;
-				float:left;
+                width:600px;
+                background:white;
+                float:left;
 
 
 }
@@ -95,7 +95,6 @@ float: left;
 width: 60%;
 height: 100%;
 margin-top: 10px;
-margin-left:20px;
 }
 #options{
 margin-top: 50px;
@@ -178,8 +177,8 @@ line-height:40px;
     </ul>
  
   </div>
-  
- </nav> 
+ 
+ </nav>
   <div class="wrapper">
 
         <nav id="sidebar">
@@ -187,9 +186,10 @@ line-height:40px;
                 
           
  <ul class="list-unstyled components">
-  
-    
-  <li><a id="emphome?username=${username}" class="showhide">DashBoard</a></li><br>	
+ 
+  <li><a id="empassets?username=${username}" class="showhide">My Assets</a></li><br>    
+     <li><a id="emprequest?username=${username}" class="showhide">My Requests</a></li><br>    
+   
    
     <li><a id="postAssetRequests" href="#" class="showhide">Request Asset</a></li><br>
     <li><a id="assetrequest" href="#" class="showhide">Request New type of Asset</a></li><br>
@@ -197,11 +197,13 @@ line-height:40px;
   </ul>
   </nav>
   </div>
-	<!-- the content is shown here -->
-	
-	
-	<div id="content"></div>
-  
+    <!-- the content is shown here -->
+    
+    
+    <div id="content">
+    <h5>${message}</h5>
+    </div>
+ 
 
 
   </j:when>

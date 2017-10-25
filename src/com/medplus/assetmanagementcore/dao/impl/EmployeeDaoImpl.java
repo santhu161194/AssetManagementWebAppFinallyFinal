@@ -24,14 +24,12 @@ import com.medplus.assetmanagementcore.utils.Queries;
 
 @Repository
 public class EmployeeDaoImpl implements EmployeeDao {
-	Connection conn;
-	PreparedStatement pst;
 	
     @Autowired
-	private JdbcTemplate template;
+	JdbcTemplate template;
     @Autowired
     Employee employee;
-    ResultSet rs;
+    
     
     //done
     private int updateEmployeeToLog(final Employee emp) {
@@ -69,7 +67,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	return rows;
 	
 }
-    //done
+    
 	@Override
 	public int insertEmployee(final Employee employee) {
 		int rows = template.update(Queries.ADD_EMPLOYEE,
@@ -101,52 +99,48 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 		return rows;
 	}
-//done
+
 	@Override
 	
+	public int updateEmployeeInfo(final Employee employee) {
 		
-			public int updateEmployeeInfo(final Employee employee, final String updatedBy,
-			final Date updatedDate) {
-		
-/*int rows=updateEmployeeToLog(employee);
-		System.out.println(rows);*/
-		int rows=template.update(Queries.UPDATE_EMPLOYEE,new PreparedStatementSetter() {
+		int rows=updateEmployeeToLog(employee);
 				
-			public void setValues(PreparedStatement pst) throws SQLException {
-				
-				pst.setString(1, employee.getEmployeeId());
-				pst.setString(2, employee.getFirstName());
-				pst.setString(3, employee.getLastName());
-			
-				pst.setString(4, employee.getGender().value.toString());
-				pst.setString(5,
-						String.valueOf(employee.getMobileNumber()));
-				pst.setDate(6, new java.sql.Date(employee
-						.getDateOfBirth().getTime()));
-				pst.setDate(7, new java.sql.Date(employee
-						.getDateOfJoin().getTime()));
-				pst.setString(8, employee.getAddress());
-				pst.setString(9,updatedBy);
-				pst.setDate(10, new java.sql.Date(new Date().getTime()));
-				pst.setString(11, employee.getEmployeeId());	
+				 rows=template.update(Queries.UPDATE_EMPLOYEE,new PreparedStatementSetter() {
+						
+					public void setValues(PreparedStatement pst) throws SQLException {
+						
+						pst.setString(1, employee.getEmployeeId());
+						pst.setString(2, employee.getFirstName());
+						pst.setString(3, employee.getLastName());
+					
+						pst.setString(4, employee.getGender().value.toString());
+						pst.setString(5,
+								String.valueOf(employee.getMobileNumber()));
+						pst.setDate(6, new java.sql.Date(employee
+								.getDateOfBirth().getTime()));
+						pst.setDate(7, new java.sql.Date(employee
+								.getDateOfJoin().getTime()));
+						pst.setString(8, employee.getAddress());
+						pst.setString(9,employee.getModifiedBy());
+						pst.setDate(10, new java.sql.Date(new Date().getTime()));
+						pst.setString(11, employee.getEmployeeId());	
+						
+					}
+				});
+				return rows;
 				
 			}
-		});
-		return rows;
-		
-	}
 	
-	//done
-	@Override
-	public int employeeModification(final String employeeId, final String updatedBy,
-			final Date updatedDate) {
+//modifying modified date and modified by after  changing roles
+	public int employeeModification(final String employeeId, final String updatedBy) {
 		int row=template.update(Queries.employeeModification,new PreparedStatementSetter() {
 				
 			@Override
 			public void setValues(PreparedStatement pst) throws SQLException {
 				
 				pst.setString(1,updatedBy);
-				pst.setDate(2, new java.sql.Date(updatedDate.getTime()));
+				pst.setDate(2, new java.sql.Date(new Date().getTime()));
 				pst.setString(3,employeeId);
 				
 				
@@ -155,7 +149,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		return row;
 		
 	}
-	//done
+	
+	
+
 	@Override
 	public Employee getEmployee(String empId) {
 		
@@ -191,14 +187,14 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		}  
 	
 	
-	//done
+
 	@Override
 	public List<Employee> getEmployees() {
-		@SuppressWarnings("unchecked")
-		List<Employee> emplist=template.query(Queries.getAllEmployees,new RowMapper() {
+	
+		List<Employee> emplist=template.query(Queries.getAllEmployees,new RowMapper<Employee>() {
 
-			@Override
-			public Object mapRow(ResultSet rs, int arg1) throws SQLException {
+	
+			public Employee mapRow(ResultSet rs, int arg1) throws SQLException {
 				Employee employee=new Employee();  
 				employee.setEmployeeId(rs.getString(1));
 				employee.setFirstName(rs.getString(2)); 
@@ -223,53 +219,57 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		
 	}
 	
-	//done
+
 	@Override
-	public int removeRole(final String empId,final String roleName, final String removedBy, final Date removedDate) {
-		final EmployeeDaoImpl employeeDaoImpl = new EmployeeDaoImpl();
+	public int removeRole(final String empId,final String roleName, final String removedBy) {
 		
+		
+		int rows2=0;
+		int rows3=0;
 		int rows=template.update(Queries.removeRole,new PreparedStatementSetter() {
 			
 			@Override
 			public void setValues(PreparedStatement pst) throws SQLException {
 				
 				pst.setString(1,empId);
-				System.out.print(empId + " === ");
 				pst.setLong(2,getRoleId(roleName));
-				
-				//pst.setString(3,removedBy);
-				/*pst.setDate(4, new java.sql.Date(addedDate.getTime()));*/
+				pst.setString(3,removedBy);
+				pst.setDate(4, new java.sql.Date(new Date().getTime()));
 			}
 		
 		});
-		System.out.println(rows);
-		int rows1=template.update(Queries.employeeModification,new PreparedStatementSetter() {
+		if(rows>0){
+		rows2=template.update(Queries.employeeModification,new PreparedStatementSetter() {
 			
 			@Override
 			public void setValues(PreparedStatement pst) throws SQLException {
 				
 				pst.setString(1,removedBy);
-				pst.setDate(2, new java.sql.Date(removedDate.getTime()));
+				pst.setDate(2, new java.sql.Date(new Date().getTime()));
 				pst.setString(3,empId);
 				
 				
 			}
 		});
-System.out.println(rows1);
-		int rows3=template.update(Queries.employeeModificationLog,new PreparedStatementSetter() {
+		}
+		if(rows2>0){
+		rows3=template.update(Queries.employeeModificationLog,new PreparedStatementSetter() {
 			
 			@Override
 			public void setValues(PreparedStatement pst) throws SQLException {
 				
 				pst.setString(1,removedBy);
-				pst.setDate(2, new java.sql.Date(removedDate.getTime()));
+				pst.setDate(2, new java.sql.Date(new Date().getTime()));
 				pst.setString(3,empId);
 				
 				
 			}
 		});
+		}
 		return rows3;
 	}
+	
+	
 	@Override
 	public int updatePassword(final String empId, String changedBy,
 			final Date updatedDate, String oldPassword, final String newPassword) {
@@ -420,5 +420,6 @@ System.out.println(rows1);
 		Employee employee = getEmployee(empId);
 		return employee.getPassword();
 	}
+	
 	
 }	

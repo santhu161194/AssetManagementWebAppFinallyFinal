@@ -15,8 +15,9 @@ import com.medplus.assetmanagementcore.model.Asset;
 import com.medplus.assetmanagementcore.model.NewTypeRequest;
 import com.medplus.assetmanagementcore.model.Request;
 import com.medplus.assetmanagementcore.service.AssetService;
-import com.medplus.assetmanagementcore.utils.AssetStatusEnum;
-import com.medplus.assetmanagementcore.utils.AssetTypeEnum;
+import com.medplus.assetmanagementcore.utils.AssetStatus;
+import com.medplus.assetmanagementcore.utils.AssetType;
+import com.medplus.assetmanagementcore.validations.CommonValidations;
 @Service
 public class AssetServiceImpl implements AssetService{
 
@@ -27,20 +28,25 @@ public class AssetServiceImpl implements AssetService{
 	EmployeeServiceImpl employeeService;
 	
 	public Asset getAsset(int assetId) throws AssetException {
-		//validate asset id--new method
-		if(assetId<=0){
-			AssetException iae= new AssetException("Invalid Asset Id");
-			throw iae;
+		String message="";
+		message=CommonValidations.isValidNumber(assetId);
+		
+		if(!message.equals("valid")){
+			AssetException invalidAssetException= new AssetException(message);
+			throw invalidAssetException;
 		}
+		
 		Asset asset=null;
 		asset = dao.getAsset(assetId);
 		if(asset==null){
-			AssetException iae= new AssetException("Asset Not Found");
-			throw iae;
+			AssetException invalidAssetException= new AssetException("Asset Not Found");
+			throw invalidAssetException;
 		}
 		return asset; 	
 	}
-//ui done
+	
+	
+
 	public List<Asset> getAllAssets()  throws AssetException{
 		List<Asset> list=dao.getAllAssets();
 		if(list.size()==0)
@@ -50,17 +56,23 @@ public class AssetServiceImpl implements AssetService{
 		}
 		return list;
 	}
-//ui done
-	public String addAsset(Asset asset, String createdBy, Date createdDate) throws AssetException {
-		//check role of createdBy
+
+	public String addAsset(Asset asset) throws AssetException, AuthenticationException {
+		
 		if(asset==null){
 			AssetException iae= new AssetException("Asset Exception");
 			throw iae;
 		}
-		if(createdBy==null){
-			return "date";
+		if(asset.getCreatedBy()==null){
+			return "Provide Created By field";
 		}
-		int result=dao.addAsset(asset, createdBy, createdDate);
+		if(employeeService.getEmployeeRole(asset.getCreatedBy())!=null&&!(employeeService.getEmployeeRole(asset.getCreatedBy()).contains("admin")))
+		{
+			AuthenticationException iae= new AuthenticationException("Authentication Exception ..");
+			throw iae;
+		}
+		employeeService.getEmployeeRole(asset.getCreatedBy());
+		int result=dao.addAsset(asset);
 		if(result!=0)
 			return ("Asset Added Successfully..");
 		else
@@ -68,13 +80,15 @@ public class AssetServiceImpl implements AssetService{
 
 	}
 
-	public String updateAsset(Asset asset, String updatedBy, Date updatedDate) {//not required
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
-	public String updateAssetStatus(int assetId,AssetStatusEnum status,String ModifiedBy,Date dateModified) {
-		//check role of ModifedBy
+	public String updateAssetStatus(int assetId,AssetStatus status,String ModifiedBy,Date dateModified) throws AuthenticationException {
+		
+		if(employeeService.getEmployeeRole(ModifiedBy)!=null&&!(employeeService.getEmployeeRole(ModifiedBy).contains("edp")))
+		{
+			AuthenticationException iae= new AuthenticationException("Authentication Exception ..");
+			throw iae;
+		}
 		int result=dao.updateAssetStatus(assetId, status, ModifiedBy, dateModified);
 
 		if(result!=0)
@@ -82,28 +96,43 @@ public class AssetServiceImpl implements AssetService{
 		else
 			return ("Failed to Update");
 		}
-
-	public List<Asset> getAssetsByStatus(String status)throws AssetException {                      //done
-		
 	
-		if(status.isEmpty()){    //change and validate using validate class
-			
+	
+
+	public List<Asset> getAssetsByStatus(String status)throws AssetException {                      
+		String msg=CommonValidations.isValidName(status);
+		if(!msg.equals("valid")){
 			AssetException iae= new AssetException("Asset Status Exception");
 			throw iae;
 		}
-		return dao.getAssetByStatus(status);
+		List<Asset> asset=null;
+		asset = dao.getAssetByStatus(status);
+		if(asset.isEmpty()){
+			AssetException invalidAssetException= new AssetException("Asset Not Found");
+			throw invalidAssetException;
+		}
+		return asset;
 	}
 
-	public List<Asset> getAssetsOfEmployee(String empId) throws AssetException{                    //done
-		if(empId.isEmpty()){  //change and validate using validate class
-			AssetException iae= new AssetException("Employee ID Exception");
+	
+	
+	public List<Asset> getAssetsOfEmployee(String empId) throws AssetException{ 
+		String message=CommonValidations.isValidName(empId);
+		if(!message.equals("valid")){
+			AssetException iae= new AssetException(message);
 			throw iae;
 		}
-		return dao.getEmployeeAssets(empId);
+		List<Asset> asset=null;
+		asset = dao.getEmployeeAssets(empId);
+		if(asset.isEmpty()){
+			AssetException invalidAssetException= new AssetException("Asset Not Found");
+			throw invalidAssetException;
+		}
+		return asset;
 	}
 
-	public String postAssetRequest(AssetTypeEnum assetType, String requestedBy,Date requestedDate)throws AuthenticationException {
-		//check for valid RequestedBy
+	public String postAssetRequest(AssetType assetType, String requestedBy,Date requestedDate)throws AuthenticationException {
+		
 		
 		System.out.println(assetType);
 		if(!employeeService.isUserExisting(requestedBy)){
@@ -124,66 +153,79 @@ public class AssetServiceImpl implements AssetService{
 					return "failure";
 				} catch (SQLException e) {
 
-				return ("Sql exception ..");
+				return ("Sql exception .."+e.getStackTrace());
 			}	
 		}
 		catch (DataIntegrityViolationException e) {
-			return ("failure");
+			return ("Request Already has been posted for this type "+e.getMessage());
 		}
 	}
 
+
 	
-	public List<Request> getAllAssetRequests() throws AssetException{                           //done
+	public List<Request> getAllAssetRequests() throws AssetException{                           
 		List<Request> list=dao.getAllAssetRequests();
 		if(list.size()==0)
 		{
 			AssetException iae= new AssetException("No Request Found");
 			throw iae;	
 		}
-		return dao.getAllAssetRequests();
+		return list;
 	}
 
+	
+	
 	public List<Request> getAssetRequests(String requestedBy)throws AssetException {
 		if(requestedBy.equals(null)){
 			AssetException iae= new AssetException("Asset Exception");
 			throw iae;
 		}
-		
-		return dao.getAssetRequestsByEmployee(requestedBy);
+		List<Request> request=null;
+		request = dao.getAssetRequestsByEmployee(requestedBy);
+		if(request.isEmpty()){
+			AssetException invalidAssetException= new AssetException("Asset Request Not Found");
+			throw invalidAssetException;
+		}
+		return request;
+
 	}
 
-	public boolean allocateAsset(String assignedTo,int assetId,String asignedBy,Date handOverDate)throws AssetException, AuthenticationException {
-		
-		if(assetId<0||asignedBy.isEmpty()||assignedTo.isEmpty()||asignedBy==null)
-		{
-			AssetException iae= new AssetException(" Exception:Asset Allocation");
-			throw iae;	
-		}
-		//System.out.println(employeeService.getEmployeeRole(asignedBy));
-		if(employeeService.getEmployeeRole(asignedBy)!=null&&!(employeeService.getEmployeeRole(asignedBy).contains("edp")))
-		{
-			AuthenticationException iae= new AuthenticationException("Authentication Exception ..");
+	public String allocateAsset(String assignedTo, int assetId,
+			String asignedBy, Date handOverDate) throws AssetException,
+			AuthenticationException {
+
+		if (assetId < 0 || asignedBy.isEmpty() || assignedTo.isEmpty()
+				|| asignedBy == null) {
+			AssetException iae = new AssetException(
+					" Exception:Asset Allocation");
 			throw iae;
 		}
-		if(dao.getAsset(assetId)!=null&&dao.getAsset(assetId).getStatus().value.equals("N")){
-			System.out.println("Asset not Available");
-			return false;
-		}else{
-		//System.out.println(dao.getAsset(assetId).getStatus().value);
-		int result=dao.allocateAsset(assignedTo, assetId, asignedBy, handOverDate);
-		 if(result>0){    //tx mgmt required-rollback
-			 dao.updateAssetStatus(assetId, AssetStatusEnum.NotAvailable, asignedBy, handOverDate);//for make asset unavailable
-			 return true;
-			 }
-		 else
-	    return false;
+		
+		if (employeeService.getEmployeeRole(asignedBy) != null
+				&& !(employeeService.getEmployeeRole(asignedBy).contains("edp"))) {
+			AuthenticationException iae = new AuthenticationException(
+					"Authentication Exception ..");
+			throw iae;
+		}
+		if (dao.getAsset(assetId) != null
+				&& dao.getAsset(assetId).getStatus().value.equals("N")) {
+			return "Asset not Available";
+		} else {
+
+			int result = dao.allocateAsset(assignedTo, assetId, asignedBy,
+					handOverDate);
+			if (result > 0) { // tx mgmt required-rollback
+				dao.updateAssetStatus(assetId, AssetStatus.NotAvailable,
+						asignedBy, handOverDate);// for make asset unavailable
+				return "Asset Allocated";
+			} else
+				return "Unable to Allocate Asset";
 		}
 	}
-
 	
 	
 	
-	public boolean deAllocateAsset(int assetId, String deallocatedBy,      //check
+	public String deAllocateAsset(int assetId, String deallocatedBy,      //check
 			Date deallocationDate)throws AssetException, AuthenticationException {
 		if(assetId<0||deallocatedBy.isEmpty())//validate class
 		{
@@ -197,17 +239,17 @@ public class AssetServiceImpl implements AssetService{
 		}
 		 int result=dao.deAllocateAsset( assetId, deallocatedBy, deallocationDate);
 		 if(result>0){ //rollback required
-		 dao.updateAssetStatus(assetId, AssetStatusEnum.Available, deallocatedBy, deallocationDate);//for make asset available
+		 dao.updateAssetStatus(assetId, AssetStatus.Available, deallocatedBy, deallocationDate);//for make asset available
 		 
-		 return true;
+		 return "Asset Deallocated";
 		 }
 		 else
-	    return false;
+	    return "Asset Deallocation Failed";
 	}
 	
-	//new asset type request
+	
+
 	public String postNewAssetTypeRequest( String requestedBy,String assetType,String assetName,Date requestedDate)throws AuthenticationException {
-		//check for valid RequestedBy
 		if(!employeeService.isUserExisting(requestedBy)){
 			AuthenticationException iae= new AuthenticationException("Authentication Exception ..");
 			throw iae;
@@ -241,8 +283,23 @@ public class AssetServiceImpl implements AssetService{
 			AssetException iae= new AssetException("No Request Found");
 			throw iae;	
 		}
-		return dao.getNewAssetTypeRequests();
+		return list;
 	
+	}
+
+	
+	@Override
+	public List<Asset> getAssetByType(AssetType type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	@Override
+	public String updateAsset(Asset asset, String updatedBy, Date updatedDate) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 

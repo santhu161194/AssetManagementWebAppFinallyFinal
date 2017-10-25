@@ -11,11 +11,11 @@
 		<table align="center">
 			<tr>
 				<td>AssetId</td>
-				<td><input name=assetID /></td>
+				<td><input name=assetID value="${assetID}"></td>
 				<td>
 			<tr>
 				<td>DeAssignedBy</td>
-				<td><input name=deassignedBy value=<%=request.getParameter("deallocatedBy")%>></td>
+				<td><input name=deassignedBy value="${username}"></td>
 			</tr>
 			</table>
 			<input type="submit">

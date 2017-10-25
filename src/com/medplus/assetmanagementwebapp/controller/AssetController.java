@@ -31,7 +31,7 @@ import com.medplus.assetmanagementcore.model.Request;
 import com.medplus.assetmanagementcore.service.AssetService;
 import com.medplus.assetmanagementcore.service.impl.EmployeeServiceImpl;
 import com.medplus.assetmanagementcore.utils.AssetStatus;
-import com.medplus.assetmanagementcore.utils.AssetTypeEnum;
+import com.medplus.assetmanagementcore.utils.AssetType;
 import com.medplus.assetmanagementcore.utils.AssetValidation;
 @Controller
 
@@ -40,31 +40,23 @@ public class AssetController {
 	
 		@Autowired	
 		AssetService assetServiceImpl;
+		
 		@Autowired
 		Asset asset;
-		@Autowired
-		AssetValidation validation;
-		@Autowired
+		
 		List<Asset> assetlist;
-		@Autowired
+		
 		List<Request> requestList;
+		
 		@Autowired
 		EmployeeServiceImpl employeeServiceImpl;
-		@Autowired
+		
 		Employee employee;
-		@Autowired
+		
 		List<Request> getAllAssetRequests;
-		@Autowired
+		
 		List<Asset> getAssetsByStatus;
-		//view employees
-		/*@RequestMapping("/viewAssets")
-		public ModelAndView viewEmployees(@ModelAttribute("asset") Asset ass,BindingResult result){
-			ModelAndView mav=new ModelAndView();
-			List<Asset> asset=assetServiceImpl.getAllAssets();
-			mav.addObject("as", asset);
-			mav.setViewName("ViewAssets");
-			return mav;
-		}*/
+		
 		
 		//getting form
 		@RequestMapping(value="/addAsset",method=RequestMethod.GET)
@@ -99,7 +91,7 @@ public class AssetController {
 				String rows;
 				try {
 					
-					rows = assetServiceImpl.addAsset(asse,"10", new Date());
+					rows = assetServiceImpl.addAsset(asse);
 					if(rows.equals(0))
 					{
 						
@@ -124,6 +116,7 @@ public class AssetController {
 			try {
 				assetlist=assetServiceImpl.getAllAssets();
 				mav.addObject("assets", assetlist);
+				mav.addObject("viewdetails", "All Assets");
 				mav.setViewName("ViewAssets");
 		        return mav;
 			} catch (AssetException e) {
@@ -186,7 +179,9 @@ public class AssetController {
 					else
 					{
 						mav.addObject("message", "allocation failed");
-					return new ModelAndView("redirect:EDPHome");
+						mav.setViewName("EDPHome");
+						return mav;
+
 				}
 				} catch (AssetException e) {
 					// TODO Auto-generated catch block
@@ -196,10 +191,10 @@ public class AssetController {
 			}
 		 
 		 @RequestMapping(value="/deallocateAsset",method=RequestMethod.GET)
-			public ModelAndView getDeAllocationForm(){
+			public ModelAndView getDeAllocationForm(@RequestParam("assetID") String assetID){
 				
 				ModelAndView mav=new ModelAndView();
-				
+				mav.addObject("assetID", assetID);
 				mav.setViewName("DeAllocation");
 				return mav;
 		}
@@ -211,19 +206,21 @@ public class AssetController {
 					@RequestParam("deassignedBy") String deassignedBy) throws NumberFormatException, AuthenticationException
 			{
 				ModelAndView mav=new ModelAndView();
-				System.out.println("I reached");
+				
 				boolean rows;
 				try {
 					rows = assetServiceImpl.deAllocateAsset(Integer.parseInt(assetID), deassignedBy, new Date());
 					if(rows==true)
 					{
-						
+						mav.addObject("message", "Deallocated asset successfully");
+						mav.setViewName("EDPHome");
 						return mav;
-					
 					}
 					else
 					{
-					return new ModelAndView("redirect:home");
+						mav.addObject("message", "allocation failed");
+						mav.setViewName("EDPHome");
+						return mav;
 				}
 				} catch (AssetException e) {
 					// TODO Auto-generated catch block
@@ -252,7 +249,7 @@ public class AssetController {
 		
 		 
 		 
-		 @RequestMapping(value="postAssetRequests",method=RequestMethod.GET)
+		/* @RequestMapping(value="postAssetRequests",method=RequestMethod.GET)
 		 public ModelAndView postAssetRequestForm(@RequestParam("type") String type,HttpServletRequest request, HttpServletResponse response)
 			{
 				ModelAndView mav=new ModelAndView();
@@ -271,7 +268,7 @@ public class AssetController {
 			
 			return mav;
 			
-			}
+			}*/
 		 
 		 
 		 @RequestMapping(value="/adminhome",method=RequestMethod.GET)
@@ -357,6 +354,108 @@ public class AssetController {
 				return mav;
 			}
 			}
+		 
+		 @RequestMapping(value="/empassets",method=RequestMethod.GET)
+         public ModelAndView EmployeeAssets(@RequestParam("username") String username,HttpServletRequest request, HttpServletResponse response)
+         {
+             ModelAndView mav=new ModelAndView();
+             
+         try {
+             
+             assetlist=assetServiceImpl.getAssetsOfEmployee(username);
+             mav.addObject("assets", assetlist);
+             employee=employeeServiceImpl.getEmployee(username);
+             mav.addObject("emp", employee);
+             mav.setViewName("EmployeeAsset");
+             return mav;
+         } catch (AssetException e) {
+             mav.addObject("message", e.getErrorMessage());
+             return mav;
+             
+         }
+         
+         }
+		 
+		 @RequestMapping(value="/emprequest",method=RequestMethod.GET)
+         public ModelAndView EmployeeRequest(@RequestParam("username") String username,HttpServletRequest request, HttpServletResponse response)
+         {
+             ModelAndView mav=new ModelAndView();
+             
+         try {
+         
+             
+             requestList    =assetServiceImpl.getAssetRequests(username);
+             mav.addObject("requestList", requestList);
+             
+             mav.setViewName("EmployeeRequests");
+             return mav;
+         } catch (AssetException e) {
+             mav.addObject("message", e.getErrorMessage());
+             return mav;
+             
+         }
+         
+         }
+		 
+		  @RequestMapping(value="assetrequest",method=RequestMethod.GET)
+	         public ModelAndView postNewTypeAssetRequestForm(HttpServletRequest request, HttpServletResponse response)
+	            {
+	                ModelAndView mav=new ModelAndView();
+	                
+	            
+	            
+	                mav.setViewName("NewRequest");
+	            
+	            return mav;
+	            
+	            }
+	         @RequestMapping(value="assetrequest",method=RequestMethod.POST)
+	         public ModelAndView postNewTypeAssetRequest(@RequestParam("userName") String userName,@RequestParam("assetType") String assetType,@RequestParam("assetName") String assetName,HttpServletRequest request, HttpServletResponse response)
+	            {
+	             System.out.println("here");
+	                ModelAndView mav=new ModelAndView();
+	                String msg="";
+	                try {
+	                    msg=assetServiceImpl.postNewAssetTypeRequest(userName,assetType,assetName,new Date());
+	                    mav.addObject("message", msg);
+	                } catch (AuthenticationException e) {
+	                    mav.addObject("msg", e.getErrorMessage());
+	                    e.printStackTrace();
+	                }
+	                mav.setViewName("EmployeeHome");
+	            
+	            return mav;
+	            
+	            }
+	         @RequestMapping(value="postAssetRequests",method=RequestMethod.GET)
+	         public ModelAndView postAssetRequestForm(HttpServletRequest request, HttpServletResponse response)
+	            {
+	                ModelAndView mav=new ModelAndView();
+	                mav.setViewName("Request1");
+	                return mav;
+	            
+	            
+	            }
+	         @RequestMapping(value="postAssetRequests",method=RequestMethod.POST)
+	         public ModelAndView postAssetRequest(@RequestParam("EmployeeId") String requestedBy,@RequestParam("type") String type,HttpServletRequest request, HttpServletResponse response)
+	            {
+	                ModelAndView mav=new ModelAndView();
+	                
+	            
+	            try {
+	                String msg=assetServiceImpl.postAssetRequest(AssetType.valueOf(type),requestedBy,new Date());
+	                mav.addObject("message", msg);
+	                mav.setViewName("EmployeeHome");
+	                return mav;
+	            } catch (AuthenticationException e) {
+	                mav.addObject("message", e.getErrorMessage());
+	                //e.printStackTrace();
+	            }
+	            
+	            return mav;
+	            
+	            }
+
 		
 	}
 

@@ -3,25 +3,22 @@ package com.medplus.assetmanagementcore.model;
 import java.util.Date;
 
 import com.medplus.assetmanagementcore.utils.AssetAllocation;
-import com.medplus.assetmanagementcore.utils.AssetStatusEnum;
+import com.medplus.assetmanagementcore.utils.AssetStatus;
 
 public class AssetMapping {
 	private String EmployeeId;
-	
+
 	private int RoleId;
-	
+
 	private int AssetId;
-	
+
 	private String AssignedBy;
-	
+
 	private Date AssignedDate;
-	
+
 	private Date ReturnDate;
 
 	private AssetAllocation Status;
-	
-	
-
 
 	public AssetAllocation getStatus() {
 		return Status;
@@ -77,6 +74,15 @@ public class AssetMapping {
 
 	public void setAssignedDate(Date assignedDate) {
 		AssignedDate = assignedDate;
+	}
+
+	@Override
+	public String toString() {
+		// TODO Auto-generated method stub
+		return "Asset Mapping{" + "EmployeeId" + EmployeeId + "RoleId" + RoleId
+				+ "AssetId" + AssetId + "AssignedBy" + AssignedBy
+				+ "AssignedDate" + AssignedDate + "ReturnDate" + ReturnDate
+				+ "Status" + Status + "}";
 	}
 
 }

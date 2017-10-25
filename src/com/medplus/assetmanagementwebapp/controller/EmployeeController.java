@@ -19,9 +19,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.medplus.assetmanagementcore.dao.impl.EmployeeDaoImpl;
+import com.medplus.assetmanagementcore.exceptions.AssetException;
 import com.medplus.assetmanagementcore.model.Asset;
 import com.medplus.assetmanagementcore.model.Employee;
+import com.medplus.assetmanagementcore.model.Request;
 import com.medplus.assetmanagementcore.service.EmployeeService;
+import com.medplus.assetmanagementcore.service.impl.AssetServiceImpl;
 import com.medplus.assetmanagementcore.service.impl.EmployeeServiceImpl;
 
 
@@ -40,7 +43,8 @@ public class EmployeeController {
 	@Autowired
 	EmployeeDaoImpl imp;
 	@Autowired
-	EmployeeServiceImpl serImpl;
+	AssetServiceImpl assetServiceImpl;
+	
 	
 	//view employees
 	@RequestMapping("/viewEmpls")
@@ -81,7 +85,7 @@ public class EmployeeController {
 	public ModelAndView EmployeeForm(@RequestParam("code") String code)
 	{
 		ModelAndView mav=new ModelAndView();
-		employee=serImpl.getEmployee(code);
+		employee=employeeServiceImpl.getEmployee(code);
 		mav.addObject(employee);
 		mav.setViewName("Employee");
 		return mav;
@@ -91,7 +95,7 @@ public class EmployeeController {
 	{
 		ModelAndView mav=new ModelAndView();
 		
-		String rows=serImpl.updateEmployee(emp,"10",new Date());
+		String rows=employeeServiceImpl.updateEmployee(emp,"10",new Date());
 		if(rows.equals(0))
 		{
 			String msg="record not inserted";
@@ -118,7 +122,7 @@ public class EmployeeController {
 		{
 			ModelAndView mav=new ModelAndView();
 			
-			String rows=serImpl.addRole(roleId,roleName,addedBy,new Date());
+			String rows=employeeServiceImpl.addRole(roleId,roleName,addedBy,new Date());
 			if(rows.equals(0))
 			{
 				String msg="record not inserted";
@@ -145,7 +149,7 @@ public class EmployeeController {
 				{
 					ModelAndView mav=new ModelAndView();
 					
-					String rows=serImpl.addRoleToEmp(employeeId, roleId, addedBy,new Date());
+					String rows=employeeServiceImpl.addRoleToEmp(employeeId, roleId, addedBy,new Date());
 					if(rows.equals(0))
 					{
 						String msg="record not inserted";
@@ -180,7 +184,7 @@ public class EmployeeController {
 				public ModelAndView getEmployeeRoleForm(@RequestParam("code") String code)
 				{
 					ModelAndView mav=new ModelAndView();
-					List<String> role=serImpl.getEmployeeRole(code);
+					List<String> role=employeeServiceImpl.getEmployeeRole(code);
 					for(String rs:role)
 					{
 						System.out.println(rs);
@@ -195,11 +199,69 @@ public class EmployeeController {
 				public ModelAndView removeEmployeeRoleForm(@RequestParam("code") String code)
 				{
 					ModelAndView mav=new ModelAndView();
-					serImpl.removeEmployeeRole("santhu", "EDP", "santhu", new Date());
+					employeeServiceImpl.removeEmployeeRole("santhu", "EDP", "santhu", new Date());
 					mav.addObject(employee);
 					mav.setViewName("Employee");
 					return mav;
 				}	
+				
+				
+				
+				//from niharika
+				@RequestMapping(value="viewRequestAssetsOfEmployee",method=RequestMethod.GET)
+				public ModelAndView viewRequestAssetsOfEmployeeForm(@RequestParam("code") String empcode)
+				{
+					ModelAndView mav=new ModelAndView();
+					employee= employeeServiceImpl.getEmployee(empcode);
+					mav.addObject(employee);
+					mav.setViewName("ViewRequestAssetsOfEmp");
+					return mav;
+				}
+				@RequestMapping(value="/viewRequestAssetsOfEmployee",method=RequestMethod.POST)
+				public ModelAndView viewRequestAssetsOfEmployeeForm(@ModelAttribute("employee") Employee emp,BindingResult result)
+				{
+					ModelAndView mav=new ModelAndView();
+					
+					List<Request> rows;
+			
+						try {
+							rows = assetServiceImpl.getAssetRequests("emp");
+							mav.addObject("empl",rows);
+						} catch (AssetException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					
+					
+					return mav;
+				}
+				@RequestMapping(value="viewAssetsOfEmployee",method=RequestMethod.GET)
+				public ModelAndView viewAssetsOfEmployeeForm(@RequestParam("code") String empcode)
+				{
+					ModelAndView mav=new ModelAndView();
+					employee= employeeServiceImpl.getEmployee(empcode);
+					mav.addObject(employee);
+					mav.setViewName("ViewAssetsOfEmp");
+					return mav;
+				}
+				@RequestMapping(value="/viewAssetsOfEmployee",method=RequestMethod.POST)
+				public ModelAndView viewAssetsOfEmployeeForm(@ModelAttribute("employee") Employee emp,BindingResult result)
+				{
+					ModelAndView mav=new ModelAndView();
+					
+					List<Asset> rows;
+			
+						try {
+							rows = assetServiceImpl.getAssetsOfEmployee("emp");
+							mav.addObject("asss",rows);
+						} catch (AssetException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					
+					
+					return mav;
+				}
 				
 				
 }

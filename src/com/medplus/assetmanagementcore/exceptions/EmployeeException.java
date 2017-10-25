@@ -1,4 +1,4 @@
-package com.medplus.assetmanagementcore.utils;
+package com.medplus.assetmanagementcore.exceptions;
 
 public class EmployeeException extends Exception{
 	

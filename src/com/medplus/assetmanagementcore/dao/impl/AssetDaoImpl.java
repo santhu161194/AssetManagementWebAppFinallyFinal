@@ -1,6 +1,5 @@
 package com.medplus.assetmanagementcore.dao.impl;
 
-import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -22,23 +21,25 @@ import com.medplus.assetmanagementcore.model.NewTypeRequest;
 import com.medplus.assetmanagementcore.model.Request;
 import com.medplus.assetmanagementcore.service.impl.AssetServiceImpl;
 import com.medplus.assetmanagementcore.utils.AssetAllocation;
-import com.medplus.assetmanagementcore.utils.AssetStatusEnum;
-import com.medplus.assetmanagementcore.utils.AssetTypeEnum;
+import com.medplus.assetmanagementcore.utils.AssetStatus;
+import com.medplus.assetmanagementcore.utils.AssetType;
 import com.medplus.assetmanagementcore.utils.Queries;
 @Component
 public class AssetDaoImpl implements AssetDao {
+
 	@Autowired
 	JdbcTemplate template;
+	
 	@Autowired
 	Asset asset;
+	
 	@Autowired
 	Request request;
+	
 	@Autowired
 	AssetServiceImpl ser;
-	Connection conn;
-	PreparedStatement pst;
-	String code="";
-	public List<Asset> getAllAssets() {                                              //working done
+	
+	public List<Asset> getAllAssets() {                                              
 		return template.query(Queries.getAllAsset,new RowMapper<Asset>(){  
 			public Asset mapRow(ResultSet rs, int row) throws SQLException,  
             DataAccessException {  
@@ -46,29 +47,20 @@ public class AssetDaoImpl implements AssetDao {
 				e.setAssetId(rs.getInt(1));
 				e.setSerialNumber(rs.getString(2)); 
 				e.setAssetName(rs.getString(3));
-				e.setAssetType(AssetTypeEnum.valueOf(rs.getString(4)));
+				e.setAssetType(AssetType.valueOf(rs.getString(4)));
 				e.setCost(rs.getDouble(5));
-				e.setStatus(AssetStatusEnum.getName(rs.getString(6)));
+				e.setStatus(AssetStatus.getName(rs.getString(6)));
 				e.setCreatedBy(rs.getString(7));
 				e.setCreatedDate(new java.util.Date(rs.getDate(8).getTime()));
-			/*	e.setModifiedBy(rs.getString(9));
-				e.setCreatedDate(new java.util.Date(rs.getDate(10).getTime()));*/
 				         
 				 return e;  
 			}  
 		});  
 	}
 
-	/*public Asset getAsset(int assetId) {
 
-		Object args[]={assetId};
-		asset=template.queryForObject(Queries.getAsset, args,new BeanPropertyRowMapper<Asset>(Asset.class));
 
-		return asset;
-
-	}*/
-
-	public int addAsset(final Asset asset, String createdBy, final Date createdDate) {   //done
+	public int addAsset(final Asset asset) {  
 		int rows=template.update(Queries.addNewAsset,new PreparedStatementSetter() {
 				public void setValues(PreparedStatement pst) throws SQLException,  
 	            DataAccessException{
@@ -78,21 +70,25 @@ public class AssetDaoImpl implements AssetDao {
 				pst.setDouble(4,asset.getCost());
 				pst.setString(5,asset.getStatus().value);
 				pst.setString(6,asset.getCreatedBy());
-				pst.setDate(7,new java.sql.Date(createdDate.getTime()));
+				pst.setDate(7,new java.sql.Date(new Date().getTime()));
 			}
 		});
 		return rows;
 	}
+	
+	
+	
 
-	public int updateAsset(Asset asset, String updatedBy, Date updatedDate) {  //Not Required
-		// TODO Auto-generated method stub
-		return 0;
-	}
-//working done with log
-	public int updateAssetStatus(final int assetId,  final AssetStatusEnum status,final String modifiedBy, final Date dateModifed) {
-		updateAssetToLog(assetId);
-		System.out.println("kya "+status);
-		int rows=template.update(Queries.updateAssetStatus,new PreparedStatementSetter() {
+
+
+	public int updateAssetStatus(final int assetId,  final AssetStatus status,final String modifiedBy, final Date dateModifed) {
+		
+		int rows=0;
+		int rows1=updateAssetToLog(assetId,modifiedBy);
+		
+		if(rows1!=0)
+		{
+		rows=template.update(Queries.updateAssetStatus,new PreparedStatementSetter() {
 			public void setValues(PreparedStatement pst) throws SQLException {
 				pst.setString(1,status.value);
 				System.out.println(status.name());
@@ -101,12 +97,15 @@ public class AssetDaoImpl implements AssetDao {
 				pst.setInt(4,assetId);
 			}
 		});	
+		}
 		return rows;
 	}
-	// mtd update status log
+	
+	
+	
 
 	
-     private int updateAssetToLog(int assetId) {
+     private int updateAssetToLog(int assetId, final String modifiedBy) {
 		
     	 final Asset asset=getAsset(assetId);
  		
@@ -122,8 +121,8 @@ public class AssetDaoImpl implements AssetDao {
  			pst.setString(6, asset.getStatus().value);
  			pst.setString(7, asset.getCreatedBy());
  			pst.setDate(8, (java.sql.Date) asset.getCreatedDate());
- 			pst.setString(9, asset.getModifiedBy());
- 			pst.setDate(10, (java.sql.Date) asset.getDateModified());
+ 			pst.setString(9, modifiedBy);
+ 			pst.setDate(10, new java.sql.Date(new Date().getTime()));
  			
 
  		
@@ -135,62 +134,57 @@ public class AssetDaoImpl implements AssetDao {
  	return rows;
 	}
 
-	//
-	public List<Asset> getAssetByStatus(String status) {      //done
+
+	public List<Asset> getAssetByStatus(String status) {      
 		Object args[]={status};
 		System.out.println(status);
 		return template.query(Queries.getAssetByStatus,args,new RowMapper<Asset>(){  
 			public Asset mapRow(ResultSet rs, int row) throws SQLException {  
-				Asset e=new Asset(); 
-				e.setAssetId(rs.getInt(1));
-				e.setSerialNumber(rs.getString(2)); 
-				e.setAssetName(rs.getString(3));
-				e.setAssetType(AssetTypeEnum.valueOf(rs.getString(4)));
-
-				e.setCost(rs.getDouble(5));
-				/* AssetStatusEnum assetStatus=(AssetStatusEnum.valueOf((rs.getString(6))));
-	            e.setStatus(assetStatus.getName(assetStatus.toString()));
-				 */
-				e.setStatus(AssetStatusEnum.getName(rs.getString(6)));
-				e.setCreatedBy(rs.getString(7));
-				e.setCreatedDate(new java.util.Date(rs.getDate(8).getTime()));
-				return e;  
+				Asset asset=new Asset(); 
+				asset.setAssetId(rs.getInt(1));
+				asset.setSerialNumber(rs.getString(2)); 
+				asset.setAssetName(rs.getString(3));
+				asset.setAssetType(AssetType.valueOf(rs.getString(4)));
+				asset.setCost(rs.getDouble(5));
+				asset.setStatus(AssetStatus.getName(rs.getString(6)));
+				asset.setCreatedBy(rs.getString(7));
+				asset.setCreatedDate(new java.util.Date(rs.getDate(8).getTime()));
+				return asset;  
 			}  
 		});  
 	}
+	
+	
 
-
-
-
-	public List<Asset> getEmployeeAssets(String empId) {  //done
+	public List<Asset> getEmployeeAssets(String empId) {  
 		Object args[]={empId};
 		return template.query(Queries.getEmployeeAsset,args,new RowMapper<Asset>(){  
 			public Asset mapRow(ResultSet rs, int row) throws SQLException {  
-				Asset e=new Asset(); 
-				e.setAssetId(rs.getInt(1));
-				e.setSerialNumber(rs.getString(2)); 
-				e.setAssetName(rs.getString(3));
-				e.setAssetType(AssetTypeEnum.valueOf(rs.getString(4)));
-				e.setCost(rs.getDouble(5));
-				e.setStatus(AssetStatusEnum.getName(rs.getString(6)));
-				e.setCreatedBy(rs.getString(7));
-				e.setCreatedDate(new java.util.Date(rs.getDate(8).getTime()));
-				return e;  
+				Asset asset=new Asset(); 
+				asset.setAssetId(rs.getInt(1));
+				asset.setSerialNumber(rs.getString(2)); 
+				asset.setAssetName(rs.getString(3));
+				asset.setAssetType(AssetType.valueOf(rs.getString(4)));
+				asset.setCost(rs.getDouble(5));
+				asset.setStatus(AssetStatus.getName(rs.getString(6)));
+				asset.setCreatedBy(rs.getString(7));
+				asset.setCreatedDate(new java.util.Date(rs.getDate(8).getTime()));
+				return asset;  
 			}  
 		});  
 	}
 
 
 
-	public List<Request> getAllAssetRequests() {               //done
+	public List<Request> getAllAssetRequests() {               
 		return template.query(Queries.getAllAssetRequests,new RowMapper<Request>(){  
 			public Request mapRow(ResultSet rs, int row) throws SQLException {  
-				Request e=new Request(); 
-				e.setEmployeeId(rs.getString(1));
-				e.setAssetType(AssetTypeEnum.valueOf(rs.getString(2)));
-				e.setRequestDate(new java.util.Date(rs.getDate(3).getTime()));
+				Request request=new Request(); 
+				request.setEmployeeId(rs.getString(1));
+				request.setAssetType(AssetType.valueOf(rs.getString(2)));
+				request.setRequestDate(new java.util.Date(rs.getDate(3).getTime()));
 
-				return e;
+				return request;
 
 			}  
 		});  
@@ -199,18 +193,12 @@ public class AssetDaoImpl implements AssetDao {
 
 
 
-	public List<Request> getAssetRequests(String requestedBy) {//repeated//done
-		// TODO Auto-generated method stub
-		return null;
-	}
 
-
-	public int postAssetRequest(final AssetTypeEnum assetType, final String empId, //done
+	public int postAssetRequest(final AssetType assetType, final String empId, 
 			final Date requestedDate)throws SQLException {
 		int rows=template.update(Queries.postAssetRequest,new PreparedStatementSetter() {
 
-			//@Override
-			public void setValues(PreparedStatement pst) throws SQLException {
+		public void setValues(PreparedStatement pst) throws SQLException {
 				pst.setString(1,empId);
 				pst.setString(2,assetType.toString());
 				pst.setDate(3,new java.sql.Date(requestedDate.getTime()));
@@ -221,24 +209,27 @@ public class AssetDaoImpl implements AssetDao {
 
 	}
 
-	public List<Request> getAssetRequestsByEmployee(String empId) {          //done
+	
+	public List<Request> getAssetRequestsByEmployee(String empId) {          
 		Object args[]={empId};
 		return template.query(Queries.getAssetRequestsByEmployee,args,new RowMapper<Request>(){  
 			public Request mapRow(ResultSet rs, int row) throws SQLException {  
-				Request e=new Request(); 
-				e.setEmployeeId(rs.getString(1));
-				e.setAssetType(AssetTypeEnum.valueOf(rs.getString(2)));
-				e.setRequestDate(new java.util.Date(rs.getDate(3).getTime()));
+				Request request=new Request(); 
+				request.setEmployeeId(rs.getString(1));
+				request.setAssetType(AssetType.valueOf(rs.getString(2)));
+				request.setRequestDate(new java.util.Date(rs.getDate(3).getTime()));
 				
-				return e;
+				return request;
 
 			}  
 		});  
 	}
-//done
+
+	
+	
+	
 	public int allocateAsset(final String assignedTo, final int assetId, final String assignedBy,final Date handOverDate) {
-		
-		
+		int rows1=0;
 		int rows=template.update(Queries.allocateAsset,new PreparedStatementSetter() {
 			public void setValues(PreparedStatement pst) throws SQLException {
 			pst.setString(1,assignedTo);
@@ -248,50 +239,55 @@ public class AssetDaoImpl implements AssetDao {
 			pst.setDate(5,new java.sql.Date(handOverDate.getTime()));
 		}
 	});
-	return rows;
+		if(rows>0)
+		rows1=updateMappingToLog( assetId,AssetAllocation.Allocated);
+	return rows1;
 	}
-//done
+
+	
+	
+	
 	public int deAllocateAsset(final int assetId, final String deAllocatedBy,final Date deAllocationdate) {
-		int rows1=updateMappingToLog( assetId);
 		
-		int rows=template.update(Queries.deallocateAsset,new PreparedStatementSetter() {
-			public void setValues(PreparedStatement pst) throws SQLException {
-			
-			pst.setString(1,AssetAllocation.DeAllocated.value);
-			pst.setDate(2,(new java.sql.Date(deAllocationdate.getTime())));
-			pst.setString(3,deAllocatedBy);            //assignedBy& deallocatedBy both in same column
-			pst.setInt(4,assetId);
-		}
-	});
-		
-	return rows;
+		int rows=0;
+		int rows1=updateMappingToLog(assetId,AssetAllocation.DeAllocated);
+		String sql=Queries.deallocateAsset;
+		Object args[]={assetId};
+		if(rows1>0)
+		rows=template.update(sql, args);
+		return rows;
 	}
 	
-//insert into mapping log 
-private int updateMappingToLog(final int assetId) {
+	
+	//insert into mapping log 
+	private int updateMappingToLog(final int assetId, final AssetAllocation status) {
 		
 		final AssetMapping map=getAssetMapping(assetId);
 		
 		int rows=template.update(Queries.UPDATE_ASSET_MAPPING_TO_LOG,new PreparedStatementSetter() {
 				
 		public void setValues(PreparedStatement pst) throws SQLException {
-			System.out.println("I got the status as"+map.getStatus());
+			
 			pst.setString(1,map.getEmployeeId());
 			pst.setString(2, map.getAssignedBy());
 			pst.setInt(3, map.getAssetId());
 			pst.setDate(4, new java.sql.Date (map.getAssignedDate().getTime()));
+			if(status.equals(AssetAllocation.Allocated)){
+			pst.setDate(5, null);	
+			}
+			else
 			pst.setDate(5, new java.sql.Date (map.getReturnDate().getTime()));
-			pst.setString(6, map.getStatus().value.toString());
+			pst.setString(6, status.value.toString());
 			
 		}
 	});
-	
 		
 	return rows;
 	
 }
+	
 	//geting entry from asset
-	public AssetMapping getAssetMapping(int assetId){  
+	private AssetMapping getAssetMapping(int assetId){  
 		Object args[]={assetId};
 		return template.query(Queries.getAssetMapping,args,new ResultSetExtractor<AssetMapping>(){  
 
@@ -304,7 +300,7 @@ private int updateMappingToLog(final int assetId) {
 				e.setAssignedDate(new java.util.Date(rs.getDate(4).getTime())); 
 				
 				e.setReturnDate((new Date() ));
-				System.out.println("I got the status as"+rs.getString(6));
+				
 				e.setStatus(AssetAllocation.getName(rs.getString(6)));
 				
 				return e; 
@@ -315,21 +311,22 @@ private int updateMappingToLog(final int assetId) {
 		});  
 	}
 
-	//---working            done
+
+	
 	public Asset getAsset(int assetId){  
 		Object args[]={assetId};
 		return template.query(Queries.getAsset,args,new ResultSetExtractor<Asset>(){  
 
 			public Asset extractData(ResultSet rs) throws SQLException,DataAccessException {   
 				if(rs.next()){
-				Asset e=new Asset();  
-				e.setAssetId(rs.getInt(1));
-				e.setSerialNumber(rs.getString(2)); 
-				e.setAssetName(rs.getString(3));
-				e.setAssetType(AssetTypeEnum.valueOf(rs.getString(4))); 
-				e.setCost(rs.getDouble(5));
-				e.setStatus(AssetStatusEnum.getName(rs.getString(6)));
-				return e; 
+				Asset asset=new Asset();  
+				asset.setAssetId(rs.getInt(1));
+				asset.setSerialNumber(rs.getString(2)); 
+				asset.setAssetName(rs.getString(3));
+				asset.setAssetType(AssetType.valueOf(rs.getString(4))); 
+				asset.setCost(rs.getDouble(5));
+				asset.setStatus(AssetStatus.getName(rs.getString(6)));
+				return asset; 
 				}
 				else
 					return null;
@@ -337,16 +334,19 @@ private int updateMappingToLog(final int assetId) {
 		});  
 	}
 
+	
+	
 	public int postNewAssetTypeRequest(final String requestedBy, final String assetType,
 			final String assetName, final Date requestedDate) throws SQLException {
+		
 		int rows=template.update(Queries.postNewAssetTypeRequest,new PreparedStatementSetter() {
 
-			//@Override
+			
 			public void setValues(PreparedStatement pst) throws SQLException {
 				pst.setString(1,requestedBy);
 				pst.setString(2,assetType);
 				pst.setString(3, assetName);
-				pst.setDate(4,(java.sql.Date) requestedDate);
+				pst.setDate(4,new java.sql.Date( requestedDate.getTime()));
 
 			}
 		});
@@ -354,6 +354,7 @@ private int updateMappingToLog(final int assetId) {
 
 	}
 
+	
 	public List<NewTypeRequest> getNewAssetTypeRequests() {
 		return template.query(Queries.getAllAssetRequests,new RowMapper<NewTypeRequest>(){  
 			public NewTypeRequest mapRow(ResultSet rs, int row) throws SQLException {  
@@ -367,9 +368,18 @@ private int updateMappingToLog(final int assetId) {
 
 			}  
 		});  
-	}  
+	}
 
-	//-------------
 
+	
+	@Override
+	public List<Asset> getAssetByType(AssetType type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
+	
 
 }

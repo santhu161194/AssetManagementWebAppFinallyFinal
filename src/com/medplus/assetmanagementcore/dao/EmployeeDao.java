@@ -2,45 +2,39 @@ package com.medplus.assetmanagementcore.dao;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
-import com.medplus.assetmanagementcore.model.AssetMapping;
 import com.medplus.assetmanagementcore.model.Employee;
 
 public interface EmployeeDao {
-	public int insertEmployee(Employee employee);//done
-	public int updateEmployeeInfo(Employee employee,String updatedBy,Date updatedDate);//done
-	public Employee getEmployee(String empId);//done
+	public int insertEmployee(Employee employee);
 	
-	public List<Employee> getEmployees();//done
+	public int updateEmployeeInfo(Employee employee);
 	
-	public List<Employee> getEmployeeByRole(String role);//done
+	public Employee getEmployee(String empId);
+	
+	public List<Employee> getEmployees();
+	
+	public List<Employee> getEmployeeByRole(String role);
 	
 	public String getEmployeePassword(String empId);
 	
-	public int addRole(int roleId, String roleName, String addedBy,Date addedDate);//done
+	public int addRole(int roleId, String roleName, String addedBy,Date addedDate);
 	
-	public int addRoleToEmp(String empId,List<Long> roleIdList, String addedBy,Date addedDate);//done
+	public int addRoleToEmp(String empId,List<Long> roleIdList, String addedBy,Date addedDate);
 	
-	public List<String> getRole(String empid);//done
-	
-	public Map<Integer,String> getAllRoles();
+	public List<String> getRole(String empid);
 	
 	public long getRoleId(String roleName);
 	
-	public int removeRole(String empid,String roleName,String removedBy,Date removedDate);
-	
-	//public int updatePassword(String empId,String changedBy,String updatedDate,String oldPassword,String newPassword);
-	
-	
-	//public boolean resetPassword(String empId,String changedBy,String updatedDate,String newPassword);
+	public int removeRole(String empid,String roleName,String removedBy);
 	
 	public String getRoleName(int roleId);
-	public int employeeModification(String employeeId, String updatedBy,
-			Date updatedDate);
-	public int updatePassword(String empId, String changedBy, Date updatedDate,
+	
+	public int employeeModification(String employeeId, String updatedBy);
+	
+	public int updatePassword(String empId, String changedBy,
 			String oldPassword, String newPassword);
-	public int resetPassword(String empId, String changedBy, Date updatedDate,
+	public int resetPassword(String empId, String changedBy,
 			String newPassword);
 	
 	

@@ -194,8 +194,11 @@ margin-left:20px;
   
   <li><a id="viewAssetsByStatus?status=A" class="showhide">Allocate Assets</a></li><br>	
    <li><a id="viewAssetsByStatus?status=N" class="showhide">De-Allocate Assets</a></li><br>
+   <li><a id="ViewAssetRequests" href="#" class="showhide">View All Asset Requests</a></li><br>
    <li><a id="viewAssets" class="showhide">View All Assets</a></li><br>	
    <li><a id="viewEmpls" class="showhide">View All Employees</a></li><br>	
+   
+   
       
   </ul>
   </nav>

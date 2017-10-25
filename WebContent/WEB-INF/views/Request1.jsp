@@ -6,57 +6,56 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
-<script type="text/javascript">
-function ChooseContact(data) {
+<title>Asset Request </title>
 
-	document.getElementById ("friendName").value = data.value;
-
-	}
-
-</script>
   <script>
   $(function() { // when DOM is ready
-	    $(".showhide").click(function(){ 
-	    	var toLoad=$(this).attr('id');// when #showhidecomment is clicked
-	    	
-	        $("#content").load(toLoad); // load the sample.jsp page in the #chkcomments element
-	    }); 
-	});
+        $(".showhide").click(function(){
+            var toLoad=$(this).attr('id');// when #showhidecomment is clicked
+            
+            $("#content").load(toLoad); // load the sample.jsp page in the #chkcomments element
+        });
+    });
   </script>
 
 </head>
 <body>
 <div id="content">
-<s:form commandName="postAssetRequests" action="postAssetRequests" method="post">
-<h2 id="id1" align="center"> Confirm Asset-Request</h2>
+<form  action="postAssetRequests" method="post">
+<h2 id="id1" align="center"> Asset-Request</h2>
 
-	<div id="id2">
-		<h3 align="center">${msg}</h3>
-		</div>
+    <div id="id2">
+        <h3 align="center">${message}</h3>
+    </div>
 
-<table align="center">
+ <table align="center">
 
-<tr><td>employeeId</td><td><input type="text" name="EmployeeId" value=${username} readonly></td></tr>
-<%-- <tr><td>Asset Type</td><td><input type="text" name="assetType"  value=<%= request.getParameter("type") %> readonly></td></tr> --%>
+    <tr>
+    <td>employeeId</td>
+    <td><input type="text" name="EmployeeId" value=${username} readonly></td>
+    </tr>
+    <tr>
+    <td>Select Asset Type:</td>
+    <td>
+         <select name="type" >
+         <option value="Laptop" name="type">Laptop</option>
+         <option value="Desktop" name="type">Desktop</option>
+         <option value="Mouse" name="type">Mouse</option>
+         <option value="Keyboard" name="type">Keyboard</option>
+       </select>
+   </td>
+
+   </tr>
+
 <tr>
 <td>
-<select name="type" onchange="ChooseContact(this)">
-  <option value="Laptop" name="type">Laptop</option>
-  <option value="Desktop" name="type">Desktop</option>
-  <option value="Mouse" name="type">Mouse</option>
-  <option value="Keyboard" name="type">Keyboard</option>
-</select>
 </td>
-<!-- <td><input id="friendName" type="text" name="type"></td> -->
-
+<td><input type="submit" value="Submit" class="showhide"></td>
 
 </tr>
-
-<tr><td></td><td><input type="submit" value="Confirm Request" class="showhide"></td><td></td></tr>
 </table>
-<a href="postAssetRequests" >Return to home</a>
-</s:form>
+
+</form>
 
 
 </div>
