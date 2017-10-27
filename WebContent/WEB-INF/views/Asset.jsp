@@ -6,6 +6,78 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+
+<script type="text/javascript">
+	 function onSubmit() {
+
+		var serialNo = document.getElementById("serialNumber").value;
+		var assetName = document.getElementById("assetName").value;
+		
+		
+		var cost = document.getElementById("cost").value;
+		
+		var formValid = true;
+		var formValid1 = false;
+		
+		if (IsEmpty(serialNo) == true) {
+			document.getElementById("serial_error").innerHTML = "Please Enter Serial No";	
+			formValid = false;
+		}else{
+			document.getElementById("serial_error").innerHTML = null;	
+			formValid = true;
+		}
+		
+		if (IsEmpty(assetName) == true) {
+			document.getElementById("assetName_error").innerHTML = "Please Enter Asset name";
+			formValid = false;
+		}
+		else if (assetName.length >= 40) {
+			document.getElementById("assetName_error").innerHTML = "AssetName should not exceed 40";
+			formValid1 = true;
+		}
+		else if (assetName.length < 5) {
+			document.getElementById("assetName_error").innerHTML = "AssetName should be greater than 4";
+			formValid1 = true;
+		}
+		else{
+			document.getElementById("assetName_error").innerHTML = null;	
+			formValid = true;
+		}
+		if (IsEmpty(cost) == true) {
+			document.getElementById("cost_error").innerHTML = "Please Enter cost";
+			formValid = false;		
+		}
+		else if (cost.length >= 15) {
+			document.getElementById("cost_error").innerHTML = "Cost should not exceed 11";
+			formValid1 = true;
+		}
+		else if (cost.length <= 3) {
+			document.getElementById("cost_error").innerHTML = "Cost should be greater than 3";
+			formValid1 = true;
+		} 
+		else{
+			document.getElementById("cost_error").innerHTML = null;	
+			formValid = true;
+		}
+		 
+		
+		
+		if (formValid1) {
+			return false;
+		}
+		if (!formValid) {
+			return false;
+		}
+		return true;
+	}
+	function IsEmpty(input) {
+		if (input.replace(/^\s+|\s+$/g, "") === "") {
+			return true;
+		}
+		
+	}
+</script>
+ 
 <style type="text/css">
 .red{
 color:red;
@@ -19,12 +91,14 @@ th, td {
     text-align: left;
     padding: 8px;
 }    
-
+span {
+	color: red;
+}
 
 </style>
 </head>
 <body>
-<s:form commandName="asset" action="addAsset" method="post">
+<s:form commandName="asset" action="addAsset" method="post" onsubmit="return onSubmit()">
 <h2 id="id1" align="center">ASSET DATA</h2>
 
 	<div id="id2">
@@ -32,25 +106,34 @@ th, td {
 		</div>
 
 <table align="center">
-<tr><td>assetId</td><td><s:input path="assetId" cssClass="form" required="true"/></td><td>
-<tr><td>serialNumber</td><td><s:input path="serialNumber" cssClass="form" required="true"/></td><td>
-<tr><td>assetName</td><td><s:input path="assetName" cssClass="form" required="true"/></td><td>
 
-<tr><td>Enter  AssetTypeEnum{Laptop/Deskto/Monitor//Mouse)</td><td><s:input path="assetType" cssClass="form" required="true"/></td><td>
-<tr><td>Enter cost</td><td><s:input path="cost" cssClass="form" required="true"/></td><td>
-<tr><td>Enter AssetStatusEnum{Available/Notavailable}</td><td><s:input path="status" cssClass="form" /></td><td>
+<tr><td>serialNumber</td><td><s:input path="serialNumber" cssClass="form" id = "serialNumber"/><span id = "serial_error"></span></td></tr>
+<tr><td>assetName</td><td><s:input path="assetName" cssClass="form" id = "assetName"/><span id = "assetName_error"></span></td></tr>
 
+
+<%-- <tr><td>Asset Type</td><td><select>
+	<option value = "Laptop" name="assetType">Laptop</option>
+	<option value = "Desktop" name="assetType">Desktop</option>
+	<option value = "Monitor" name="assetType">Monitor</option>
+	<option value = "Mouse" name="assetType">Mouse</option>
+	<option value = "Keyboard" name="assetType">Keyboard</option>	
+</select></td></tr>  --%>
+ 
+<tr><td>Select AssetType</td><td><input type="radio" name="assetType" value="Laptop" checked>Laptop
+		<input type="radio" name="assetType" value="Desktop">Desktop
+		<input type="radio" name="assetType" value="Monitor">Monitor
+		<input type="radio" name="assetType" value="Mouse">Mouse
+		<input type="radio" name="assetType" value="Keyboard">Keyboard</td></tr>
+<tr><td>Enter cost</td><td><s:input path="cost" cssClass="form" id = "cost"/><span id = "cost_error"></span></td></tr>
+<tr><td>Select Status</td>
+<td><input type = "radio" name = "status" value = "Available" id = "status" checked>Available
+<input type = "radio" name = "status" value = "NotAvailable" id = "status">Not Available<span id = "status_error"></span>
+</td></tr>
+<tr><td>createdBy</td><td><s:input path="createdBy" cssClass="form" id = "createdBy" value="${username}"/><span id = "createdBy_error"></span></td></tr>
 
 </table>
-	
- 
- 	<input type="submit" value="Submit">
-	
-
-
+<input type="submit" value="Submit">
 <a href="home">Return to home</a>
 </s:form>
-
-
 </body>
 </html>

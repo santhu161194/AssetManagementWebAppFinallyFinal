@@ -19,7 +19,9 @@ clear:both;
 </style>
 </head>
 <body>
-
+<div id="id2">
+		<h4 align="center">${viewdetails}</h4>
+		</div>
 <table align="center">
 			
 		

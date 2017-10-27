@@ -32,7 +32,7 @@
 
     <tr>
     <td>employeeId</td>
-    <td><input type="text" name="EmployeeId" value=${username} readonly></td>
+    <td><input type="text" name="EmployeeId" readonly value=${username} ></td>
     </tr>
     <tr>
     <td>Select Asset Type:</td>

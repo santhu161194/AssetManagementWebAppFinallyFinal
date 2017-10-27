@@ -11,8 +11,8 @@
 
 	http://www.springframework.org/schema/context/spring-context-3.0.xsd ">
 
-	<ctx:component-scan base-package="com.medplus.assetmanagementwebapp.*"></ctx:component-scan>
-	<ctx:component-scan base-package="com.medplus.assetmanagementcore.*"></ctx:component-scan>
+	<ctx:component-scan base-package="org.medplus.assetmanagementwebapp.*"></ctx:component-scan>
+	<ctx:component-scan base-package="org.medplus.assetmanagementcore.*"></ctx:component-scan>
 	
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">

@@ -22,8 +22,18 @@ th {
     color: white;
 }
 </style>
+<script>
+  $(function() { // when DOM is ready
+	    $(".showhide").click(function(){ 
+	    	var toLoad=$(this).attr('id');// when #showhidecomment is clicked
+	    	
+	        $("#content").load(toLoad); // load the sample.jsp page in the #chkcomments element
+	    }); 
+	});
+  </script>
 </head>
 <body>
+<div id="content">
 		<%
 HttpSession session1=request.getSession(false);
 if(session1==null||session1.getAttribute("username")==null)
@@ -33,7 +43,7 @@ if(session1==null||session1.getAttribute("username")==null)
 	<h2 id="id1" align="center">EMPLOYEE DATA</h2>
 
 	<div id="id2">
-		<h3 align="center">View Employees</h3>
+		<h3 align="center">${viewdetails}</h3>
 		</div>
 	<h4><j:out value="${updatestatus}"></j:out></h4>
 	<table border="2">
@@ -41,6 +51,9 @@ if(session1==null||session1.getAttribute("username")==null)
 			<th>EMPCODE
 			<th>FirstNAME
 			<th>LastNAME
+			<th>gender
+			<th>mobileNumber
+			<th>dateOfBirth
 			
 		</tr>
 		
@@ -49,16 +62,19 @@ if(session1==null||session1.getAttribute("username")==null)
 				<td><j:out value="${emp.employeeId} "></j:out></td>
 				<td><j:out value="${emp.firstName} "></j:out></td>
 				<td><j:out value="${emp.lastName} "></j:out></td>
-				
-				<td><a href="UpdateEmployee?code=<j:out value="${emp.employeeId}"></j:out>">Update</a></td>
-				<td><a href="removeEmployeeRole?code=<j:out value="${emp.employeeId}"></j:out>">Remove Role</a></td>
-				<td><a href="getEmployeeRole?code=<j:out value="${emp.employeeId}"></j:out>">Emp Role</a></td>
-				<td><a href="view?code=<j:out value="${emp.employeeId}"></j:out>">Emp Role</a></td>
+				<td><j:out value="${emp.gender} "></j:out></td>
+				<td><j:out value="${emp.mobileNumber} "></j:out></td>
+				<td><j:out value="${emp.dateOfBirth} "></j:out></td>
+				<td><a class="showhide" id="UpdateEmployee?code=<j:out value="${emp.employeeId}"></j:out>">Update</a></td>
+				<td><a class="showhide" id="empassets?username=<j:out value="${emp.employeeId}"></j:out>">view Assets of Employee</a></td>
+				<td><a class="showhide" id="emprequest?username=<j:out value="${emp.employeeId}"></j:out>">view Request Assets of Employee</a></td>
+				<td><a class="showhide" id="getEmployeeRole?code=<j:out value="${emp.employeeId}"></j:out>">Emp Role</a></td>
 				</tr>
 				</j:forEach>
 	</table>
 
 	<a href="home">Return to home</a>
 	<%} %>
+	</div>
 </body>
 </html>
