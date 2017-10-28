@@ -40,7 +40,7 @@ return false;
 </script>
 </head>
 <body>
-	<form action="allocateAsset" method="post" enctype="multipart/form-data">
+	<form action="uploadFile" method="post" enctype="multipart/form-data">
 		<table align="center">
 			<tr>
 				<td>EmployeeId</td>
@@ -56,7 +56,7 @@ return false;
 			</tr>
 			<tr>
 					<td>Portrait Photo: </td>
-					<td><input id="photo" type="file" name="photo" size="50" required/></td>
+					<td><input id="photo" type="file" name="file" size="50" required/></td>
 			</tr>
 			</table>
 			<input type="submit">
