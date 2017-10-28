@@ -18,7 +18,7 @@
 				<td><input name=deassignedBy value="${username}"></td>
 			</tr>
 			</table>
-			<input type="submit">
+			<input type="submit" value="Submit">
 		
 
 

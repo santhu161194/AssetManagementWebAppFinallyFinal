@@ -89,8 +89,8 @@ span {
 <tr><td>addedBy</td><td><s:input path="addedBy" cssClass="form" required="true"/></td><td>
 <tr><td>addedDate</td><td><s:input path="addedDate" cssClass="form" required="true"/></td><td>
  --%>
-<tr><td>employeeId</td><td><input type="text" name="employeeId" id="employeeId"><span id = "employeeId_error"></span></td></tr>
-<tr><td>roleId</td><td><input type="text" name="roleId" id="roleId"><span id="roleId_error"></span></td></tr>
+<tr><td>employeeId</td><td><input name="employeeId" id="employeeId" type="number"><span id = "employeeId_error"></span></td></tr>
+<tr><td>roleId</td><td><input type="number" name="roleId" id="roleId"><span id="roleId_error"></span></td></tr>
 <tr><td>addedBy</td><td><input type="text" name="addedBy" id="addedBy" value="${username}"><span id="addedBy_error"></span></td></tr>
 
 <tr><td></td><td><input type="submit"></td><td></td></tr>

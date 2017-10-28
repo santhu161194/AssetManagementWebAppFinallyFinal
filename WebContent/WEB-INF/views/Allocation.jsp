@@ -5,9 +5,42 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
+
+<script>
+if(!$('input[type="file"]').val()) {
+	   alert('please enter');
+	   return false;
+	}
+</script>
+
+
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#photo").change(function(e){
+var fd = new FormData();    
+fd.append( 'file',$( '#photo' )[0].files[0] );
+$.ajax({
+  url: 'addImage',
+  data: fd,
+  processData: false,
+  contentType: false,
+  type: 'POST',
+  success: function(data){
+    alert(data);
+  }
+});
+return false;
+   
+	 });
+    
+});	
+
+
+
+</script>
 </head>
 <body>
-	<form action="allocateAsset" method="post">
+	<form action="allocateAsset" method="post" enctype="multipart/form-data">
 		<table align="center">
 			<tr>
 				<td>EmployeeId</td>
@@ -20,6 +53,10 @@
 			<tr>
 				<td>AssignedBy</td>
 				<td><input name=assignedBy value=<%=session.getAttribute("username")%>></td>
+			</tr>
+			<tr>
+					<td>Portrait Photo: </td>
+					<td><input id="photo" type="file" name="photo" size="50" required/></td>
 			</tr>
 			</table>
 			<input type="submit">

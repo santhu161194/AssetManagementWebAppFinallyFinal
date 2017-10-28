@@ -1,26 +1,37 @@
 package org.medplus.assetmanagementwebapp.controller;
 
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.Part;
 
 import org.medplus.assetmanagementcore.exceptions.AssetException;
 import org.medplus.assetmanagementcore.exceptions.AuthenticationException;
 import org.medplus.assetmanagementcore.exceptions.EmployeeException;
 import org.medplus.assetmanagementcore.model.Asset;
+import org.medplus.assetmanagementcore.model.AssetMapping;
 import org.medplus.assetmanagementcore.model.Employee;
 import org.medplus.assetmanagementcore.model.Request;
 import org.medplus.assetmanagementcore.service.AssetService;
 import org.medplus.assetmanagementcore.service.EmployeeService;
 import org.medplus.assetmanagementcore.service.impl.EmployeeServiceImpl;
 import org.medplus.assetmanagementcore.utils.AssetType;
+import org.medplus.assetmanagementcore.utils.Encryption;
+import org.medplus.assetmanagementcore.utils.Queries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -29,6 +40,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 @Controller
 
@@ -40,7 +53,8 @@ public class AssetController {
 		
 		@Autowired
 		EmployeeService employeeService;
-	
+		@Autowired
+		JdbcTemplate template;
 		
 		List<Request> requestList;
 		
@@ -53,63 +67,65 @@ public class AssetController {
 		List<Asset> getAssetsByStatus;
 		
 		
+		
 		//getting form
 		@RequestMapping(value="/addAsset",method=RequestMethod.GET)
-			public ModelAndView getAssetForm(){
-		Asset asset=new Asset();
-				ModelAndView mav=new ModelAndView();
-				mav.addObject(asset);
-				mav.setViewName("Asset");
-				return mav;
-		}
+		public ModelAndView getAssetForm(){
+	Asset asset=new Asset();
+			ModelAndView mav=new ModelAndView();
+			mav.addObject(asset);
+			mav.setViewName("Asset");
+			return mav;
+	}
 
-		 @InitBinder
-		 public final void initBinderUsuariosFormValidator(final WebDataBinder binder, final Locale locale) {
-		     final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", locale);
-		     binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));    
-		 }
+	 @InitBinder
+	 public final void initBinderUsuariosFormValidator(final WebDataBinder binder, final Locale locale) {
+	     final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", locale);
+	     binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));    
+	 }
 
-		
-/*
-		 @InitBinder
-		 public final void initBinderUsuariosFormValidator(final WebDataBinder binder, final Locale locale) {
-		     final SimpleDateFormat public class EmployeeController {dateFormat = new SimpleDateFormat("yyyy-MM-dd", locale);
-		     binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));    
-		 }
 
-		*/
-		 @RequestMapping(value="/addAsset",method=RequestMethod.POST)
-			public ModelAndView addAsset(@ModelAttribute("asset") Asset asse, BindingResult result)
-			{
-				ModelAndView mav=new ModelAndView();
+	 @RequestMapping(value="/addAsset",method=RequestMethod.POST)
+		public ModelAndView addAsset(@ModelAttribute("asset") Asset asse, BindingResult result)
+		{
+			ModelAndView mav=new ModelAndView();
+			
+			String rows=null;
+			
+			
+			try {
 				
-				String rows="0";
-				try {
-					
-					
-						try {
-							rows = assetService.addAsset(asse);
-						} catch (EmployeeException e) {
-							
-							e.printStackTrace();
-						}
-					
-					if(rows.equals(0))
-					{
-						
-						return mav;
-					
-					}
-					else
-					{
-					return new ModelAndView("redirect:home");
+				rows = assetService.addAsset(asse);
+				
+				if (rows.equals("Failed to insert")) {
+					String msg = "add asset failed";
+					mav.addObject("message", msg);
+					mav.setViewName("AdminHome");
+				} else {
+					String msg = " Asset added Successfully";
+					mav.addObject("message", msg);
+					mav.setViewName("AdminHome");
+
 				}
-				} catch (AssetException |AuthenticationException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+
+			
+			} catch (AuthenticationException e) {
+
+				mav.addObject("message", e.getErrorMessage());
+				mav.setViewName("AdminHome");
+				return mav;
+			} catch (AssetException e) {
+				mav.addObject("message", e.getErrorMessage());
+				mav.setViewName("AdminHome");
+				return mav;
+			} catch (EmployeeException e) {
+				mav.addObject("message", e.getErrorMessage());
+				mav.setViewName("AdminHome");
 				return mav;
 			}
+
+			return mav;
+		}
 		 @RequestMapping(value="/viewAssets",method=RequestMethod.GET)
 			public ModelAndView viewAssetForm()
 			{
@@ -162,15 +178,17 @@ public class AssetController {
 		 
 		 
 		 @RequestMapping(value="/allocateAsset",method=RequestMethod.POST)
-			public ModelAndView allocateAsset(@RequestParam("employeeID") String employeeId,
-					@RequestParam("assetID") String assetID,
-					@RequestParam("assignedBy") String assignedBy) throws NumberFormatException, AuthenticationException
+			public ModelAndView allocateAsset(
+					@RequestParam("file") MultipartFile file) throws NumberFormatException, AuthenticationException, IOException
 			{
 				ModelAndView mav=new ModelAndView();
-				
+				System.out.println(file.getBytes());
 				String rows="0";
 				try {
 					try {
+						String employeeId = null;
+						String assetID = null;
+						String assignedBy = null;
 						rows = assetService.allocateAsset(employeeId, Long.parseLong(assetID), assignedBy);
 					} catch (EmployeeException e) {
 						// TODO Auto-generated catch block
@@ -258,101 +276,7 @@ public class AssetController {
 			return mav;
 			}
 		 
-		 
-		 @RequestMapping(value="/adminhome",method=RequestMethod.GET)
-			public ModelAndView emphome(@RequestParam("username") String username,HttpServletRequest request, HttpServletResponse response)
-			{
-				ModelAndView mav=new ModelAndView();
-				List<Asset> assetlist;
-			try {
-				
-				assetlist=assetService.getAssetsOfEmployee(username);
-				
-				mav.addObject("assets", assetlist);
-				
-				requestList	=assetService.getAssetRequests(username);
-				
-				mav.addObject("requestList", requestList);
-				try {
-					employee=employeeService.getEmployee(username);
-				} catch (EmployeeException e) {
-					e.printStackTrace();
-				}
-				mav.addObject("emp", employee);
-				mav.setViewName("AdminHome");
-		        return mav;
-			} catch (AssetException e) {
-				return mav;
-				
-			}
-			catch(NullPointerException e1)
-			{
-				return mav;
-			}
-			}
-		 
-		 @RequestMapping(value="/employee",method=RequestMethod.GET)
-			public ModelAndView EmployeeHome(@RequestParam("username") String username,HttpServletRequest request, HttpServletResponse response)
-			{
-				ModelAndView mav=new ModelAndView();
-				List<Asset> assetlist;
-			try {
-				
-				assetlist=assetService.getAssetsOfEmployee(username);
-				mav.addObject("assets", assetlist);
-				requestList	=assetService.getAssetRequests(username);
-				mav.addObject("requestList", requestList);
-				try {
-					employee=employeeService.getEmployee(username);
-				} catch (EmployeeException e) {
-					e.printStackTrace();
-				}
-				mav.addObject("emp", employee);
-				mav.setViewName("EmployeeHome");
-		       
-			} catch (AssetException e) {
-				mav.addObject("message", e);
-				
-			}
-			catch(NullPointerException e1)
-			{
-				mav.addObject("message", e1);
-			}
-			 return mav;
-			}
-		 
-		 @RequestMapping(value="/EDPHome",method=RequestMethod.GET)
-			public ModelAndView EDPHome(@RequestParam("username") String username,HttpServletRequest request, HttpServletResponse response)
-			{
-				ModelAndView mav=new ModelAndView();
-				List<Asset> assetlist;
-			try {
-				
-				assetlist=assetService.getAssetsOfEmployee(username);
-				
-				mav.addObject("assets", assetlist);
-				
-				requestList	=assetService.getAssetRequests(username);
-				
-				mav.addObject("requestList", requestList);
-				try {
-					employee=employeeService.getEmployee(username);
-				} catch (EmployeeException e) {
-					e.printStackTrace();
-				}
-				mav.addObject("emp", employee);
-				mav.setViewName("EDPHome");
-		        
-			} catch (AssetException e) {
-				mav.addObject("message", e);
-				
-			}
-			catch(NullPointerException e1)
-			{
-				mav.addObject("message", e1);
-			}
-			return mav;
-			}
+
 		 
 		 @RequestMapping(value="/empassets",method=RequestMethod.GET)
          public ModelAndView EmployeeAssets(@RequestParam("username") String username,HttpServletRequest request, HttpServletResponse response)
@@ -466,6 +390,97 @@ public class AssetController {
 	            return mav;
 	            
 	            }
+	         
+	         
+	         
+	         @RequestMapping(value = "/UpdateAsset", method = RequestMethod.GET)
+		     	public ModelAndView updateAssetForm(@RequestParam("code") long assetID,HttpServletRequest request, HttpServletResponse response) {
+		     		Asset asset = new Asset();
+		     		ModelAndView mav = new ModelAndView();
+		     		try {
+		     			asset=assetService.getAsset(assetID);
+		     			mav.addObject(asset);
+		     			System.out.println("Iam for Asset");
+		     			mav.addObject("viewdetails", "Update Asset Form");
+		     			mav.setViewName("UpdateAsset");
+		     			return mav;
+		     		} catch (AssetException e) {
+		     			mav.addObject("message", e.getErrorMessage());
+						mav.setViewName("UpdateAsset");
+						return mav;
+					}
+		     
+		     	}
+
+		     	@RequestMapping(value = "/UpdateAsset", method = RequestMethod.POST)
+		     	public ModelAndView updateAsset( @ModelAttribute("asset") Asset asset,HttpServletRequest request, HttpServletResponse response) {
+		     		ModelAndView mav = new ModelAndView();
+
+		     		String rows = null;
+		     		try {
+		     			
+		     			asset.setModifiedBy(request.getSession(false).getAttribute("username").toString());
+		     			rows =assetService.updateAsset(asset);
+		     			
+		     			if (rows.equals("Failed to Update")) {
+
+		     				String msg = "record not updated";
+		     				mav.addObject("message", msg);
+		     				mav.setViewName("AdminHome");
+		     			} else {
+		     				String msg = "record  updated";
+		     				mav.addObject("message", msg);
+		     				mav.setViewName("AdminHome");
+		     			}
+		     		} catch (AuthenticationException e) {
+
+		     			mav.addObject("message", e.getErrorMessage());
+		     			mav.setViewName("AdminHome");
+		     			return mav;
+		     		} catch (AssetException e) {
+		     			mav.addObject("message", e.getErrorMessage());
+						mav.setViewName("AdminHome");
+						return mav;
+					}
+
+		     		return mav;
+		     	}
+		     	
+		     	  @RequestMapping(value="/asset-mapping-log",method=RequestMethod.GET)
+					public ModelAndView viewAssetMappingLog()
+					{
+						ModelAndView mav=new ModelAndView();
+						List<AssetMapping> assetMappingLog ;
+					try {
+						assetMappingLog=assetService.getAssetMappingLog();
+						mav.addObject("assetMappingLog",assetMappingLog);
+						mav.setViewName("ViewLog");
+				        return mav;
+					} catch (AssetException e) {
+						mav.addObject("message", e);
+						e.printStackTrace();
+					}
+					return mav;
+					}
+
+		         
+		         @RequestMapping(value="assetInfo",method=RequestMethod.GET)
+		         public ModelAndView viewAssetInfo(@RequestParam("assetId")long assetId)
+		            {
+		                ModelAndView mav=new ModelAndView();
+		                Asset asset;
+		                try {
+		                	asset=assetService.getAsset(assetId);
+		                	
+		                    mav.addObject("asset", asset);
+		                } catch (AssetException e) {
+		                	 mav.addObject("message", e); 
+		                }
+		                mav.setViewName("AssetInfo");
+		            
+		            return mav;
+		            
+		            }
 
 		
 	}

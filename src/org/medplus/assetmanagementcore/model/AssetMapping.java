@@ -3,7 +3,6 @@ package org.medplus.assetmanagementcore.model;
 import java.util.Date;
 
 import org.medplus.assetmanagementcore.utils.AssetAllocation;
-import org.medplus.assetmanagementcore.utils.AssetStatus;
 
 public class AssetMapping {
 	private String EmployeeId;

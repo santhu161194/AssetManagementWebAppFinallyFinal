@@ -10,7 +10,7 @@
 <script type="text/javascript">
 	function onSubmit() {
 
-		var roleId = document.getElementById("roleId").value;
+		var employeeId = document.getElementById("employeeId").value;
 		var roleName = document.getElementById("roleName").value;
 
 		var validForm = true;
@@ -73,38 +73,43 @@ span {
 </style>
 </head>
 <body>
-	<s:form commandName="employee" action="addRole" method="post"
+	<s:form commandName="employee" action="removeRole" method="post"
 		onsubmit="return onSubmit()">
-		<h2 id="id1" align="center">ADD ROLE</h2>
+
 
 		<div id="id2">
 			<h3 align="center">${viewdetails}</h3>
 		</div>
 
 		<table align="center">
+			<%-- <tr><td>roleId</td><td><s:input path="roleId" cssClass="form" required="true"/></td><td>
+<tr><td>roleName</td><td><s:input path="roleName" cssClass="form" required="true"/></td><td>
+<tr><td>addedBy</td><td><s:input path="addedBy" cssClass="form" required="true"/></td><td>
+<tr><td>addedDate</td><td><s:input path="addedDate" cssClass="form" required="true"/></td><td>
+ --%>
 			<tr>
-				<td>roleId</td>
-				<td><input name="roleId" id="roleId" type="number"><span
+				<td>employeeId</td>
+				<td><input type="text" name="employeeId" id="employeeId" required="true"><span
 					id="id_error"></span></td>
 			</tr>
 			<tr>
 				<td>roleName</td>
-				<td><input type="text" name="roleName" id="roleName"><span
+				<td><input type="text" name="roleName" id="roleName" required="true"><span
 					id="name_error"></span></td>
 			</tr>
 			<tr>
-				<td>addedBy</td>
-				<td><input type="text" name="addedBy" id="addedBy"
-					value="${username}"><span id="addedBy_error"></span></td>
+				<td>removedBy</td>
+				<td><input type="text" name="removedBy" id="removedBy"
+					value="${username}"><span id="removedBy_error" required="true"></span></td>
 			</tr>
+
 
 			<tr>
 				<td></td>
-				<td><input type="submit" value="submit"></td>
+				<td><input type="submit" value="submit" onclick="return onSubmit()"></td>
 				<td></td>
 			</tr>
 		</table>
-		
 	</s:form>
 </body>
 </html>

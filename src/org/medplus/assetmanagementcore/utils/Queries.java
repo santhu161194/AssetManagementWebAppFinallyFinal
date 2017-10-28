@@ -89,6 +89,6 @@ public class Queries {
 
 	public static String getAssetByType="select AssetId,SerialNumber,AssetName,AssetType,Cost,Status,CreatedBy,DateCreated,ModifiedBy,DateModified from AssetManagement.tbl_asset where AssetType=? and Status='A'";
 
-	public static String updateAsset="update tbl_asset set AssetName=?,SerialNumber=?,Cost=?,ModifiedDate=?,ModifiedBy=? where AssetId=?";
+	public static String updateAsset="update tbl_asset set AssetName=?,SerialNumber=?,Cost=?,DateModified=?,ModifiedBy=? where AssetId=?";
 
 }

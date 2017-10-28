@@ -7,6 +7,7 @@ import java.util.Map;
 import org.medplus.assetmanagementcore.exceptions.AuthenticationException;
 import org.medplus.assetmanagementcore.exceptions.EmployeeException;
 import org.medplus.assetmanagementcore.model.Employee;
+import org.springframework.dao.DataAccessException;
 
 
 
@@ -35,9 +36,13 @@ public interface EmployeeService
 	
 	public String resetPassword(String employeeId,String changedBy,String newPassword, Date date) throws EmployeeException,AuthenticationException;
 
-	public List<Map<Integer, String>> getRole(String employeeId) throws EmployeeException;
+	public List<Map<Integer, String>> getRole(String employeeId) throws EmployeeException, AuthenticationException;
 
-	public String authenticateEmployee(String employeeId, String password) throws EmployeeException;
+	public String authenticateEmployee(String employeeId, String password) throws EmployeeException, DataAccessException, AuthenticationException;
+
+	public List<String> checkRoles(String empID);
+	
+	public boolean isUserExisting(String empId) throws AuthenticationException;
 	
 }
 

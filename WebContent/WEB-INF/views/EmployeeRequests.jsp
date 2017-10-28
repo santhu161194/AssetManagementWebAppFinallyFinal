@@ -32,6 +32,16 @@ th {
         });
     });
   </script>
+  <script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
 </head>
 <body>
     
@@ -41,19 +51,16 @@ th {
         <h3 align="center">${viewdetails}</h3>
         </div>
     <h4><j:out value="${updatestatus}"></j:out></h4>
+    <input class="form-control" id="myInput" type="text" placeholder="Search Request here....">
+    
     <table border="2">
           <table id="table" border="2" margin: 10px; >
         <tr id="th">
-            <th id="th"> assetId
-            <th id="th">assetType
-            <th id="th">requested Date
-            
-            <!-- <th>createdDate
-            <th> createdBy
-            <th>modifiedBy -->
-            
+            <th id="th"> Employee ID
+            <th id="th">Asset-Type
+            <th id="th">Requested-Date   
         </tr>
-        
+        <tbody id="myTable">
         <j:forEach var="requestList" items="${requestList}">
             <tr id="th">
                 <td id="th"><j:out value="${requestList.employeeId} "></j:out></td>
@@ -67,6 +74,7 @@ th {
                 <td><a href="UpdateAsset?code=<j:out value="${asss.assetId}"></j:out>">Update</a></td>--%>
                 </tr>
                 </j:forEach>
+                </tbody>
                 </table>
                 
 

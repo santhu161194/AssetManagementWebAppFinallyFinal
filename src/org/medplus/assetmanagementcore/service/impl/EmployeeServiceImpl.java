@@ -23,10 +23,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 	@Autowired
 	EmployeeDaoImpl employeeDaoImpl;
 
-	public boolean isUserExisting(String empId) {
-		Employee emp = employeeDaoImpl.getEmployee(empId);
+	public boolean isUserExisting(String empId) throws AuthenticationException {
+		Employee emp ;
+		try{
+				emp = employeeDaoImpl.getEmployee(empId);
+		}
+		catch(NullPointerException e)
+		{
+			System.out.println("dataaccess exception");
+			throw new AuthenticationException("The User ID doesnt exist");
+		}
 		if (emp == null)
-
 			return false;
 		else
 			return true;
@@ -74,7 +81,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 					"You need to be an administrator");
 			throw authException;
 		}
-		employee = employeeDaoImpl.getEmployee(employee.getEmployeeId());
+		
 		String msg = null;
 		try {
 			int rows = employeeDaoImpl.updateEmployeeInfo(employee);
@@ -108,7 +115,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	public String changePassword(String empId, String password,
-			String newPassword, String changedBy, Date changedDate) throws EmployeeException {
+			String newPassword, String changedBy, Date changedDate) throws EmployeeException, AuthenticationException {
 		if(!isUserExisting(empId))
 		{
 			EmployeeException employeeException = new EmployeeException(
@@ -160,32 +167,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	  
 	 }
 
-	@Override
-	public String removeEmployeeRole(String empId, String roleName,
-			String removedBy, Date removedDate) throws AuthenticationException, EmployeeException {
-		if (!checkRoles(removedBy).contains("admin")) {
-			AuthenticationException authException = new AuthenticationException(
-					"You need to be an administrator");
-			throw authException;
-		}
-		String msg = null;
-			try {
-				int rows = employeeDaoImpl.removeRole(empId, roleName,
-						removedBy);
-
-				if (rows > 0)
-					msg = "REMOVED";
-				else
-					msg = "NOT REMOVED";
-			} catch (DataAccessException e) {
-				EmployeeException employeeException= new EmployeeException("Failure to get All employees list");
-				   throw employeeException;
-			}
-
-		return msg;
-
-	}
-
+	
 	@Override
 	public String addRoleToEmployee(String empId, List<Long> roleIdList,
 			String addedBy,Date addedDate) throws AuthenticationException, EmployeeException {
@@ -205,6 +187,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 				msg = "FAILURE";
 		} catch (DuplicateKeyException e) {
 			EmployeeException employeeException= new EmployeeException("ROle Id already exists for the user");
+			   throw employeeException;
+		}
+		catch (DataAccessException e) {
+			EmployeeException employeeException= new EmployeeException("Invalid Data entered check your all details");
 			   throw employeeException;
 		}
 
@@ -244,7 +230,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	 
 	 @Override 
-	public String authenticateEmployee(String empId, String password) throws EmployeeException {
+	public String authenticateEmployee(String empId, String password) throws EmployeeException, DataAccessException, AuthenticationException {
 		String msg="";
 		if (!isUserExisting(empId)) {
 			msg="INVALID USER";
@@ -280,7 +266,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		  }
 		if(list.size()==0)
 		  {
-		  EmployeeException invalidEmployeeException= new EmployeeException("No Roles Assigned to that employee");
+		  EmployeeException invalidEmployeeException= new EmployeeException("No Special roles assigned to that employee");
 		   throw invalidEmployeeException;
 		  }
 		
@@ -291,11 +277,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 
 	@Override
-	public List<Map<Integer, String>> getRole(String empId) throws EmployeeException {
+	public List<Map<Integer, String>> getRole(String empId) throws EmployeeException, AuthenticationException {
 		
 		if (!isUserExisting(empId)) {
-			EmployeeException invalidAssetException= new EmployeeException("INVALID EMPLOYEE");
-			   throw invalidAssetException;
+			EmployeeException invalidEmployeeException= new EmployeeException("INVALID EMPLOYEE");
+			   throw invalidEmployeeException;
 			
 		}
 		List<Map<Integer, String>> list = employeeDaoImpl.getRole(empId);
@@ -320,7 +306,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 			e.printStackTrace();
 		}
 		List<String> roles = new ArrayList<String>();
-
 		for (Map<Integer, String> map : list) {
 			if (map.containsValue("admin")) {
 				roles.add("admin");
@@ -330,8 +315,42 @@ public class EmployeeServiceImpl implements EmployeeService {
 			}
 			continue;
 		}
-		roles.add("employee");
+		
 		return roles;
+
+	}
+	
+	@Override
+	public String removeEmployeeRole(String empId, String roleName,
+			String removedBy, Date removedDate) throws EmployeeException {
+
+		String message = null;
+		message = CommonValidations.isValidNumberForString(empId);
+		message = CommonValidations.isValidNumberForString(roleName);
+		if (!message.equals("valid")) {
+			EmployeeException invalidEmployeeException = new EmployeeException(
+					message);
+			throw invalidEmployeeException;
+		}
+		if (checkRoles(removedBy).contains("admin")) {
+			try {
+
+				int rows = employeeDaoImpl.removeRole(empId, roleName,
+						removedBy);
+System.out.println(rows);
+				if (rows > 0)
+					message = "REMOVED";
+				else
+					message = "FAILURE";
+			} catch (Exception e) {
+				EmployeeException invalidEmployeeException = new EmployeeException(
+						"please enter correct employee Id and rolename");
+				throw invalidEmployeeException;
+			}
+		} else
+			return "NO AUTHORITY";
+
+		return message;
 
 	}
 

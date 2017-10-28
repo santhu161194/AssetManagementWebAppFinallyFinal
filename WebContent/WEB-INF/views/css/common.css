@@ -1,0 +1,124 @@
+body {
+    font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    color: #333;
+    background-color: whitesmoke;
+}
+#upleft {
+width: 300px;
+height: 100%;
+background: grey;
+float: left;
+margin: 10px;
+padding-left: 10px;
+position: absolute;
+left: -10px;
+top: 42px;
+}
+#profile { 
+   width:550px; 
+				height: 200px;
+				background:gray;
+				float:left;
+				 margin: 10px;
+ 
+}
+
+#upright { 
+   width:600px;
+				height:215px;
+				background:gray;
+				float:left;
+
+}
+#below { 
+ height:215px;
+				width:600px;
+				background:gray;
+				float:left;
+
+
+}
+#d4 { 
+ height:50px;
+				width:600px;
+				background:white;
+				float:left;
+
+
+}
+#table{
+width:95%;
+margin: 10px;
+}
+#th{
+margin: 10px;
+    border-bottom: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    vertical-align: center;
+}
+
+th {
+    background-color: black;
+    color: white;
+}
+
+#options{
+margin-top: 50px;
+}
+.showhide{
+line-height:40px;
+
+
+}
+#content{
+float: left;
+width: 60%;
+height: 100%;
+margin-top: 10px;
+margin-left:20px;
+}
+.wrapper {
+        display: flex;
+        float:left;
+}
+
+#sidebar {
+        min-width: 250px;
+        max-width: 250px;
+        height: 100vh;
+        margin-top: -20px;
+}
+#sidebar {
+    /* don't forget to add all the previously mentioned styles here too */
+    background: black;
+    color: white;
+    transition: all 0.3s;
+}
+
+#sidebar .sidebar-header {
+    padding: 20px;
+    background: #6d7fcc;
+}
+
+#sidebar ul.components {
+    padding: 20px 0;
+    border-bottom: 1px solid #47748b;
+}
+
+#sidebar ul p {
+    color: #fff;
+    padding: 10px;
+}
+
+#sidebar ul li a {
+    padding: 10px;
+    font-size: 1.1em;
+    display: block;
+}
+#sidebar ul li a:hover {
+    color: #7386D5;
+    background: #fff;
+}

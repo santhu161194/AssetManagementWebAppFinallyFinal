@@ -139,7 +139,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 	@Override
 	public Employee getEmployee(String empId) throws DataAccessException {
-
 		Object args[] = { empId };
 		return template.query(Queries.GET_EMPLOYEE, args,
 				new ResultSetExtractor<Employee>() {
@@ -205,61 +204,57 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 	@Transactional
 	@Override
-	public int removeRole(final String empId, final String roleName,
-			final String removedBy) throws DataAccessException,
-			DataIntegrityViolationException {
+	public int removeRole(final String empId,final String roleName, final String removedBy) {
+	
+		int rows1=0;
+		int rows3=0;
+		int rows=template.update(Queries.removeRole,new PreparedStatementSetter() {
+			
+			@Override
+			public void setValues(PreparedStatement pst) throws SQLException {
+				
+				pst.setString(1,empId);
+				pst.setLong(2,getRoleId(roleName));
+			}
+		
+		});
 
-		int employeedatemodificationrows = 0;
-		int employeeLogrows = 0;
-		int roleMappingrows = template.update(Queries.removeRole,
-				new PreparedStatementSetter() {
 
-					@Override
-					public void setValues(PreparedStatement pst)
-							throws SQLException {
-
-						pst.setString(1, empId);
-						pst.setLong(2, getRoleId(roleName));
-						pst.setString(3, removedBy);
-						pst.setDate(4, new java.sql.Date(new Date().getTime()));
-					}
-
-				});
-		if (roleMappingrows > 0) {
-			employeedatemodificationrows = template.update(Queries.employeeModification,
-					new PreparedStatementSetter() {
-
-						@Override
-						public void setValues(PreparedStatement pst)
-								throws SQLException {
-
-							pst.setString(1, removedBy);
-							pst.setDate(2,
-									new java.sql.Date(new Date().getTime()));
-							pst.setString(3, empId);
-
-						}
-					});
+		if(rows>0)
+		{
+		rows1=template.update(Queries.employeeModification,new PreparedStatementSetter() {
+			
+			@Override
+			public void setValues(PreparedStatement pst) throws SQLException {
+				
+				pst.setString(1,removedBy);
+				pst.setDate(2, new java.sql.Date(new Date().getTime()));
+				pst.setString(3,empId);
+				
+				
+			}
+		});
 		}
-		if (employeedatemodificationrows > 0) {
-			employeeLogrows = template.update(Queries.employeeModificationLog,
-					new PreparedStatementSetter() {
-
-						@Override
-						public void setValues(PreparedStatement pst)
-								throws SQLException {
-
-							pst.setString(1, removedBy);
-							pst.setDate(2,
-									new java.sql.Date(new Date().getTime()));
-							pst.setString(3, empId);
-
-						}
-					});
+		
+		if(rows1>0)
+		{
+	 rows3=template.update(Queries.employeeModificationLog,new PreparedStatementSetter() {
+			
+			@Override
+			public void setValues(PreparedStatement pst) throws SQLException {
+				
+				pst.setString(1,removedBy);
+				pst.setDate(2, new java.sql.Date(new Date().getTime()));
+				pst.setString(3,empId);
+				
+				
+			}
+		});
+		
 		}
-		return employeeLogrows;
+	
+		return rows1;
 	}
-
 	public int updatePassword(final String empId, String changedBy,
 			String oldPassword, final String newPassword)
 			throws DataAccessException, DataIntegrityViolationException {

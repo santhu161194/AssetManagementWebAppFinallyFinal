@@ -22,23 +22,28 @@
 		
 		
 		if (IsEmpty(uname) == true) {
-			document.getElementById("user_error").innerHTML = "* Please Enter Username";
+			document.getElementById("message").innerHTML = "* Please Enter Username";
 			flag2=false;
 		}
 		else if (uname.length >= 40) {
-			document.getElementById("user_error").innerHTML = "Username should not exceed 40 characters";
+			document.getElementById("message").innerHTML = "Username should not exceed 40 characters";
 			flag = true;
 		}
 		else if (uname.length <= 5) {
-			document.getElementById("user_error").innerHTML = "Username should be greater than 5 characters";
+			document.getElementById("message").innerHTML = "Username should be greater than 5 characters";
 			flag = true;
 		} 
+		else
+			{
+			document.getElementById("message").innerHTML = "";
+			flag=false;
+			}
 		if (IsEmpty(pass) == true) {
 			document.getElementById("pass_error").innerHTML = "* Please Enter Password";
 			flag2=false;
 		}
 		else if (uname.length <= 5) {
-			document.getElementById("user_error").innerHTML = "Username should be greater than 5 characters";
+			document.getElementById("message").innerHTML = "Username should be greater than 5 characters";
 			flag = true;
 		} 
 		else if (pass.length >= 15) {
@@ -86,7 +91,7 @@
 
 			<form action="login" id="form_id" method="post" name="myform"
 				onsubmit="return onSubmit()">
-				<font color="red"><div>${status}</div></font> <font color="red"><div
+				<font color="red"><div id="message">${message}</div></font> <font color="red"><div
 						id="user_error"></div></font> <label>User Name :</label> <input
 					type="text" name="username" id="username" /> <font color="red"><div
 						id="pass_error"></div></font> <label>Password :</label> <input

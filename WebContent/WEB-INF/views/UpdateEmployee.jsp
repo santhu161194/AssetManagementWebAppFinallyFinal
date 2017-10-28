@@ -172,25 +172,23 @@ span {
 		</div>
 
 <table align="center">
-<tr><td>EmployeeId</td><td><s:input path="employeeId" cssClass="form" readonly="true"/></td></tr>
-<tr><td>Firstname</td><td><s:input path="firstName" cssClass="form" id = "firstName"/><span id = "name_error"></span></td></tr>
-<tr><td>LastName</td><td><s:input path="lastName" cssClass="form" id = "lastName" /><span id = "lname_error"></span></td></tr>
-<tr><td>Enter Password</td><td><s:input path="password" cssClass="form" id="password"/><span id = "pass_error"></span></td></tr>
+<tr><td>EmployeeId</td><td><s:input path="employeeId" cssClass="form" readonly="true" required="true"/></td></tr>
+<tr><td>Firstname</td><td><s:input path="firstName" cssClass="form" id = "firstName" required="true"/><span id = "name_error"></span></td></tr>
+<tr><td>LastName</td><td><s:input path="lastName" cssClass="form" id = "lastName" required="true"/><span id = "lname_error"></span></td></tr>
+<tr><td>Enter Password</td><td><s:input path="password" cssClass="form" id="password" required="true"/><span id = "pass_error"></span></td></tr>
 
   <tr><td>Select Gender</td><td><input type="radio" name="gender" value="MALE" ${employee.gender eq "MALE"?'checked="checked"':''}/>Male
 		<input type="radio" name="gender"  value="FEMALE"  ${employee.gender eq "FEMALE"?'checked="checked"':''}/>female</td></tr>  
   
 <%-- <tr><td>Enter Gender</td><td><s:input path="gender" cssClass="form"/></td></tr> 
   --%>
-<tr><td>Enter MobileNumber</td><td><s:input path="mobileNumber" cssClass="form" id="mobileNumber"/><span id = "mobile_error"></span></td></tr>
-<tr><td>Enter DateOfBirth</td><td><s:input path="dateOfBirth" cssClass="form" id="dateOfBirth" /><span id = "date_error"></span></td></tr>
-<tr><td>Enter DateOfJoining</td><td><s:input path="dateOfJoin" cssClass="form"  id="dateOfJoin" /><span id = "dateJoin_error"></span></td></tr>
-<tr><td>Enter Address</td><td><s:input path="address" cssClass="form" id="address"/><span id = "address_error"></span></td></tr>
-<tr><td>modifiedBy</td><td><s:input path="modifiedBy" cssClass="form" id = "modifiedBy" value="${username}"/></td></tr>
-<tr><td></td><td><input type="submit"></td><td></td></tr>
+<tr><td>Enter MobileNumber</td><td><s:input path="mobileNumber" cssClass="form" id="mobileNumber" pattern="[789][0-9]{9}" title="Phone number with 7-9 and remaing 9 digit with 0-9" required="true"/><span id = "mobile_error"></span></td></tr>
+<tr><td>Enter DateOfBirth</td><td><s:input path="dateOfBirth" cssClass="form" id="dateOfBirth" /><span id = "date_error" required="true"></span></td></tr>
+<tr><td>Enter DateOfJoining</td><td><s:input path="dateOfJoin" cssClass="form"  id="dateOfJoin" /><span id = "dateJoin_error" required="true"></span></td></tr>
+<tr><td>Enter Address</td><td><s:input path="address" cssClass="form" id="address" required="true"/><span id = "address_error"></span></td></tr>
+<tr><td></td><td><input type="submit" value="update"></td><td></td></tr>
 
 </table>
-<a href="AdminHome">Return to home</a>
 </s:form>
 
 </body>

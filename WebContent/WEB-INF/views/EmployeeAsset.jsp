@@ -5,6 +5,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
 <title>Insert title here</title>
 <style>
 table{
@@ -21,6 +23,10 @@ th {
     background-color: black;
     color: white;
 }
+#id1{
+margin-left: 10%;
+
+}
 </style>
 
 <script>
@@ -32,6 +38,17 @@ th {
         });
     });
   </script>
+  
+<script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
 </head>
 <body>
     
@@ -40,44 +57,34 @@ th {
     <div id="content">
         <h3 align="center">${viewdetails}</h3>
         </div>
+      
     <h4><j:out value="${updatestatus}"></j:out></h4>
-    <table border="2">
+    <h2 id="id1" align="">Allocated Asset</h2>
+      <input class="form-control" id="myInput" type="text" placeholder="Search Asset here....">
+    <table border="2" class="table table-striped">
         <tr>
             <th> assetId
             <th>serialNumber
             <th>assetName
             <th>assetType
             <th>cost
-            <th> status
-            <!-- <th>createdDate
-            <th> createdBy
-            <th>modifiedBy -->
             
         </tr>
-        
+        <tbody id="myTable">
         <j:forEach var="asss" items="${assets}">
             <tr>
-                <td><j:out value="${asss.assetId} "></j:out></td>
-                <td><j:out value="${asss.serialNumber} "></j:out></td>
+               <td><a data-toggle="tooltip" data-placement="bottom" title="Asset Info!"  class="showhide" id="assetInfo?assetId=<j:out value="${asss.assetId}"></j:out>"><j:out value="${asss.assetId}"></j:out></a></td>
+               <td><j:out value="${asss.serialNumber} "></j:out></td>
                 <td><j:out value="${asss.assetName} "></j:out></td>
                 <td><j:out value="${asss.assetType} "></j:out></td>
                 <td><j:out value="${asss.cost} "></j:out></td>
-                <td><j:out value="${asss.status} "></j:out></td>
-                <%-- <td><j:out value="${asss.createdDate} "></j:out></td>
-                <td><j:out value="${asss.createdBy} "></j:out></td>
-                <td><j:out value="${asss.modifiedBy} "></j:out></td>
-                <j:if test="${viewdetails eq 'Available Assets'}">
-                <td><a class="showhide" id="allocateAsset?assetID=<j:out value="${asss.assetId}"></j:out>">Allocate Asset</a></td>
-                </j:if>
-                <j:if test="${viewdetails eq 'Allocated Assets'}">
-                <td><a class="showhide" id="deallocateAsset?assetID=<j:out value="${asss.assetId}"></j:out>?deassignedBy=<j:out value="${username}"></j:out>">DeAllocate Asset</a></td>
-                </j:if>
-                <td><a href="UpdateAsset?code=<j:out value="${asss.assetId}"></j:out>">Update</a></td>
-             --%>    </tr>
+                </tr>
                 </j:forEach>
+                
+         </tbody>       
                 </table>
                 
-            
+          
             
                 </body>
                 </html>

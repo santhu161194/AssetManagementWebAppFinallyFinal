@@ -7,20 +7,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <style>
-table{
-width:100%;
-}
-th, td {
-    border-bottom: 1px solid #ddd;
-    padding: 8px;
-    text-align: center;
-    vertical-align: center;
-}
-tr:nth-child(even) {background-color: #f2f2f2}
-th {
-    background-color: black;
-    color: white;
-}
+<%@include file="css/pages.css"%>
 </style>
 <script>
   $(function() { // when DOM is ready
@@ -53,7 +40,7 @@ if(session1==null||session1.getAttribute("username")==null)
 			<th>LastNAME
 			<th>gender
 			<th>mobileNumber
-			<th>dateOfBirth
+			<th>Address
 			
 		</tr>
 		
@@ -64,16 +51,15 @@ if(session1==null||session1.getAttribute("username")==null)
 				<td><j:out value="${emp.lastName} "></j:out></td>
 				<td><j:out value="${emp.gender} "></j:out></td>
 				<td><j:out value="${emp.mobileNumber} "></j:out></td>
-				<td><j:out value="${emp.dateOfBirth} "></j:out></td>
+				<td><j:out value="${emp.address} "></j:out></td>
+				<j:if test="${viewdetails eq 'View All Employees' }">
 				<td><a class="showhide" id="UpdateEmployee?code=<j:out value="${emp.employeeId}"></j:out>">Update</a></td>
-				<td><a class="showhide" id="empassets?username=<j:out value="${emp.employeeId}"></j:out>">view Assets of Employee</a></td>
-				<td><a class="showhide" id="emprequest?username=<j:out value="${emp.employeeId}"></j:out>">view Request Assets of Employee</a></td>
-				<td><a class="showhide" id="getEmployeeRole?code=<j:out value="${emp.employeeId}"></j:out>">Emp Role</a></td>
+				<td><a class="showhide" id="getRole?code=<j:out value="${emp.employeeId}"></j:out>">Show Employee Roles</a></td>
+				</j:if>
 				</tr>
 				</j:forEach>
 	</table>
 
-	<a href="home">Return to home</a>
 	<%} %>
 	</div>
 </body>

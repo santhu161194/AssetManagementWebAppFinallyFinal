@@ -337,7 +337,7 @@ public class AssetDaoImpl implements AssetDao {
 				e.setAssetId(rs.getInt(3));
 				e.setAssignedDate(new java.util.Date(rs.getDate(4)
 						.getTime()));
-				if (AssetAllocation.getName(rs.getString(6)).equals(AssetAllocation.Allocated)) {
+				if (AssetAllocation.getName(rs.getString(6)).equals(AssetAllocation.DeAllocated)) {
 					e.setReturnDate(new java.util.Date(rs.getDate(5)
 							.getTime()));
 				}

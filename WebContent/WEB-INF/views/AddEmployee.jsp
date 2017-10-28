@@ -56,13 +56,30 @@ span {
 			formValid = false;
 
 		}
+		else if (employeeId.length >= 10)
 
+		{
+
+			document.getElementById("id_error").innerHTML = "Value should not exceed 10";
+
+			formValid1 = true;
+
+		} else if (employeeId.length <= 3)
+
+		{
+
+			document.getElementById("id_error").innerHTML = "Value should be greater than 3";
+
+			formValid1 = true;
+
+		}
 		else
 
 		{
 			document.getElementById("id_error").innerHTML = null;
 
 			formValid = true;
+			formValid1=false;
 		}
 
 		if (IsEmpty(firstName) == true)
@@ -377,13 +394,13 @@ span {
 
 			<tr>
 				<td>Enter DateOfBirth</td>
-				<td><s:input type="date" path="dateOfBirth" cssClass="form"
+				<td><s:input path="dateOfBirth" cssClass="form"
 						id="dateOfBirth" /><span id="date_error"></span></td>
 			</tr>
 
 			<tr>
 				<td>Enter DateOfJoining</td>
-				<td><s:input type="date" path="dateOfJoin" cssClass="form"
+				<td><s:input path="dateOfJoin" cssClass="form"
 						id="dateOfJoin" /><span id="dateJoin_error"></span></td>
 			</tr>
 
@@ -392,19 +409,17 @@ span {
 				<td><s:input path="address" cssClass="form" id="address" /><span
 					id="address_error"></span></td>
 			</tr>
-
 			<%
 				session.setAttribute("userid",
 							(String) pageContext.getAttribute("userid"));
 			%>
 			<tr>
 				<td></td>
-				<td><input type="submit" value="Submit"></td>
+				<td><input type="submit" value="Submit" onclick="return onSubmit()"></td>
 			</tr>
 
 			<tr>
 				<td></td>
-				<td><a href="home">Return to home</a></td>
 			</tr>
 
 		</table>
