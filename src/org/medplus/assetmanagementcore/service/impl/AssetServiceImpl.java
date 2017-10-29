@@ -362,4 +362,23 @@ public class AssetServiceImpl implements AssetService{
 		}
 	}
 	
+	@Override
+	public String removeAssetRequest(Request request) throws AssetException {
+			String message = null;
+				try {
+
+					int resultCount =dao.removeAssetRequest(request);
+					
+					if (resultCount > 0)
+						message = "REMOVED";
+					else
+						message = "FAILURE";
+				} catch (Exception e) {
+					AssetException invalidAssetException = new AssetException(
+							" Remove Asset Request Exception");
+					throw invalidAssetException;
+				}
+			return message;
+
+		}
 }

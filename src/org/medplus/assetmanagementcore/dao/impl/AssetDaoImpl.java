@@ -466,5 +466,20 @@ public class AssetDaoImpl implements AssetDao {
 					}
 				});
 	}
+	@Override
+	public int removeAssetRequest(final Request request) throws DataAccessException {
+		
+			int resultCount=template.update(Queries.removeAssetRequest,new PreparedStatementSetter() {
+				
+				@Override
+				public void setValues(PreparedStatement pst) throws SQLException {	
+				pst.setString(1,request.getEmployeeId());		
+				pst.setString(2,request.getAssetType().toString());		
+			}
+			
+			});
+		
+			return resultCount;
+		}
 
 }

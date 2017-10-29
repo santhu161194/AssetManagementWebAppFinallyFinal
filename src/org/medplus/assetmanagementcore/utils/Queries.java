@@ -70,6 +70,8 @@ public class Queries {
 	public static String postNewAssetTypeRequest = "insert into AssetManagement.tbl_asset_request_unavailable values(?,?,?,?)";
 	
 	public static String getNewAssetTypeRequest = "select EmployeeId,AssetType,AssetName,RequestDate from AssetManagement.tbl_asset_request_unavailable ";
+	
+	public static String removeAssetRequest="delete from tbl_asset_request where EmployeeId=? and AssetType=?";
 
 	// asset log
 	public static String UPDATE_ASSET_TO_LOG_ = "insert into AssetManagement.tbl_asset_log values(?,?,?,?,?,?,?,?,?,?)";

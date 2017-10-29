@@ -5,42 +5,19 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
-
 <script>
-if(!$('input[type="file"]').val()) {
-	   alert('please enter');
-	   return false;
-	}
-</script>
-
-
-<script type="text/javascript">
-$(document).ready(function(){
-    $("#photo").change(function(e){
-var fd = new FormData();    
-fd.append( 'file',$( '#photo' )[0].files[0] );
-$.ajax({
-  url: 'addImage',
-  data: fd,
-  processData: false,
-  contentType: false,
-  type: 'POST',
-  success: function(data){
-    alert(data);
-  }
-});
-return false;
-   
-	 });
-    
-});	
-
-
-
-</script>
+  $(function() { // when DOM is ready
+	    $(".showhide").click(function(){ 
+	    	var toLoad=$(this).attr('id');// when #showhidecomment is clicked
+	    	
+	        $("#content").load(toLoad); // load the sample.jsp page in the #chkcomments element
+	    }); 
+	});
+  </script>
 </head>
 <body>
-	<form action="uploadFile" method="post" enctype="multipart/form-data">
+<div id="content">
+	<form action="allocateAsset" method="post" enctype="multipart/form-data">
 		<table align="center">
 			<tr>
 				<td>EmployeeId</td>
@@ -59,11 +36,12 @@ return false;
 					<td><input id="photo" type="file" name="file" size="50" required/></td>
 			</tr>
 			</table>
-			<input type="submit">
+			<input id="allocateAsset" class="showhide" type="submit">
 		
 
 
 
 	</form>
+	</div>
 </body>
 </html>

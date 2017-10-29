@@ -54,4 +54,6 @@ public interface AssetDao {
 	public List<Asset> getAssetByType(AssetType type)
 			throws DataAccessException;
 	public List<AssetMapping> getAssetMappingLog() throws DataAccessException;
+	
+	public int removeAssetRequest(Request request) throws DataAccessException;
 }

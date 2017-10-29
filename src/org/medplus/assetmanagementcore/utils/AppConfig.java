@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ImportResource;
 import org.springframework.web.multipart.MultipartResolver;
 
-@ImportResource("classpath:com/medplus/assetmanagementcore/utils/ApplicationContext.xml")
+@ImportResource("classpath:org/medplus/assetmanagementcore/utils/ApplicationContext.xml")
 //@Configuration
 public class AppConfig {
 

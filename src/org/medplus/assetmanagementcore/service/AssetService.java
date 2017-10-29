@@ -47,6 +47,8 @@ public interface AssetService {
 	public String updateAsset(Asset asset) throws AssetException, AuthenticationException;
 
 	public List<AssetMapping> getAssetMappingLog() throws AssetException;
+	
+	public String removeAssetRequest(Request request) throws AssetException;
 
 	
 }
