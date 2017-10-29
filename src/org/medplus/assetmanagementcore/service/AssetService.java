@@ -1,6 +1,5 @@
 package org.medplus.assetmanagementcore.service;
 
-import java.util.Date;
 import java.util.List;
 
 import org.medplus.assetmanagementcore.exceptions.AssetException;
@@ -12,7 +11,6 @@ import org.medplus.assetmanagementcore.model.NewTypeRequest;
 import org.medplus.assetmanagementcore.model.Request;
 import org.medplus.assetmanagementcore.utils.AssetStatus;
 import org.medplus.assetmanagementcore.utils.AssetType;
-import org.springframework.dao.DataAccessException;
 
 public interface AssetService {
 

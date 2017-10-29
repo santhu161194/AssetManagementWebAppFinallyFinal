@@ -65,7 +65,7 @@ public class Queries {
 
 	public static String REMOVE_ENTRY_FROM_ASSET_MAPPING = "delete from AssetManagement.tbl_asset_mapping where AssignedTo=? and Status=?";
 	
-	public static String deallocateAsset = "delete from AssetManagement.tbl_asset_mapping where AssetId=?";// change
+	public static String deallocateAsset = "delete from AssetManagement.tbl_asset_mapping where AssetId=?";
 	
 	public static String postNewAssetTypeRequest = "insert into AssetManagement.tbl_asset_request_unavailable values(?,?,?,?)";
 	
@@ -92,5 +92,7 @@ public class Queries {
 	public static String getAssetByType="select AssetId,SerialNumber,AssetName,AssetType,Cost,Status,CreatedBy,DateCreated,ModifiedBy,DateModified from AssetManagement.tbl_asset where AssetType=? and Status='A'";
 
 	public static String updateAsset="update tbl_asset set AssetName=?,SerialNumber=?,Cost=?,DateModified=?,ModifiedBy=? where AssetId=?";
+
+	public static String getAllNewAssetRequests = "select EmployeeId,AssetType,AssetName,RequestDate from AssetManagement.tbl_asset_request_unavailable";
 
 }

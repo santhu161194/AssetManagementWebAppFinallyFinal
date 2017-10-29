@@ -42,7 +42,6 @@ public class EmployeeController {
 
 	String msg;
 
-	// view employees
 	@RequestMapping("/viewEmployees")
 	public ModelAndView viewEmployees(@ModelAttribute("employee") Employee emp,
 			BindingResult result) {
@@ -63,7 +62,6 @@ public class EmployeeController {
 		return mav;
 	}
 
-	// getting form
 	@RequestMapping(value = "/empl", method = RequestMethod.GET)
 	public ModelAndView getFormEmployee() {
 		
@@ -82,7 +80,6 @@ public class EmployeeController {
 				dateFormat, true));
 	}
 
-	// Adding employee
 	@RequestMapping(value = "/empl", method = RequestMethod.POST)
 	public ModelAndView employeeData(@ModelAttribute("employee") Employee emp) {
 		ModelAndView mav = new ModelAndView();
@@ -206,8 +203,7 @@ public class EmployeeController {
 		try {
 			employee = employeeService.getEmployee(empcode);
 		} catch (EmployeeException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			mav.addObject("message", e);
 		}
 		mav.addObject(employee);
 		mav.setViewName("ViewRequestAssetsOfEmp");
@@ -225,8 +221,7 @@ public class EmployeeController {
 			rows = assetService.getAssetRequests("emp");
 			mav.addObject("empl", rows);
 		} catch (AssetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			mav.addObject("message", e);
 		}
 
 		return mav;
@@ -303,8 +298,7 @@ public class EmployeeController {
 				rows = employeeService.addRole(roleId, roleName, addedBy,
 						new Date());
 			} catch (AuthenticationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				mav.addObject("message", e);
 			}
 			if (rows.equals("FAILURE")) {
 				String msg = "record not inserted";
@@ -325,7 +319,6 @@ public class EmployeeController {
 		return mav;
 	}
 
-	// getting form for addRole
 	@RequestMapping(value = "/addRoleToEmp", method = RequestMethod.GET)
 	public ModelAndView addRoleToEmpForm() {
 		employee=new Employee();
@@ -339,18 +332,17 @@ public class EmployeeController {
 	@RequestMapping(value = "/addRoleToEmp", method = RequestMethod.POST)
 	public ModelAndView addRoleToEmpForm(
 			@RequestParam("employeeId") String employeeId,
-			@RequestParam("roleId") List<Long> roleId,
+			@RequestParam("roleName") String roleName,
 			@RequestParam("addedBy") String addedBy) {
 		ModelAndView mav = new ModelAndView();
-
+		
 		String rows = "";
 		try {
 			try {
 				rows = employeeService.addRoleToEmployee(employeeId,
-						roleId, addedBy, new Date());
+						roleName, addedBy, new Date());
 			} catch (AuthenticationException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				mav.addObject("message", e);
 			}
 			if (rows.equals("FAILURE")) {
 				String message = "record not inserted";
@@ -371,7 +363,6 @@ public class EmployeeController {
 		return mav;
 	}
 
-	// getting form for getSigleEmployee
 	@RequestMapping(value = "/getSingleEmployee", method = RequestMethod.GET)
 	public ModelAndView getSingleEmployeeForm() {
 
@@ -451,8 +442,7 @@ public class EmployeeController {
 			rows = assetService.getAssetsOfEmployee("emp");
 			mav.addObject("asss", rows);
 		} catch (AssetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			mav.addObject("message", e);
 		}
 
 		return mav;

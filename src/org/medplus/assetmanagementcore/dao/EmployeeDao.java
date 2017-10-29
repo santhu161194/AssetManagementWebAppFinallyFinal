@@ -76,7 +76,7 @@ public interface EmployeeDao {
 	 * @throws DataAccessException
 	 * @throws DataIntegrityViolationException
 	 */
-	public int addRoleToEmp(String empId, List<Long> roleIdList,
+	public int addRoleToEmp(String empId, String roleName,
 			String addedBy, Date addedDate) throws DataAccessException,
 			DataIntegrityViolationException;
 

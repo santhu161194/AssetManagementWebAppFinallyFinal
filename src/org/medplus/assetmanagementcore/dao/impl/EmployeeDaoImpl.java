@@ -206,9 +206,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Override
 	public int removeRole(final String empId,final String roleName, final String removedBy) {
 	
-		int rows1=0;
-		int rows3=0;
-		int rows=template.update(Queries.removeRole,new PreparedStatementSetter() {
+		int employeeModificationResultCount=0;
+		int employeeModificationLogResultCount=0;
+		int removeRoleResultCount=template.update(Queries.removeRole,new PreparedStatementSetter() {
 			
 			@Override
 			public void setValues(PreparedStatement pst) throws SQLException {
@@ -220,9 +220,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		});
 
 
-		if(rows>0)
+		if(removeRoleResultCount>0)
 		{
-		rows1=template.update(Queries.employeeModification,new PreparedStatementSetter() {
+			employeeModificationResultCount=template.update(Queries.employeeModification,new PreparedStatementSetter() {
 			
 			@Override
 			public void setValues(PreparedStatement pst) throws SQLException {
@@ -236,9 +236,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		});
 		}
 		
-		if(rows1>0)
+		if(employeeModificationResultCount>0)
 		{
-	 rows3=template.update(Queries.employeeModificationLog,new PreparedStatementSetter() {
+			employeeModificationLogResultCount=template.update(Queries.employeeModificationLog,new PreparedStatementSetter() {
 			
 			@Override
 			public void setValues(PreparedStatement pst) throws SQLException {
@@ -253,7 +253,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		
 		}
 	
-		return rows1;
+		return removeRoleResultCount;
 	}
 	public int updatePassword(final String empId, String changedBy,
 			String oldPassword, final String newPassword)
@@ -320,11 +320,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	}
 
 	@Override
-	public int addRoleToEmp(final String empId, List<Long> roleIdList,
+	public int addRoleToEmp(final String empId, final String roleName,
 			final String addedBy, final Date addedDate)
 			throws DataAccessException, DataIntegrityViolationException {
 		int rows = 0;
-		for (final Long ls : roleIdList) {
 			rows = template.update(Queries.addRoleToEmp,
 					new PreparedStatementSetter() {
 
@@ -333,14 +332,13 @@ public class EmployeeDaoImpl implements EmployeeDao {
 								throws SQLException {
 
 							pst.setString(1, empId);
-							pst.setLong(2, ls.longValue());
+							pst.setLong(2, getRoleId(roleName));
 							pst.setString(3, addedBy);
 							pst.setDate(4,
 									new java.sql.Date(addedDate.getTime()));
 
 						}
 					});
-		}
 		return rows;
 	}
 
@@ -382,7 +380,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
 			Map<Integer, String> role1 = new HashMap<Integer, String>();
 			role1.put(role, getRoleName(role));
 			rolemap.add(role1);
-			System.out.println(rolemap);
 		}
 		return rolemap;
 	}

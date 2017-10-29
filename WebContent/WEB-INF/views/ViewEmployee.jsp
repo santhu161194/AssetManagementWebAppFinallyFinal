@@ -26,10 +26,10 @@ th {
 <body>
 <j:choose>
 <j:when test="${not empty sessionScope.username}">
-	<h2 id="id1" align="center">EMPLOYEE DATA</h2>
+	
 
 	<div id="id2">
-		<h3 align="center">View Employee</h3>
+		
 		</div>
 	<h4><j:out value="${updatestatus}"></j:out></h4>
 	<table border="2">

@@ -31,6 +31,11 @@ th {
 	        $("#content").load(toLoad); // load the sample.jsp page in the #chkcomments element
 	    }); 
 	});
+  
+  
+ 
+
+
   </script>
 </head>
 <body>
@@ -49,31 +54,27 @@ th {
 			<th>assetType
 			<th>cost
 			<th> status
-			<th>createdDate
-			<th> createdBy
-			<th>modifiedBy
+		
 			
 		</tr>
 		
-		<j:forEach var="asss" items="${assets}">
+		<j:forEach var="asset" items="${assets}">
 			<tr>
-				<td><j:out value="${asss.assetId} "></j:out></td>
-				<td><j:out value="${asss.serialNumber} "></j:out></td>
-				<td><j:out value="${asss.assetName} "></j:out></td>
-				<td><j:out value="${asss.assetType} "></j:out></td>
-				<td><j:out value="${asss.cost} "></j:out></td>
-				<td><j:out value="${asss.status} "></j:out></td>
-				<td><j:out value="${asss.createdDate} "></j:out></td>
-				<td><j:out value="${asss.createdBy} "></j:out></td>
-				<td><j:out value="${asss.modifiedBy} "></j:out></td>
+				<td><j:out value="${asset.assetId} "></j:out></td>
+				<td><j:out value="${asset.serialNumber} "></j:out></td>
+				<td><j:out value="${asset.assetName} "></j:out></td>
+				<td><j:out value="${asset.assetType} "></j:out></td>
+				<td><j:out value="${asset.cost} "></j:out></td>
+				<td><j:out value="${asset.status} "></j:out></td>
+								
 				<j:if test="${viewdetails eq 'Available Assets'}">
-				<td><a class="showhide" id="allocateAsset?assetID=<j:out value="${asss.assetId}"></j:out>">Allocate Asset</a></td>
+				<td><a class="showhide" id="allocateAsset?assetID=<j:out value="${asset.assetId}"></j:out>">Allocate Asset</a></td>
 				</j:if>
 				<j:if test="${viewdetails eq 'Allocated Assets'}">
-				<td><a class="showhide" id="deallocateAsset?assetID=<j:out value="${asss.assetId}"></j:out>">DeAllocate Asset</a></td>
+				<td><a class="showhide" id="deallocateAsset?assetID=<j:out value="${asset.assetId}"></j:out>">DeAllocate Asset</a></td>
 				</j:if>
 				<j:if test="${viewdetails eq 'All Assets'}">
-				
+				<td><a class="showhide" id="UpdateAsset?assetID=<j:out value="${asset.assetId}"></j:out>">Update</a>
 				</j:if>
 				</tr>
 				</j:forEach>

@@ -108,7 +108,7 @@ span {
 			</tr>
 			<tr>
 				<td>AssetType</td>
-				<td><s:input path="assetType" cssClass="form" id="assetType" required="true"/><span
+				<td><s:input path="assetType" cssClass="form" id="assetType" required="true" readonly="true"/><span
 					id="mobile_error"></span></td>
 			</tr>
 

@@ -5,83 +5,98 @@ import java.util.Date;
 import org.medplus.assetmanagementcore.utils.AssetAllocation;
 
 public class AssetMapping {
-	private String EmployeeId;
+	private String employeeId;
 
-	private int RoleId;
+	private int roleId;
 
-	private int AssetId;
+	private int assetId;
 
-	private String AssignedBy;
+	private String assignedBy;
 
-	private Date AssignedDate;
+	private Date assignedDate;
 
-	private Date ReturnDate;
+	private Date returnDate;
 
-	private AssetAllocation Status;
+	private AssetAllocation status;
 
-	public AssetAllocation getStatus() {
-		return Status;
-	}
-
-	public void setStatus(AssetAllocation status) {
-		Status = status;
-	}
-
-	public int getAssetId() {
-		return AssetId;
-	}
-
-	public void setAssetId(int assetId) {
-		AssetId = assetId;
-	}
-
-	public Date getReturnDate() {
-		return ReturnDate;
-	}
-
-	public void setReturnDate(Date returnDate) {
-		ReturnDate = returnDate;
-	}
-
+	
 	public String getEmployeeId() {
-		return EmployeeId;
+		return employeeId;
 	}
+
 
 	public void setEmployeeId(String employeeId) {
-		EmployeeId = employeeId;
+		this.employeeId = employeeId;
 	}
+
 
 	public int getRoleId() {
-		return RoleId;
+		return roleId;
 	}
+
 
 	public void setRoleId(int roleId) {
-		RoleId = roleId;
+		this.roleId = roleId;
 	}
+
 
 	public String getAssignedBy() {
-		return AssignedBy;
+		return assignedBy;
 	}
+
 
 	public void setAssignedBy(String assignedBy) {
-		AssignedBy = assignedBy;
+		this.assignedBy = assignedBy;
 	}
+
 
 	public Date getAssignedDate() {
-		return AssignedDate;
+		return assignedDate;
 	}
 
+
 	public void setAssignedDate(Date assignedDate) {
-		AssignedDate = assignedDate;
+		this.assignedDate = assignedDate;
 	}
+
+
+	public Date getReturnDate() {
+		return returnDate;
+	}
+
+
+	public void setReturnDate(Date returnDate) {
+		this.returnDate = returnDate;
+	}
+
+
+	public AssetAllocation getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(AssetAllocation status) {
+		this.status = status;
+	}
+
+
+	public int getAssetId() {
+		return assetId;
+	}
+
+
+	public void setAssetId(int assetId) {
+		this.assetId = assetId;
+	}
+
 
 	@Override
 	public String toString() {
 		// TODO Auto-generated method stub
-		return "Asset Mapping{" + "EmployeeId" + EmployeeId + "RoleId" + RoleId
-				+ "AssetId" + AssetId + "AssignedBy" + AssignedBy
-				+ "AssignedDate" + AssignedDate + "ReturnDate" + ReturnDate
-				+ "Status" + Status + "}";
+		return "Asset Mapping{" + "EmployeeId" + employeeId + "RoleId" + roleId
+				+ "AssetId" + assetId + "AssignedBy" + assignedBy
+				+ "AssignedDate" + assignedDate + "ReturnDate" + returnDate
+				+ "Status" + status + "}";
 	}
 
 }

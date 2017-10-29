@@ -76,8 +76,7 @@ span {
 </style>
 </head>
 <body>
-<s:form commandName="employee" action="addRoleToEmp" method="post" onsubmit = "return onSubmit()">
-<h2 id="id1" align="center">ADD ROLE TO EMP</h2>
+<form action="addRoleToEmp" method="post" onsubmit = "return onSubmit()">
 
 	<div id="id2">
 		<h3 align="center">${viewdetails}</h3>
@@ -89,13 +88,24 @@ span {
 <tr><td>addedBy</td><td><s:input path="addedBy" cssClass="form" required="true"/></td><td>
 <tr><td>addedDate</td><td><s:input path="addedDate" cssClass="form" required="true"/></td><td>
  --%>
-<tr><td>employeeId</td><td><input name="employeeId" id="employeeId" type="number"><span id = "employeeId_error"></span></td></tr>
-<tr><td>roleId</td><td><input type="number" name="roleId" id="roleId"><span id="roleId_error"></span></td></tr>
+<tr><td>employeeId</td><td><input name="employeeId" id="employeeId" type="text"><span id = "employeeId_error"></span></td></tr>
+<tr><%-- <td>roleId</td><td><input type="number" name="roleId" id="roleId"><span id="roleId_error"></span></td> --%>
+<td>Select Role:</td>
+    <td>
+         <select name="roleName" >
+         <option value="admin" name="roleName" >Admin</option>
+         <option value="edp" name="roleName">EDP</option>
+         <option value="employee" name="roleName" checked>Employee</option>
+        
+       </select>
+   </td>
+   </tr>
+
 <tr><td>addedBy</td><td><input type="text" name="addedBy" id="addedBy" value="${username}"><span id="addedBy_error"></span></td></tr>
 
 <tr><td></td><td><input type="submit"></td><td></td></tr>
 </table>
-<a href="home">Return to home</a>
-</s:form>
+
+</form>
 </body>
 </html>

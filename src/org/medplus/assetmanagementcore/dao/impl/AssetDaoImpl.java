@@ -79,7 +79,6 @@ public class AssetDaoImpl implements AssetDao {
 						public void setValues(PreparedStatement pst)
 								throws SQLException {
 							pst.setString(1, status.value);
-							System.out.println(status.name());
 							pst.setString(2, modifiedBy);
 							pst.setDate(3,
 									new java.sql.Date(new Date().getTime()));
@@ -425,7 +424,7 @@ public class AssetDaoImpl implements AssetDao {
 	public List<NewTypeRequest> getNewAssetTypeRequests()
 			throws DataAccessException {
 
-		return template.query(Queries.getAllAssetRequests,
+		return template.query(Queries.getAllNewAssetRequests,
 				new RowMapper<NewTypeRequest>() {
 					public NewTypeRequest mapRow(ResultSet rs, int row)
 							throws SQLException {
@@ -433,7 +432,7 @@ public class AssetDaoImpl implements AssetDao {
 						e.setEmployeeId(rs.getString(1));
 						e.setAssetType((rs.getString(2)));
 						e.setAssetName(rs.getString(3));
-						e.setRequestDate(new java.util.Date(rs.getDate(3)
+						e.setRequestDate(new java.util.Date(rs.getDate(4)
 								.getTime()));
 
 						return e;
@@ -447,7 +446,6 @@ public class AssetDaoImpl implements AssetDao {
 	public List<Asset> getAssetByType(AssetType type)
 			throws DataAccessException {
 		Object args[] = { type.toString() };
-		System.out.println(type);
 		return template.query(Queries.getAssetByType, args,
 				new RowMapper<Asset>() {
 					public Asset mapRow(ResultSet rs, int row)

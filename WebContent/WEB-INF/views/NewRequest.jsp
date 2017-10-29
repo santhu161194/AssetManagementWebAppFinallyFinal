@@ -39,12 +39,12 @@
 		}
 
 		if (formValid) {
-			return false;
+			return true;
 		}
 		if (!formValid) {
-			return false;
+			return true;
 		}
-		return true;
+		
 	}
 	function IsEmpty(input) {
 		if (input.replace(/^\s+|\s+$/g, "") === "") {
@@ -57,7 +57,7 @@
 </head>
 <body>
 	<div id="content">
-		<form action="assetrequest" method="post" onsubmit="return onSubmit()">
+		<form action="assetrequest" method="post" >
 			<h2 id="id1" align="center">Asset Request</h2>
 
 			<div id="id2">
@@ -75,13 +75,13 @@
 
 				<tr>
 					<td>Asset Type</td>
-					<td><input type="text" name="assetType" id="assetType"
+					<td><input type="text" name="assetType" id="assetType" required
 					><span id="assetType_error"></span></td>
 				</tr>
 
 				<tr>
 					<td>Asset Name</td>
-					<td><input type="text" name="assetName" id="assetName"
+					<td><input type="text" name="assetName" id="assetName" required
 						><span id="assetName_error"></span></td>
 				</tr>
 

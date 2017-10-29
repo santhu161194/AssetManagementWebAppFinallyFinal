@@ -1,12 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://www.springframework.org/tags/form" prefix="s"%>
+
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 
+
+<link rel="stylesheet"
+	href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <style type="text/css">
 .red {
 	color: red;
@@ -337,6 +346,12 @@ span {
 		}
 
 	}
+	
+	
+	  $(function() {
+		     $( "#dateOfBirth").datepicker();
+		     
+		  });
 </script>
 
 </head>
@@ -350,7 +365,7 @@ span {
 
 		<div id="id2">
 
-			<h3 align="center">${viewdetails}</h3>
+			<h3 align="center"></h3>
 
 		</div>
 
@@ -413,8 +428,10 @@ span {
 				session.setAttribute("userid",
 							(String) pageContext.getAttribute("userid"));
 			%>
+			
 			<tr>
 				<td></td>
+			
 				<td><input type="submit" value="Submit" onclick="return onSubmit()"></td>
 			</tr>
 

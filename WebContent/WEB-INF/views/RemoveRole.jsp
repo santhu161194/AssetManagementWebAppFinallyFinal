@@ -92,11 +92,20 @@ span {
 				<td><input type="text" name="employeeId" id="employeeId" required="true"><span
 					id="id_error"></span></td>
 			</tr>
-			<tr>
+			<%-- <tr>
 				<td>roleName</td>
 				<td><input type="text" name="roleName" id="roleName" required="true"><span
 					id="name_error"></span></td>
-			</tr>
+			</tr> --%>
+			<td>Select Role:</td>
+    <td>
+         <select name="roleName" >
+         <option value="admin" name="roleName" >Admin</option>
+         <option value="edp" name="roleName">EDP</option>
+         <option value="employee" name="roleName" checked>Employee</option>
+        
+       </select>
+   </td>
 			<tr>
 				<td>removedBy</td>
 				<td><input type="text" name="removedBy" id="removedBy"

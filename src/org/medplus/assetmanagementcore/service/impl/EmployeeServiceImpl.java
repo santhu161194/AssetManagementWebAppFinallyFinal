@@ -30,7 +30,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 		catch(NullPointerException e)
 		{
-			System.out.println("dataaccess exception");
 			throw new AuthenticationException("The User ID doesnt exist");
 		}
 		if (emp == null)
@@ -169,7 +168,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	
 	@Override
-	public String addRoleToEmployee(String empId, List<Long> roleIdList,
+	public String addRoleToEmployee(String empId, String roleName,
 			String addedBy,Date addedDate) throws AuthenticationException, EmployeeException {
 		if (!checkRoles(addedBy).contains("admin")) {
 			AuthenticationException authException = new AuthenticationException(
@@ -179,7 +178,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		String msg = null;
 		try {
 
-			int rows = employeeDaoImpl.addRoleToEmp(empId, roleIdList, addedBy,
+			int rows = employeeDaoImpl.addRoleToEmp(empId, roleName, addedBy,
 					addedDate);
 			if (rows > 0)
 				msg = "SUCCESS";
@@ -337,7 +336,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 				int rows = employeeDaoImpl.removeRole(empId, roleName,
 						removedBy);
-System.out.println(rows);
 				if (rows > 0)
 					message = "REMOVED";
 				else

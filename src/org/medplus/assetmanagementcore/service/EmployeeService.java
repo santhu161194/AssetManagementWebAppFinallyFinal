@@ -23,7 +23,7 @@ public interface EmployeeService
 	
 	public List<Employee> getAllEmployees() throws EmployeeException;
 
-	public String addRoleToEmployee(String employeeId,List<Long> roleIdList, String addedBy,Date addedDate) throws EmployeeException,AuthenticationException;
+	public String addRoleToEmployee(String employeeId,String roleName, String addedBy,Date addedDate) throws EmployeeException,AuthenticationException;
 	
 	public String addRole(int roleId, String roleName, String createdBy,Date addedDate) throws EmployeeException, AuthenticationException;
 	

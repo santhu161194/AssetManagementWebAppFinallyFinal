@@ -27,7 +27,7 @@ if(session1==null||session1.getAttribute("username")==null)
 {	%>
 <a href="login">Click here to login</a>
 <%} else{ %>
-	<h2 id="id1" align="center">EMPLOYEE DATA</h2>
+
 
 	<div id="id2">
 		<h3 align="center">${viewdetails}</h3>

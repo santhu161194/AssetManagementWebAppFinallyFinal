@@ -3,19 +3,13 @@ package org.medplus.assetmanagementwebapp.controller;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.Part;
 
 import org.medplus.assetmanagementcore.exceptions.AssetException;
 import org.medplus.assetmanagementcore.exceptions.AuthenticationException;
@@ -23,17 +17,14 @@ import org.medplus.assetmanagementcore.exceptions.EmployeeException;
 import org.medplus.assetmanagementcore.model.Asset;
 import org.medplus.assetmanagementcore.model.AssetMapping;
 import org.medplus.assetmanagementcore.model.Employee;
+import org.medplus.assetmanagementcore.model.NewTypeRequest;
 import org.medplus.assetmanagementcore.model.Request;
 import org.medplus.assetmanagementcore.service.AssetService;
 import org.medplus.assetmanagementcore.service.EmployeeService;
-import org.medplus.assetmanagementcore.service.impl.EmployeeServiceImpl;
 import org.medplus.assetmanagementcore.utils.AssetType;
-import org.medplus.assetmanagementcore.utils.Encryption;
-import org.medplus.assetmanagementcore.utils.Queries;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
@@ -42,7 +33,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -65,7 +55,6 @@ public class AssetController {
 
 	List<Asset> getAssetsByStatus;
 
-	// getting form
 	@RequestMapping(value = "/addAsset", method = RequestMethod.GET)
 	public ModelAndView getAssetForm() {
 		Asset asset = new Asset();
@@ -161,62 +150,67 @@ public class AssetController {
 	}
 
 	@RequestMapping(value = "/allocateAsset", method = RequestMethod.POST)
-			public ModelAndView 
-			 uploadFileHandler(@RequestParam("employeeID") String employeeID,
-					@RequestParam("assetID") String assetID,
-					@RequestParam("assignedBy") String assignedBy,
-					@RequestParam("file")  MultipartFile file) {
-			 String rows="";
-			 String message="";
-			 	ModelAndView mav=new ModelAndView();
+	public ModelAndView uploadFileHandler(
+			@RequestParam("employeeID") String employeeID,
+			@RequestParam("assetID") String assetID,
+			@RequestParam("assignedBy") String assignedBy,
+			@RequestParam("file") MultipartFile file) {
+		String rows = "";
+		String message = "";
+		ModelAndView mav = new ModelAndView();
+		try {
+			rows = assetService.allocateAsset(employeeID,
+					Long.parseLong(assetID), assignedBy);
+		} catch (NumberFormatException | AssetException
+				| AuthenticationException | EmployeeException e1) {
+			message+=e1;
+			mav.addObject("message", message);
+			mav.setViewName("EDPHome");
+			return mav;
+
+		}
+		if (rows.equals("success")) {
+			mav.addObject("message", "allocated asset successfully");
+
+			if (!file.isEmpty()) {
 				try {
-					rows= assetService.allocateAsset(employeeID, Long.parseLong(assetID), assignedBy);
-				} catch (NumberFormatException | AssetException
-						| AuthenticationException | EmployeeException e1) {
-					System.out.println(e1);;
-				}
-				if(rows.equals("success"))
-				{
-					mav.addObject("message", "allocated asset successfully");
+					final byte[] bytes = file.getBytes();
 
-				if (!file.isEmpty()) {
-					try {
-						final byte[] bytes = file.getBytes();
-						
+					String rootPath = System.getProperty("catalina.home");
+					File dir = new File(rootPath + File.separator
+							+ "AssetManagementForms");
+					if (!dir.exists())
+						dir.mkdirs();
+					File serverFile = new File(dir.getAbsolutePath()
+							+ File.separator + employeeID + "-" + assetID
+							+ new Date());
+					BufferedOutputStream stream = new BufferedOutputStream(
+							new FileOutputStream(serverFile));
+					stream.write(bytes);
+					stream.close();
 
-						String rootPath = System.getProperty("catalina.home");
-						File dir = new File(rootPath + File.separator + "AssetManagementForms");
-						if (!dir.exists())
-							dir.mkdirs();						File serverFile = new File(dir.getAbsolutePath()
-								+ File.separator + employeeID+"-"+assetID+new Date());
-						BufferedOutputStream stream = new BufferedOutputStream(
-								new FileOutputStream(serverFile));
-						stream.write(bytes);
-						stream.close();
-						
-						
-						message+= "You successfully uploaded file=" + employeeID+"-"+assetID;
-						mav.addObject("message", message);
-						mav.setViewName("EDPHome");
-						return mav;
-					} catch (Exception e) {
-						message+= "You failed to upload " + employeeID+"-"+assetID + " => " + e.getMessage();
-						mav.addObject("message", message);
-						mav.setViewName("EDPHome");
-						return mav;
-					}
-				} else 
-					{
+					message += "You successfully uploaded file=" + employeeID
+							+ "-" + assetID;
 					mav.addObject("message", message);
 					mav.setViewName("EDPHome");
 					return mav;
-					}
-			}
+				} catch (Exception e) {
+					message +=e+ "You failed to upload " + employeeID + "-"
+							+ assetID + " => " + e.getMessage();
+					mav.addObject("message", message);
+					mav.setViewName("EDPHome");
+					return mav;
+				}
+			} else {
 				mav.addObject("message", message);
 				mav.setViewName("EDPHome");
 				return mav;
-		 }
-
+			}
+		}
+		mav.addObject("message", message);
+		mav.setViewName("EDPHome");
+		return mav;
+	}
 
 	@RequestMapping(value = "/allocateAsset", method = RequestMethod.GET)
 	public ModelAndView getAllocationForm(
@@ -227,8 +221,6 @@ public class AssetController {
 		mav.setViewName("Allocation");
 		return mav;
 	}
-	 
-
 
 	@RequestMapping(value = "/deallocateAsset", method = RequestMethod.GET)
 	public ModelAndView getDeAllocationForm(
@@ -253,38 +245,39 @@ public class AssetController {
 				rows = assetService.deAllocateAsset(Long.parseLong(assetID),
 						deassignedBy);
 			} catch (EmployeeException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				mav.addObject("message", "allocation failed");
 			}
 			if (rows.equals("success")) {
 				mav.addObject("message", "Deallocated asset successfully");
-				mav.setViewName("EDPHome");
-				return mav;
 			} else {
 				mav.addObject("message", "allocation failed");
-				mav.setViewName("EDPHome");
-				return mav;
 			}
 		} catch (AssetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			mav.addObject("message", "allocation failed");
 		}
+		mav.setViewName("EDPHome");
+
 		return mav;
 	}
 
 	@RequestMapping(value = "/ViewAssetRequests", method = RequestMethod.GET)
 	public ModelAndView viewAssetRequestForm() {
-		ModelAndView mav = new ModelAndView();
-
+		String msg=null;
+		ModelAndView mav=new ModelAndView();
+		mav.setViewName("ViewAssetRequests");
 		try {
+			List<NewTypeRequest> newAssetRequests = assetService
+					.getNewAssetTypeRequests();
+			mav.addObject("newAssetRequests", newAssetRequests);
 			getAllAssetRequests = assetService.getAllAssetRequests();
+			
 			mav.addObject("assetRequests", getAllAssetRequests);
-			mav.setViewName("ViewAssetRequests");
-			return mav;
+			
 		} catch (AssetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			msg=e.getErrorMessage();
+			mav.addObject("message",msg);
 		}
+		mav.setViewName("ViewAssetRequests");
 		return mav;
 	}
 
@@ -301,16 +294,16 @@ public class AssetController {
 			try {
 				employee = employeeService.getEmployee(username);
 			} catch (EmployeeException e) {
-				e.printStackTrace();
+				mav.addObject("message", e);
 			}
-			mav.addObject("emp", employee);
-			mav.setViewName("EmployeeAsset");
-			return mav;
 		} catch (AssetException e) {
-			mav.addObject("message", e);
-			return mav;
+		mav.addObject("message", e);
 
 		}
+		mav.addObject("emp", employee);
+		mav.setViewName("EmployeeAsset");
+		return mav;
+
 
 	}
 
@@ -351,7 +344,6 @@ public class AssetController {
 			@RequestParam("assetType") String assetType,
 			@RequestParam("assetName") String assetName,
 			HttpServletRequest request, HttpServletResponse response) {
-
 		ModelAndView mav = new ModelAndView();
 		String msg = "";
 		try {
@@ -402,22 +394,20 @@ public class AssetController {
 			return mav;
 		} catch (AuthenticationException e) {
 			mav.addObject("message", e);
-			// e.printStackTrace();
-		}
+					}
 
 		return mav;
 
 	}
 
 	@RequestMapping(value = "/UpdateAsset", method = RequestMethod.GET)
-	public ModelAndView updateAssetForm(@RequestParam("code") long assetID,
+	public ModelAndView updateAssetForm(@RequestParam("assetID") long assetID,
 			HttpServletRequest request, HttpServletResponse response) {
 		Asset asset = new Asset();
 		ModelAndView mav = new ModelAndView();
 		try {
 			asset = assetService.getAsset(assetID);
 			mav.addObject(asset);
-			System.out.println("Iam for Asset");
 			mav.addObject("viewdetails", "Update Asset Form");
 			mav.setViewName("UpdateAsset");
 			return mav;
@@ -497,50 +487,46 @@ public class AssetController {
 		return mav;
 
 	}
-	
-	
+
 	@RequestMapping(value = "/removeAssetRequest", method = RequestMethod.GET)
- 	public ModelAndView removeRoleForm() {
- 		Request request=new Request();
- 		ModelAndView mav = new ModelAndView();
- 		mav.addObject(request);
- 		mav.addObject("viewdetails", "remove Asset Form");
- 		mav.setViewName("RemoveAssetRequest");
- 		
- 		return mav;
- 	}
+	public String RemoveRequest(
+			@RequestParam("employeeId") String employeeId,
+			@RequestParam("type") AssetType type) {
+		ModelAndView mav = new ModelAndView();
+		String result = null;
+		Request request = new Request();
+		request.setEmployeeId(employeeId);
+		request.setAssetType(type);
+		try {
 
- 	@RequestMapping(value = "/removeAssetRequest", method = RequestMethod.POST)
- 	public ModelAndView RemoveRoleForm(
- 			@ModelAttribute("request") Request request)
- 			 {
- 		ModelAndView mav = new ModelAndView();
+			result = assetService.removeAssetRequest(request);
 
- 		String rows = null;
- 		
- 			try {
- 			
-				rows =assetService.removeAssetRequest(request);
-				
-				if (rows.equals("FAILURE")) {
-     				String msg = "role not removed";
-     				mav.addObject("message", msg);
-     				mav.setViewName("EDPHome");
+			mav.addObject("message", result);
+			return "redirect:/ViewAssetRequests";
 
-     			} else {
-     				String msg = rows;
-     				mav.addObject("message", msg);
-     				mav.setViewName("EDPHome");
+		} catch (AssetException e) {
+			mav.addObject("message", e.getErrorMessage());
+			return "redirect:/ViewAssetRequests";
+		}
 
-     			}
-			} catch (AssetException e) {
-			mav.addObject("message",e.getMessage());
-			mav.setViewName("EDPHome");
-			}
- 			
- 		
+	}
+	
+	
+	@RequestMapping(value = "/viewAssetsByType", method = RequestMethod.GET)
+	public ModelAndView viewAssetByTypeForm(@RequestParam("type") AssetType type) {
+		ModelAndView mav = new ModelAndView();
+		List<Asset> assetlist;
+		try {
+			assetlist = assetService.getAssetByType(type);
+			mav.addObject("assets", assetlist);
+			mav.setViewName("ViewAssets");
+			mav.addObject("viewdetails", "Available Assets");
 
- 		return mav;
- 		}
+			return mav;
+		} catch (AssetException e) {
+			e.printStackTrace();
+		}
+		return mav;
+	}
 
 }

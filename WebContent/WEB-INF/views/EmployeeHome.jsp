@@ -45,11 +45,11 @@
    <% List role = (List)session.getAttribute("role");
    if(role.contains("admin")){
 %>
-      <li ><a href="adminhome?username=${username}">Admin</a></li>
+      <li ><a href="adminhome">Admin</a></li>
       <%} if(role.contains("edp")){%>
-      <li><a  href="EDPHome?username=${username}">EDP</a></li>
+      <li><a  href="EDPHome">EDP</a></li>
       <%} %>
-      <li class="active"><a  href="employee?username=${username}">Employee</a></li>
+      <li class="active"><a  href="employee">Employee</a></li>
 
       
     </ul>

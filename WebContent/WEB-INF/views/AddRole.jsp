@@ -75,8 +75,7 @@ span {
 <body>
 	<s:form commandName="employee" action="addRole" method="post"
 		onsubmit="return onSubmit()">
-		<h2 id="id1" align="center">ADD ROLE</h2>
-
+		
 		<div id="id2">
 			<h3 align="center">${viewdetails}</h3>
 		</div>

@@ -99,7 +99,7 @@ span {
 </head>
 <body>
 <s:form commandName="asset" action="addAsset" method="post" onsubmit="return onSubmit()">
-<h2 id="id1" align="center">ASSET DATA</h2>
+
 
 	<div id="id2">
 		<h3 align="center">Add Asset Form</h3>
@@ -119,21 +119,24 @@ span {
 	<option value = "Keyboard" name="assetType">Keyboard</option>	
 </select></td></tr>  --%>
  
-<tr><td>Select AssetType</td><td><input type="radio" name="assetType" value="Laptop" checked>Laptop
-		<input type="radio" name="assetType" value="Desktop">Desktop
-		<input type="radio" name="assetType" value="Monitor">Monitor
-		<input type="radio" name="assetType" value="Mouse">Mouse
-		<input type="radio" name="assetType" value="Keyboard">Keyboard</td></tr>
+<tr><td>Select Asset Type:</td>
+    <td>
+         <select name="assetType" >
+         <option value="Laptop" name="assetType">Laptop</option>
+         <option value="Desktop" name="assetType">Desktop</option>
+         <option value="Mouse" name="assetType">Mouse</option>
+         <option value="Keyboard" name="assetType">Keyboard</option>
+       </select>
+   </td></tr>
 <tr><td>Enter cost</td><td><s:input path="cost" cssClass="form" id = "cost"/><span id = "cost_error"></span></td></tr>
 <tr><td>Select Status</td>
 <td><input type = "radio" name = "status" value = "Available" id = "status" checked>Available
 <input type = "radio" name = "status" value = "NotAvailable" id = "status">Not Available<span id = "status_error"></span>
 </td></tr>
 <tr><td>createdBy</td><td><s:input path="createdBy" cssClass="form" id = "createdBy" value="${username}"/><span id = "createdBy_error"></span></td></tr>
-
+<tr><td></td><td><input type="submit" value="Submit" style="align:center"></td></tr>
 </table>
-<input type="submit" value="Submit">
-<a href="home">Return to home</a>
+
 </s:form>
 </body>
 </html>

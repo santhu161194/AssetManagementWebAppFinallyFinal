@@ -27,7 +27,6 @@ public class LoginController {
 
 	Employee employee;
 
-	// getting login form
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView getLoginForm() {
 		ModelAndView mav = new ModelAndView();
@@ -35,7 +34,6 @@ public class LoginController {
 		return mav;
 	}
 
-	// Logging in
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public ModelAndView login(HttpServletRequest request,
 			HttpServletResponse response,
@@ -68,7 +66,7 @@ public class LoginController {
 			HttpSession session = request.getSession();
 			session.setAttribute("username", username);
 			mav.addObject("username", username);
-			System.out.println(request.getSession(false).getAttribute("username"));
+		
 			List<String> roles = null;
 			roles = employeeService.checkRoles(username);
 			session.setAttribute("role", roles);
@@ -86,7 +84,6 @@ public class LoginController {
 		return mav;
 	}
 
-	// invalidate
 	@RequestMapping(value = "/invalidate", method = RequestMethod.GET)
 	public String invalidate(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -160,29 +157,23 @@ public class LoginController {
 	}
 
 	@RequestMapping(value = "/adminhome", method = RequestMethod.GET)
-	public ModelAndView emphome(@RequestParam("username") String username,
-			HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView emphome(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView();
-		request.getSession(false).setAttribute("username", username);
 		mav.setViewName("AdminHome");
 		return mav;
 
 	}
 
 	@RequestMapping(value = "/employee", method = RequestMethod.GET)
-	public ModelAndView EmployeeHome(@RequestParam("username") String username,
-			HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView EmployeeHome(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView();
-		request.getSession(false).setAttribute("username", username);
 		mav.setViewName("EmployeeHome");
 		return mav;
 	}
 
 	@RequestMapping(value = "/EDPHome", method = RequestMethod.GET)
-	public ModelAndView EDPHome(@RequestParam("username") String username,
-			HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView EDPHome(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView();
-		request.getSession(false).setAttribute("username", username);
 		mav.setViewName("EDPHome");
 		return mav;
 	}

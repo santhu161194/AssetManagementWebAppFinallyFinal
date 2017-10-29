@@ -12,7 +12,6 @@ public enum Gender{
 
 	public String value;
 
-	// Reverse-lookup map for getting a day from an abbreviation
 	private static final Map<String, Gender> lookup = new HashMap<String, Gender>();
 
 	static {

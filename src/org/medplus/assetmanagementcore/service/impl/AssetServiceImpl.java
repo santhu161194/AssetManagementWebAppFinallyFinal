@@ -1,6 +1,5 @@
 package org.medplus.assetmanagementcore.service.impl;
 
-import java.util.Date;
 import java.util.List;
 
 import org.medplus.assetmanagementcore.dao.AssetDao;
@@ -19,6 +18,7 @@ import org.medplus.assetmanagementcore.validations.CommonValidations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -184,7 +184,7 @@ public class AssetServiceImpl implements AssetService{
 	public List<Request> getAllAssetRequests() throws AssetException{ 
         try{                         
 		List<Request> list=dao.getAllAssetRequests();
-		if(list.size()==0)
+		if(list!=null &&list.size()==0)
 		{
 			throw new AssetException("No Request Found");	
 		}
@@ -295,12 +295,15 @@ public class AssetServiceImpl implements AssetService{
 				else
 					return "Request Failed";
 	        }
+	        catch(DuplicateKeyException e){
+ 				throw  new AssetException(" Request already posted..",e);
+ 			}
 	        catch(DataIntegrityViolationException e){
- 				throw  new AssetException(" Asset Not Available",e);
+ 				throw  new AssetException(" Asset Exception",e);
  			}
  			
  			catch (DataAccessException e) {
- 					throw new AssetException("Asset Allocation Exception",e);
+ 					throw new AssetException("Asset Exception",e);
  			}
 	}
 

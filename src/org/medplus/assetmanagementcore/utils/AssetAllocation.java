@@ -14,7 +14,6 @@ package org.medplus.assetmanagementcore.utils;
 
 		public String value;
 
-		// Reverse-lookup map for getting a day from an abbreviation
 		private static final Map<String, AssetAllocation > lookup = new HashMap<String, AssetAllocation >();
 
 		static {
