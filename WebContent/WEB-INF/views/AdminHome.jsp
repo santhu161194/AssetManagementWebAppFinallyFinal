@@ -9,7 +9,8 @@
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
  
   <script>
   $(function() { // when DOM is ready
@@ -19,6 +20,11 @@
 	        $("#content").load(toLoad); // load the sample.jsp page in the #chkcomments element
 	    }); 
 	});
+
+  $(function() {
+	     $( "#dateOfBirth").datepicker();
+	     
+	  });
   </script>
   <title>Welcome Home</title>
 <style type="text/css">
@@ -32,13 +38,13 @@
 <nav class="navbar navbar-inverse">
 <div class="container-fluid">
   <div class="navbar-header">
-    <a class="navbar-brand" href="#">Asset Management</a>
+    <a class="navbar-brand" href="home">Asset Management</a>
   </div>
   <ul class="nav navbar-nav">
  <% List role = (List)session.getAttribute("role");
  if(role.contains("admin")){
 %>
-    <li class="active"><a href="#">Admin</a></li>
+    <li class="active"><a href="home">Admin</a></li>
     <%} if(role.contains("edp")){%>
     <li><a  href="EDPHome">EDP</a></li>
     <%} %>
@@ -62,13 +68,14 @@
           
  <ul class="list-unstyled components">
   
-  <li><a id="viewAssets" href="#" class="showhide">View Available Assets</a></li><br>	
-   <li><a id="viewEmployees" href="#" class="showhide">View All Employees</a></li><br>
+  <li><a id="viewAssets?role=admin" href="#" class="showhide">View Available Assets</a></li><br>	
+   <li><a id="viewEmployees?role=admin" href="#" class="showhide">View All Employees</a></li><br>
    <li><a id="addEmployee" href="#" class="showhide">add Employee</a></li><br>
       <li><a id="addAsset" href="#" class="showhide">add Asset</a></li><br>
       <li><a id="addRole" href="#" class="showhide">add Role</a></li><br>
        <li><a id="addRoleToEmp" href="#" class="showhide">add Role To Emp</a></li><br>
         <li><a id="removeRole" href="#" class="showhide">Remove Employee Role</a></li><br>
+         <li><a id="resetPassword" href="#" class="showhide">ResetPassword</a></li><br>
   </ul>
   </nav>
   </div>

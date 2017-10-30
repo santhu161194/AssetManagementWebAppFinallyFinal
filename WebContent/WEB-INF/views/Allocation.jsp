@@ -25,18 +25,20 @@
 				<td>
 			<tr>
 				<td>AssetId</td>
-				<td><input name=assetID value="${assetID}"></td>
+				<td><input name=assetID value="${assetID}" readonly="true"></td>
 				<td>
 			<tr>
 				<td>AssignedBy</td>
-				<td><input name=assignedBy value=<%=session.getAttribute("username")%>></td>
+				<td><input name=assignedBy readonly="true" value=<%=session.getAttribute("username")%>></td>
 			</tr>
 			<tr>
 					<td>Portrait Photo: </td>
 					<td><input id="photo" type="file" name="file" size="50" required/></td>
 			</tr>
+			<tr></tr>
+			<tr><td></td><td><input id="allocateAsset" class="showhide" type="submit" value="allocate"></td></tr>
 			</table>
-			<input id="allocateAsset" class="showhide" type="submit">
+			
 		
 
 

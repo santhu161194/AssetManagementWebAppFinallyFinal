@@ -114,12 +114,13 @@ public class AssetController {
 	}
 
 	@RequestMapping(value = "/viewAssets", method = RequestMethod.GET)
-	public ModelAndView viewAssetForm() {
+	public ModelAndView viewAssetsForm(@RequestParam("role") String role) {
 		ModelAndView mav = new ModelAndView();
 		List<Asset> assetlist;
 		try {
 			assetlist = assetService.getAllAssets();
 			mav.addObject("assets", assetlist);
+			mav.addObject("requestrole",role);
 			mav.addObject("viewdetails", "All Assets");
 			mav.setViewName("ViewAssets");
 			return mav;

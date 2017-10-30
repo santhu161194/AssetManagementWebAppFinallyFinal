@@ -43,17 +43,18 @@ public class EmployeeController {
 	String msg;
 
 	@RequestMapping("/viewEmployees")
-	public ModelAndView viewEmployees(@ModelAttribute("employee") Employee emp,
+	public ModelAndView viewEmployees(@RequestParam("role") String requestrole, @ModelAttribute("employee") Employee emp,
 			BindingResult result) {
 		ModelAndView mav = new ModelAndView();
 		List<Employee> empls;
 		try {
 			empls = employeeService.getAllEmployees();
 			mav.addObject("empl", empls);
+			mav.addObject("requestrole", requestrole);
 			mav.addObject("viewdetails", "View All Employees");
 			mav.setViewName("ViewEmployees");
 		} catch (EmployeeException e) {
-
+			mav.addObject("requestrole", requestrole);
 			mav.addObject("message", e.getErrorMessage());
 			mav.setViewName("ViewEmployees");
 			return mav;

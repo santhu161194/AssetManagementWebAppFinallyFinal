@@ -35,8 +35,8 @@
 			document.getElementById("assetName_error").innerHTML = "AssetName should not exceed 40";
 			formValid1 = true;
 		}
-		else if (assetName.length < 5) {
-			document.getElementById("assetName_error").innerHTML = "AssetName should be greater than 4";
+		else if (assetName.length < 1) {
+			document.getElementById("assetName_error").innerHTML = "AssetName should be greater than 1";
 			formValid1 = true;
 		}
 		else{
@@ -47,12 +47,12 @@
 			document.getElementById("cost_error").innerHTML = "Please Enter cost";
 			formValid = false;		
 		}
-		else if (cost.length >= 15) {
-			document.getElementById("cost_error").innerHTML = "Cost should not exceed 11";
+		else if (cost.value <= 100) {
+			document.getElementById("cost_error").innerHTML = "Cost should be greater 100";
 			formValid1 = true;
 		}
-		else if (cost.length <= 3) {
-			document.getElementById("cost_error").innerHTML = "Cost should be greater than 3";
+		else if (cost.length >= 1000000) {
+			document.getElementById("cost_error").innerHTML = "Cost should not exceed 10000000";
 			formValid1 = true;
 		} 
 		else{
@@ -134,7 +134,7 @@ span {
 <input type = "radio" name = "status" value = "NotAvailable" id = "status">Not Available<span id = "status_error"></span>
 </td></tr>
 <tr><td>createdBy</td><td><s:input path="createdBy" cssClass="form" id = "createdBy" value="${username}"/><span id = "createdBy_error"></span></td></tr>
-<tr><td></td><td><input type="submit" value="Submit" style="align:center"></td></tr>
+<tr><td></td><td><input type="submit" value="Submit" style="align:center" onclick="return onSubmit()"></td></tr>
 </table>
 
 </s:form>

@@ -18,9 +18,19 @@
 	    }); 
 	});
   </script>
+    <script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
 </head>
 <body>
-<div id="content">
+<div id="content" style="width: 80%;">
 		<%
 HttpSession session1=request.getSession(false);
 if(session1==null||session1.getAttribute("username")==null)
@@ -33,6 +43,8 @@ if(session1==null||session1.getAttribute("username")==null)
 		<h3 align="center">${viewdetails}</h3>
 		</div>
 	<h4><j:out value="${updatestatus}"></j:out></h4>
+	<input class="form-control" id="myInput" type="text" placeholder="Search Request here....">
+	<div style="overflow:scroll;height:400px;width:100%;overflow:auto">
 	<table border="2">
 		<tr>
 			<th>EMPCODE
@@ -43,7 +55,7 @@ if(session1==null||session1.getAttribute("username")==null)
 			<th>Address
 			
 		</tr>
-		
+				<tbody id="myTable">
 		<j:forEach var="emp" items="${empl}">
 			<tr>
 				<td><j:out value="${emp.employeeId} "></j:out></td>
@@ -53,12 +65,16 @@ if(session1==null||session1.getAttribute("username")==null)
 				<td><j:out value="${emp.mobileNumber} "></j:out></td>
 				<td><j:out value="${emp.address} "></j:out></td>
 				<j:if test="${viewdetails eq 'View All Employees' }">
+				<j:if test="${requestrole eq 'admin'}">
 				<td><a class="showhide" id="UpdateEmployee?code=<j:out value="${emp.employeeId}"></j:out>">Update</a></td>
-				<td><a class="showhide" id="getRole?code=<j:out value="${emp.employeeId}"></j:out>">Show Employee Roles</a></td>
+				<td><a class="showhide" id="getRole?code=<j:out value="${emp.employeeId}"></j:out>">Roles</a></td>
+				</j:if>
 				</j:if>
 				</tr>
 				</j:forEach>
+				</tbody>
 	</table>
+	</div>
 
 	<%} %>
 	</div>

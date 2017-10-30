@@ -50,7 +50,7 @@
 			document.getElementById("pass_error").innerHTML = "Password should not exceed 15 characters";
 			flag = true;
 		}
-		else if (pass.length <= 6) {
+		else if (pass.length < 6) {
 			document.getElementById("pass_error").innerHTML = "Password should be greater than 5 characters";
 			flag = true;
 		} 

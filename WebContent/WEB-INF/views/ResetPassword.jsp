@@ -11,21 +11,21 @@
 		<table align="center">
 			<tr>
 				<td>EmployeeId</td>
-				<td><input name=employeeID /></td>
+				<td><input name=employeeID required="true"/></td>
 				<td>
 			
 			<tr>
 				<td>New Password</td>
-				<td><input name=newpassword /></td>
+				<td><input name=newpassword type="password" required="true"/></td>
 				<td>
 			<tr>
 			<tr>
 				<td>Reset By</td>
-				<td><input name=resetby value=<%=request.getParameter("resetBy")%>></td>
+				<td><input name=resetby required="true" value=<%=request.getSession(false).getAttribute("username")%>></td>
 				<td>
 			<tr>	
 			</table>
-			<input type="submit">
+			<input type="submit" value="reset">
 		
 
 

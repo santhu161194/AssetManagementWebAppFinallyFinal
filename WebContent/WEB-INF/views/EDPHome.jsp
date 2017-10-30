@@ -9,15 +9,9 @@
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-  
-  <script type="text/javascript">
-  function assetRequest(select){
-	  var request=document.getElementById(select);
-	  var sel=(request.options[request.selectedIndex].value);
-	  window.location = '/Task2/postAssetRequests?type=' + sel;
-  }
-  
-  </script>
+  <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+ 
   <script>
   $(function() { // when DOM is ready
 	    $(".showhide").click(function(){ 
@@ -26,6 +20,11 @@
 	        $("#content").load(toLoad); // load the sample.jsp page in the #chkcomments element
 	    }); 
 	});
+
+  $(function() {
+	     $( "#dateOfBirth").datepicker();
+	     
+	  });
   </script>
 <title>Welcome Home</title>
 <style type="text/css">
@@ -39,7 +38,7 @@
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">Asset Management</a>
+      <a class="navbar-brand" href="home">Asset Management</a>
     </div>
     
      <ul class="nav navbar-nav">
@@ -72,8 +71,8 @@
   <li><a id="viewAssetsByStatus?status=A" class="showhide">Allocate Assets</a></li><br>	
    <li><a id="viewAssetsByStatus?status=N" class="showhide">De-Allocate Assets</a></li><br>
    <li><a id="ViewAssetRequests" href="#" class="showhide">View All Asset Requests</a></li><br>
-   <li><a id="viewAssets" class="showhide">View All Assets</a></li><br>	
-   <li><a id="viewEmployees" class="showhide">View All Employees</a></li><br>
+   <li><a id="viewAssets?role=edp" class="showhide">View All Assets</a></li><br>	
+   <li><a id="viewEmployees?role=edp" class="showhide">View All Employees</a></li><br>
     <li><a id="asset-mapping-log" class="showhide">View Asset Log</a></li>	
   </ul>
   </nav>

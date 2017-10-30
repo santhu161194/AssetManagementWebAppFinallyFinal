@@ -349,9 +349,11 @@ span {
 	
 	
 	  $(function() {
-		     $( "#dateOfBirth").datepicker();
-		     
+		     $( "#dateOfBirth").datepicker({ dateFormat: 'yy-m-dd' });
+		     $( "#dateOfJoin").datepicker({ dateFormat: 'yy-m-dd' });
+		    
 		  });
+
 </script>
 
 </head>
@@ -388,10 +390,10 @@ span {
 				<td><s:input path="lastName" cssClass="form" id="lastName" /><span
 					id="lname_error"></span></td>
 			</tr>
-
+			
 			<tr>
 				<td>Enter Password</td>
-				<td><s:input path="password" cssClass="form" id="password" /><span
+				<td><s:input path="password" cssClass="form" id="password" type="password"/><span
 					id="pass_error"></span></td>
 			</tr>
 
@@ -404,25 +406,26 @@ span {
 			<tr>
 				<td>Enter MobileNumber</td>
 				<td><s:input path="mobileNumber" cssClass="form"
-						id="mobileNumber" /><span id="mobile_error"></span></td>
+						id="mobileNumber" placeholder="91xxxxxxxxxx" value=""/><span id="mobile_error"></span></td>
 			</tr>
 
 			<tr>
 				<td>Enter DateOfBirth</td>
 				<td><s:input path="dateOfBirth" cssClass="form"
-						id="dateOfBirth" /><span id="date_error"></span></td>
+						id="dateOfBirth" placeholder="YYYY-MM-DD"/><span id="date_error"></span></td>
+						
 			</tr>
 
 			<tr>
 				<td>Enter DateOfJoining</td>
 				<td><s:input path="dateOfJoin" cssClass="form"
-						id="dateOfJoin" /><span id="dateJoin_error"></span></td>
+						id="dateOfJoin" placeholder="YYYY-MM-DD" /><span id="dateJoin_error"></span></td>
 			</tr>
 
 			<tr>
 				<td>Enter Address</td>
-				<td><s:input path="address" cssClass="form" id="address" /><span
-					id="address_error"></span></td>
+				<td><s:textarea path="address" cssClass="form" id="address" /><span
+					id="address_error" ></span></td>
 			</tr>
 			<%
 				session.setAttribute("userid",

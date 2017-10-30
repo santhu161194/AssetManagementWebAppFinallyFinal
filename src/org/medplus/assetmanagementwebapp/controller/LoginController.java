@@ -105,25 +105,35 @@ public class LoginController {
 	@RequestMapping(value = "/changePassword", method = RequestMethod.POST)
 	public ModelAndView ChangePassword(
 			@RequestParam("employeeID") String username,
-			@RequestParam("oldpassword") String oldpassword,
-			@RequestParam("newpassword") String newpassword,
-			@RequestParam("employeeID") String changedBy) {
+			@RequestParam("oldPassword") String oldpassword,
+			@RequestParam("newPassword") String newpassword
+			) {
 		ModelAndView mav = new ModelAndView();
 
 		String msg = "";
 		try {
 			try {
 				msg = employeeService.changePassword(username, oldpassword,
-						newpassword, changedBy, new Date());
+						newpassword, username, new Date());
 			} catch (AuthenticationException e) {
 				msg += e.getMessage();
 			}
 		} catch (EmployeeException e) {
 			msg += e.getMessage();
 		}
+		if(msg.equals("SUCCESS"))
+		{
 		mav.addObject("message", msg);
 		mav.setViewName("Login");
 		return mav;
+		}
+		else
+		{
+			mav.addObject("message", msg);
+			mav.setViewName("EmployeeHome");
+			return mav;	
+		}
+		
 	}
 
 	@RequestMapping(value = "/resetPassword", method = RequestMethod.GET)
@@ -152,7 +162,7 @@ public class LoginController {
 			msg += e.getMessage();
 		}
 		mav.addObject("message", msg);
-		mav.setViewName("Login");
+		mav.setViewName("AdminHome");
 		return mav;
 	}
 
@@ -175,6 +185,13 @@ public class LoginController {
 	public ModelAndView EDPHome(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("EDPHome");
+		return mav;
+	}
+	
+	@RequestMapping(value = "/home", method = RequestMethod.GET)
+	public ModelAndView Home(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = new ModelAndView();
+		mav.setViewName("Home");
 		return mav;
 	}
 

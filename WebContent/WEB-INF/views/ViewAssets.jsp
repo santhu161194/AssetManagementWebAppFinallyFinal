@@ -23,6 +23,7 @@ th {
 }
 </style>
 
+
 <script>
   $(function() { // when DOM is ready
 	    $(".showhide").click(function(){ 
@@ -37,6 +38,16 @@ th {
 
 
   </script>
+  <script>
+$(document).ready(function(){
+  $("#myInput").on("keyup", function() {
+    var value = $(this).val().toLowerCase();
+    $("#myTable tr").filter(function() {
+      $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+    });
+  });
+});
+</script>
 </head>
 <body>
 	
@@ -46,6 +57,8 @@ th {
 		<h3 align="center">${viewdetails}</h3>
 		</div>
 	<h4><j:out value="${updatestatus}"></j:out></h4>
+	<input class="form-control" id="myInput" type="text" placeholder="Search Request here....">
+	<div style="overflow:scroll;height:400px;width:100%;overflow:auto">
 	<table border="2">
 		<tr>
 			<th> assetId
@@ -57,7 +70,7 @@ th {
 		
 			
 		</tr>
-		
+		<tbody id="myTable">
 		<j:forEach var="asset" items="${assets}">
 			<tr>
 				<td><j:out value="${asset.assetId} "></j:out></td>
@@ -74,12 +87,15 @@ th {
 				<td><a class="showhide" id="deallocateAsset?assetID=<j:out value="${asset.assetId}"></j:out>">DeAllocate Asset</a></td>
 				</j:if>
 				<j:if test="${viewdetails eq 'All Assets'}">
+				<j:if test="${requestrole eq 'admin'}">
 				<td><a class="showhide" id="UpdateAsset?assetID=<j:out value="${asset.assetId}"></j:out>">Update</a>
+				</j:if>
 				</j:if>
 				</tr>
 				</j:forEach>
+				</tbody>
 				</table>
-				
+				</div>
 			
 			
 				</body>

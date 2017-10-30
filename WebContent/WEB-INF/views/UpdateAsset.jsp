@@ -26,28 +26,30 @@
 		if (IsEmpty(assetName) == true) {
 			document.getElementById("lname_error").innerHTML = "Please Enter last name";
 			formValid = false;
-		} else if (assetName.length >= 40) {
+		} else if (assetName.length > 40) {
 			document.getElementById("lname_error").innerHTML = "Value should not exceed 40";
 			formValid1 = true;
-		} else if (assetName.length <= 1) {
-			document.getElementById("lname_error").innerHTML = "Value should be greater than 5";
-			formValid1 = true;
+		
 		} else {
 			document.getElementById("lname_error").innerHTML = null;
-			formValid = true;
+			formValid = false;
+			formValid1=true;
 		}
 
 		if (IsEmpty(cost) == true) {
-			document.getElementById("mobile_error").innerHTML = "Please Enter mobile number";
-			formValid = false;
-		} else if (cost.length > 10) {
-			document.getElementById("mobile_error").innerHTML = "Mobile number should not be more than 10 digits";
+			document.getElementById("cost_error").innerHTML = "Please Enter cost";
+			formValid = false;		
+		}
+		else if (cost.value <= 100) {
+			document.getElementById("cost_error").innerHTML = "Cost should be greater 100";
 			formValid1 = true;
-		} else if (cost.length < 1) {
-			document.getElementById("mobile_error").innerHTML = "Mobile number should contain 10 digits";
+		}
+		else if (cost.length >= 1000000) {
+			document.getElementById("cost_error").innerHTML = "Cost should not exceed 10000000";
 			formValid1 = true;
-		} else {
-			document.getElementById("mobile_error").innerHTML = null;
+		} 
+		else{
+			document.getElementById("cost_error").innerHTML = null;	
 			formValid = true;
 		}
 
@@ -57,7 +59,7 @@
 		if (!formValid) {
 			return false;
 		}
-		return true;
+		
 	}
 	function IsEmpty(input) {
 		if (input.replace(/^\s+|\s+$/g, "") === "") {
@@ -85,7 +87,7 @@ span {
 <body>
 
 	<s:form commandName="asset" action="UpdateAsset" method="post"
-		onsubmit="return onSubmit()">
+		>
 		<div id="id2">
 			<h3 align="center">${viewdetails}</h3>
 
@@ -108,22 +110,13 @@ span {
 			</tr>
 			<tr>
 				<td>AssetType</td>
-				<td><s:input path="assetType" cssClass="form" id="assetType" required="true" readonly="true"/><span
-					id="mobile_error"></span></td>
+				<td><s:input path="assetType" cssClass="form" id="assetType" required="true" readonly="true"/></td>
 			</tr>
 
-			<%-- <tr>
-				<td>Select Status</td>
-				<td><input type="radio" name="status" value="Available"
-					${asset.status eq "Available"?'checked="checked"':''} />Available <input
-					type="radio" name="status" value="NotAvailable"
-					${asset.status eq "NotAvailable"?'checked="checked"':''} />NotAvailable</td>
-			</tr>
- --%>
 			<tr>
 				<td>cost</td>
 				<td><s:input path="cost" cssClass="form" id="cost" required="true"/><span
-					id="mobile_error"></span></td>
+					id="cost_error"></span></td>
 			</tr>
 
 			<tr>

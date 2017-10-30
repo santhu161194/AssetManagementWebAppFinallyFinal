@@ -336,7 +336,7 @@ public class AssetServiceImpl implements AssetService{
 
 	@Override
 	public String updateAsset(Asset asset) throws AuthenticationException, AssetException {
-		if(asset!=null&&employeeService.checkRoles(asset.getModifiedBy())!=null&&!(employeeService.checkRoles(asset.getModifiedBy()).contains("edp")))
+		if(asset!=null&&employeeService.checkRoles(asset.getModifiedBy())!=null&&!((employeeService.checkRoles(asset.getModifiedBy()).contains("edp"))||employeeService.checkRoles(asset.getModifiedBy()).contains("admin")))
 		{
 			throw new AuthenticationException("Authentication Exception ..");
 		}

@@ -9,7 +9,7 @@
  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+ 
 
   <script>
   $(function() { // when DOM is ready
@@ -19,14 +19,7 @@
             $("#content").load(toLoad); // load the sample.jsp page in the #chkcomments element
         });
     });
-  
-
-  $(function() {
-	     $( "#dateOfBirth").datepicker();
-	     
-	  });
   </script>
-  
   <title>Welcome Home</title>
 <style type="text/css">
 <%@include file="css/common.css"%>
@@ -39,7 +32,7 @@
 <nav class="navbar navbar-inverse">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="home">Asset Management</a>
+      <a class="navbar-brand" href="#">Asset Management</a>
     </div>
 
     <ul class="nav navbar-nav">
@@ -50,7 +43,7 @@
       <%} if(role.contains("edp")){%>
       <li><a  href="EDPHome">EDP</a></li>
       <%} %>
-      <li class="active"><a  href="employee">Employee</a></li>
+      <li><a  href="employee">Employee</a></li>
 
       
     </ul>
@@ -71,28 +64,32 @@
           
  <ul class="list-unstyled components">
  
-  <li><a id="empassets?username=${username}" class="showhide">My Assets</a></li><br>    
-     <li><a id="emprequest?username=${username}" class="showhide">My Requests</a></li><br>    
+  <li id="welcome"> Hii.... ${username}</li>
+     <%-- <li><a id="emprequest?username=${username}" class="showhide">My Requests</a></li><br>    
    
    
     <li><a id="postAssetRequests" href="#" class="showhide">Request Asset</a></li><br>
     <li><a id="assetrequest" href="#" class="showhide">Request New type of Asset</a></li><br>
-       <li><a id="changePassword" href="#" class="showhide">Change Password</a></li><br>
+       <li><a id="changePassword" href="#" class="showhide">Change Password</a></li><br> --%>
   </ul>
   </nav>
   </div>
     <!-- the content is shown here -->
     
+    <div id="details">
+    <h3 align="center" style="color: blue;">Welcome To Medplus Asset Management System</h3>
     
+    
+    </div>
     <div id="content">
-    <h5>${message}</h5>
+    <img src="https://www.targetintegration.com/wp-content/uploads/2017/08/as-blue.jpg" style="width: 1100px;height: 500px;">
     </div>
  
 
 
   </j:when>
   <j:otherwise>
-  <a href="login">Click here to login</a>
+ 
 </j:otherwise>
 </j:choose></body>
 </html>

@@ -7,6 +7,7 @@
 <title>Insert title here</title>
 <script  type="text/javascript">
 function onSubmit() {
+
 	var employeeId = document.getElementById("employeeId").value;
 		var oldPassword = document.getElementById("oldPassword").value;
 		var newPassword = document.getElementById("newPassword").value;
@@ -84,12 +85,11 @@ function onSubmit() {
 
 <table align="center">
 
- <tr><td>employeeId</td><td><input type="text" name="employeeId" id="employeeId" readonly value=${username} ><span id = "id_error"></span></td></tr>
- <tr><td>oldPassword</td><td><input type="text" name="oldPassword" id="oldPassword"><span id = "oldPassword_error"></span></td></tr>
- <tr><td>newPassword</td><td><input type="text" name="newPassword" id="newPassword"><span id = "newPassword_error"></span></td></tr> 
- <tr><td>ReEnter Password</td><td><input type="text" name="confirmPassword" id="confirmPassword"><span id = "confirmPassword_error"></span></td></tr> 
+ <tr><td>employeeId</td><td><input type="text" name="employeeID" id="employeeId" readonly value=${username} ><span id = "id_error"></span></td></tr>
+ <tr><td>oldPassword</td><td><input type="password" name="oldPassword" id="oldPassword"  value=""><span id = "oldPassword_error"></span></td></tr>
+ <tr><td>newPassword</td><td><input type="password" name="newPassword" id="newPassword"><span id = "newPassword_error"></span></td></tr> 
+ <tr><td>ReEnter Password</td><td><input type="password"  id="confirmPassword"><span id = "confirmPassword_error"></span></td></tr> 
 
- <!-- <tr><td>changedBy</td><td><input type="text" name="changedBy" id="changedBy"><span id = "changedBy_error"></span></td></tr>  -->
  <tr><td></td><td><input type="submit" value="SUBMIT"></td><td></td></tr>
   </table>
 

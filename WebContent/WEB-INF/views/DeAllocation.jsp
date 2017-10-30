@@ -11,14 +11,15 @@
 		<table align="center">
 			<tr>
 				<td>AssetId</td>
-				<td><input name=assetID value="${assetID}"></td>
+				<td><input name=assetID value="${assetID}" readonly="true"></td>
 				<td>
 			<tr>
 				<td>DeAssignedBy</td>
-				<td><input name=deassignedBy value="${username}"></td>
+				<td><input name=deassignedBy value="${username}" readonly="true"></td>
 			</tr>
+			<tr></tr>
+			<tr><td></td><td><input id="allocateAsset" class="showhide" type="submit" value="Confirm"></td></tr>
 			</table>
-			<input type="submit" value="Submit">
 		
 
 
