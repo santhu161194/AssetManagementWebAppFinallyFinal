@@ -15,34 +15,38 @@ import org.medplus.assetmanagementcore.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-@Controller
+import com.google.gson.Gson;
+
+@RestController
 public class LoginController {
 	@Autowired
 	EmployeeService employeeService;
 
 	Employee employee;
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
+/*	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public ModelAndView getLoginForm() {
 		ModelAndView mav = new ModelAndView();
 		mav.setViewName("Login");
 		return mav;
-	}
-
-	@RequestMapping(value = "/login", method = RequestMethod.POST)
-	public ModelAndView login(HttpServletRequest request,
+	}*/
+	@CrossOrigin
+	@RequestMapping(value = "/login")
+	@ResponseBody
+	public String login(HttpServletRequest request,
 			HttpServletResponse response,
 			@RequestParam("username") String username,
 			@RequestParam("password") String password) throws IOException {
-		ModelAndView mav = new ModelAndView();
-	
+		Gson gson=new Gson();
 		String login = null;
-		
 		
 				try {
 					
@@ -51,37 +55,14 @@ public class LoginController {
 					
 				} catch (DataAccessException | EmployeeException
 						| AuthenticationException e) {
-					mav.addObject("message", "INVALID USER ID");
-					mav.setViewName("Login");
-					return mav;
+					return gson.toJson("false");
 				}
 			
 			
-		if (!login.equals("LOGIN SUCCESSFUL")) {
-			mav.setViewName("Login");
-			
-			mav.addObject("message", login);
-			return mav;
-		} else {
-			HttpSession session = request.getSession();
-			session.setAttribute("username", username);
-			mav.addObject("username", username);
-		
-			List<String> roles = null;
-			roles = employeeService.checkRoles(username);
-			session.setAttribute("role", roles);
-			if (roles.contains("admin")) {
-				mav.setViewName("AdminHome");
-			} else if (roles.contains("edp")) {
-				mav.setViewName("EDPHome");
+		if (!login.equals("LOGIN SUCCESSFUL")) 
+			return gson.toJson("true");
 
-			} else {
-				mav.setViewName("EmployeeHome");
-
-			}
-		}
-
-		return mav;
+		return gson.toJson("false");
 	}
 
 	@RequestMapping(value = "/invalidate", method = RequestMethod.GET)
